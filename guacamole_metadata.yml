@@ -14,7 +14,7 @@ port_range_min: 8080
 securitygroup_name: "_guacamole"
 securitygroup_description: "Guacamole"
 securitygroup_ssh: False
-title: ""
-description: ""
+title: "Guacamole"
+description: "Guacamole is awesoem"
 logo_url: ""
 info_url: ""

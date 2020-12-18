@@ -1,4 +1,4 @@
-template_name: rstudio
+template_name: theiaide
 is_maintained: True
 port: 20
 needs_forc_support: True
@@ -14,7 +14,7 @@ port_range_min: 8787
 securitygroup_name: "_rstudio"
 securitygroup_description: "Rstudio"
 securitygroup_ssh: False
-title: "R Studio"
-description: "R Studio is great"
+title: "THEIAIDE"
+description: "I love theiaide"
 logo_url: ""
 info_url: ""
