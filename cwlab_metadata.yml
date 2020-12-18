@@ -1,4 +1,3 @@
-#add versions for metadata file version tag
 template_name: cwlab
 is_maintained: True
 port: 20
