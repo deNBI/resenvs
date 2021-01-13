@@ -1,6 +1,6 @@
 template_name: rstudio
 is_maintained: True
-port: 20
+port: 8787
 needs_forc_support: True
 forc_versions:
   - v03
@@ -9,8 +9,6 @@ forc_versions:
 incompatible_versions: []
 direction: "ingress"
 protocol: "tcp"
-port_range_max: 8787
-port_range_min: 8787
 securitygroup_name: "_rstudio"
 securitygroup_description: "Rstudio"
 securitygroup_ssh: False

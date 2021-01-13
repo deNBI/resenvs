@@ -1,14 +1,12 @@
 template_name: cwlab
 is_maintained: True
-port: 20
+port: 80
 needs_forc_support: True
 forc_versions:
     - v01
 incompatible_versions: []
 direction: "ingress"
 protocol: "tcp"
-port_range_max: 80
-port_range_min: 80
 securitygroup_name: "_cwlab"
 securitygroup_description: "CWLab"
 securitygroup_ssh: False
