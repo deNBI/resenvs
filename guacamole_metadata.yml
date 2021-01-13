@@ -5,7 +5,9 @@ needs_forc_support: True
 forc_versions:
     - v02
     - v01
-incompatible_versions: []
+incompatible_versions:
+    - Ubuntu 16.04
+    - Ubuntu 20.04
 direction: "ingress"
 protocol: "tcp"
 securitygroup_name: "_guacamole"
