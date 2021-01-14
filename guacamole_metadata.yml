@@ -14,6 +14,6 @@ securitygroup_name: "_guacamole"
 securitygroup_description: "Guacamole"
 securitygroup_ssh: False
 title: "Guacamole"
-description: "Guacamole is awesoem"
-logo_url: ""
+description: "Guacamole is a browser based remote desktop application."
+logo_url: "https://cloud.denbi.de/wp-content/uploads/2020/02/guacamole-7.png"
 info_url: ""
