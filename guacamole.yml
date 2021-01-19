@@ -78,5 +78,5 @@
         - unattended-upgrades
         - apt-daily
         - apt-daily.timer
-        - apt-daily-upgrade
+    #    - apt-daily-upgrade
         - apt-daily-upgrade.timer
