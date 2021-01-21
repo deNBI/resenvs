@@ -17,3 +17,5 @@ title: "Guacamole"
 description: "Guacamole is a browser based remote desktop application."
 logo_url: "https://cloud.denbi.de/wp-content/uploads/2020/02/guacamole-7.png"
 info_url: ""
+information_for_display:
+     version: "1.0.0"
