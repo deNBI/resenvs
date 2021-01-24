@@ -17,15 +17,6 @@
         - apt-daily-upgrade
         - apt-daily-upgrade.timer
 
-
-- name: Wait for automatic system updates 1
-  shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
-  when: theiaide_vars.create_only_backend == "false"
-
-- name: Wait for automatic system updates 2
-  shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
-  when: theiaide_vars.create_only_backend == "false"
-
 - name: Install theia_ide role
   block:
     - name: Install packages
@@ -82,13 +73,12 @@
       args:
         executable: bash
 
-    - block:
-        - name: Install prebuild theia
-          shell: |
-            curl -o- https://bibiserv.cebitec.uni-bielefeld.de/resources/bibigrid/plugins/theia-ide_node12.tar.gz | tar -xzf -
-          args:
-            chdir: "/opt"
-            creates: "{{ theiaide_vars.THEIA_INSTALL_DIR }}"
+    - name: Install prebuild theia
+      shell: |
+        curl -o- https://bibiserv.cebitec.uni-bielefeld.de/resources/bibigrid/plugins/theia-ide_node12.tar.gz | tar -xzf -
+      args:
+        chdir: "/opt"
+        creates: "{{ theiaide_vars.THEIA_INSTALL_DIR }}"
 
     - name: Generate IDE start skript to /usr/local/bin
       template:
