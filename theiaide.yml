@@ -105,9 +105,6 @@
         enabled: true
         state: started
 
-    - name: Start Theia script
-      shell: "{{ theiaide_vars.THEIA_INSTALL_DIR }}/theia-ide.sh"
-
   when: theiaide_vars.create_only_backend == "false"
 
 - name: Enable periodic updates
