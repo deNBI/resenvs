@@ -89,13 +89,13 @@
 
     - name: Generate IDE start skript to /usr/local/bin
       template:
-        src: "{{ templates_path }}theia-ide.sh.j2"
+        src: "{{ theiaide_vars.templates_path }}theia-ide.sh.j2"
         dest: "{{ theiaide_vars.THEIA_INSTALL_DIR }}/theia-ide.sh"
         mode: 0755
 
     - name: Generate systemd service
       template:
-        src: "{{ templates_path }}theia-ide.service.j2"
+        src: "{{ theiaide_vars.templates_path }}theia-ide.service.j2"
         dest: /etc/systemd/system/theia-ide.service
         mode: 0644
 
