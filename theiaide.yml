@@ -40,19 +40,6 @@
         theia_ide_user: "{{ ansible_env.SUDO_USER }}"
       when: theia_ide_user is not defined
 
-#    - block:
-#        - name: Check if given workspace exists
-#          stat:
-#            path: "{{ theiaide_vars.IDEA_WORKSPACE}}"
-#          register: workspace_path
-#
-#        - name: Set fact 'theia_ide_workspace' when defined workspace exists
-#          set_fact:
-#            theia_ide_workspace: "{{ theiaide_vars.IDEA_WORKSPACE }}"
-#          when: workspace_path.stat.exists and workspace_path.stat.isDir
-#
-#      when: theiaide_vars.IDEA_WORKSPACE is defined and theiaide_vars.IDEA_WORKSPACE != "${HOME}"
-
     - name: Set fact 'theia_ide_workspace' to '${HOME}'
       set_fact:
         theia_ide_workspace: "${HOME}"
