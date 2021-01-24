@@ -1,6 +1,6 @@
 template_name: theiaide
 is_maintained: True
-port: 8787
+port: 8080
 needs_forc_support: True
 forc_versions:
   - v03
