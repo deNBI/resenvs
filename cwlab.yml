@@ -45,6 +45,14 @@
     name: python3-docker
   become: yes
 
+- name: Ensure data path exists
+  file:
+    state: directory
+    path: "{{ cwlab_vars.data_volume_path }}"
+    recurse: yes
+    owner: ubuntu
+    group: ubuntu
+
 - name: Launch cwlab container
   community.general.docker_container:
     name: cwlab
