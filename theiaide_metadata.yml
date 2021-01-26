@@ -3,7 +3,6 @@ is_maintained: True
 port: 8787
 needs_forc_support: True
 forc_versions:
-  - v03
   - v02
   - v01
 incompatible_versions:
