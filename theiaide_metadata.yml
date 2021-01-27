@@ -3,7 +3,6 @@ is_maintained: True
 port: 8787
 needs_forc_support: True
 forc_versions:
-  - v03
   - v02
   - v01
 incompatible_versions:
@@ -13,7 +12,9 @@ protocol: "tcp"
 securitygroup_name: "_theaide"
 securitygroup_description: "Theaide"
 securitygroup_ssh: False
-title: "Thea - Cloud and Desktop IDE"
+title: "Theia - Cloud and Desktop IDE"
 description: "Browser based IDE that offers among others a terminal, editor and a file browser."
 logo_url: "https://cloud.denbi.de/wp-content/uploads/2020/02/theia.png"
 info_url: ""
+information_for_display:
+     version: 12
