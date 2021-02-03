@@ -41,6 +41,7 @@
     name: oefenweb.rstudio_server
   vars:
     rstudio_install: [r-base]
+    rstudio_server_version: "{{ rstudio_vars.RSTUDIO_VERSION }}"
   when: rstudio_vars.create_only_backend == "false"
 
 - name: Copy session file if also installing rstudio
