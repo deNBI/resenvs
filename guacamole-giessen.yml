@@ -71,6 +71,12 @@
     daemon_reload: yes
   when: guacamole_vars.create_only_backend == "true"
 
+- name: Install Systemd
+  apt:
+    pkg:
+    - systemd-sysv
+    state: present
+
 - name: Enable periodic updates
   block:
     - name: enable unattended upgrades
