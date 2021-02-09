@@ -17,7 +17,6 @@
         - apt-daily-upgrade
         - apt-daily-upgrade.timer
 
-
 - name: Wait for automatic system updates 1
   shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
   when: rstudio_vars.create_only_backend == "false"
