@@ -14,8 +14,12 @@
         - unattended-upgrades
         - apt-daily
         - apt-daily.timer
-        - apt-daily-upgrade
         - apt-daily-upgrade.timer
+
+- name: Update apt cache
+  apt:
+    update_cache: true
+  become: yes
 
 - name: Wait for automatic system updates 1
   shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
@@ -23,43 +27,45 @@
 - name: Wait for automatic system updates 2
   shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
 
-- name: Install guacamole role
-  include_role:
-    name: guacamole
-  when: guacamole_vars.create_only_backend == "false"
+- name: Install docker.io package
+  apt:
+    name: docker.io
+  become: yes
 
-- name: Flush guacamole handlers
-  meta: flush_handlers
-  when: guacamole_vars.create_only_backend == "false"
-
-- name: Setup password for default user
+- name: Add ubuntu user to docker group
   user:
-    name: "{{ guacamole_vars.DEFAULT_USER }}"
-    password: "{{ guacamole_vars.DEFAULT_PASSWORD_HASHED }}"
-  when: guacamole_vars.create_only_backend == "true"
+    name: ubuntu
+    groups: docker
+    append: yes
+  become: yes
 
-- name: Restart xrdp
-  systemd:
-    name: xrdp
-    state: restarted
-  when: guacamole_vars.create_only_backend == "true"
+- name: Install docker python dev package
+  apt:
+    name: python3-docker
+  become: yes
 
-- name: Restart guacd
-  systemd:
-    name: guacd
-    state: restarted
-  when: guacamole_vars.create_only_backend == "true"
+- name: Ensure data path exists
+  file:
+    state: directory
+    path: "{{ cwlab_vars.data_volume_path }}"
+    recurse: yes
+    owner: ubuntu
+    group: ubuntu
 
-- name: Restart Tomcat
-  systemd:
-    name: tomcat8
-    state: restarted
-  when: guacamole_vars.create_only_backend == "true"
-
-- name: Reload systemd
-  systemd:
-    daemon_reload: yes
-  when: guacamole_vars.create_only_backend == "true"
+- name: Launch cwlab container
+  community.general.docker_container:
+    name: cwlab
+    image: "{{ cwlab_vars.image }}"
+    ports:
+      - "{{ cwlab_vars.exposed_port }}:5000"
+    volumes:
+      - "{{ cwlab_vars.data_volume_path }}:/cwlab"
+    restart_policy: always
+    user: 1000:1000
+    recreate: yes
+    privileged: yes
+    working_dir: "/cwlab"
+    container_default_behavior: no_defaults
 
 - name: Enable periodic updates
   block:
@@ -77,5 +83,4 @@
         - unattended-upgrades
         - apt-daily
         - apt-daily.timer
-        - apt-daily-upgrade
         - apt-daily-upgrade.timer

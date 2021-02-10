@@ -17,7 +17,6 @@
         - apt-daily-upgrade
         - apt-daily-upgrade.timer
 
-
 - name: Wait for automatic system updates 1
   shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
   when: rstudio_vars.create_only_backend == "false"
@@ -41,6 +40,7 @@
     name: oefenweb.rstudio_server
   vars:
     rstudio_install: [r-base]
+    rstudio_server_version: "{{ rstudio_vars.RSTUDIO_VERSION }}"
   when: rstudio_vars.create_only_backend == "false"
 
 - name: Copy session file if also installing rstudio
