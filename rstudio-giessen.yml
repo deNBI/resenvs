@@ -14,52 +14,45 @@
         - unattended-upgrades
         - apt-daily
         - apt-daily.timer
-        - apt-daily-upgrade
         - apt-daily-upgrade.timer
 
 - name: Wait for automatic system updates 1
   shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+  when: rstudio_vars.create_only_backend == "false"
 
 - name: Wait for automatic system updates 2
   shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
-
-- name: Install guacamole role
-  include_role:
-    name: guacamole
-  when: guacamole_vars.create_only_backend == "false"
-
-- name: Flush guacamole handlers
-  meta: flush_handlers
-  when: guacamole_vars.create_only_backend == "false"
+  when: rstudio_vars.create_only_backend == "false"
 
 - name: Setup password for default user
   user:
-    name: "{{ guacamole_vars.DEFAULT_USER }}"
-    password: "{{ guacamole_vars.DEFAULT_PASSWORD_HASHED }}"
-  when: guacamole_vars.create_only_backend == "true"
+    name: "{{ rstudio_vars.DEFAULT_USER }}"
+    password: "{{ rstudio_vars.DEFAULT_PASSWORD_HASHED }}"
 
-- name: Restart xrdp
-  systemd:
-    name: xrdp
-    state: restarted
-  when: guacamole_vars.create_only_backend == "true"
+- name: Install R role
+  include_role:
+    name: oefenweb.r
+  when: rstudio_vars.create_only_backend == "false"
 
-- name: Restart guacd
-  systemd:
-    name: guacd
-    state: restarted
-  when: guacamole_vars.create_only_backend == "true"
+- name: Install rstudio-server role
+  include_role:
+    name: oefenweb.rstudio_server
+  vars:
+    rstudio_install: [r-base]
+  when: rstudio_vars.create_only_backend == "false"
 
-- name: Restart Tomcat
-  systemd:
-    name: tomcat8
-    state: restarted
-  when: guacamole_vars.create_only_backend == "true"
+- name: Copy session file if also installing rstudio
+  copy:
+    content: "session-timeout-minutes=180"
+    dest: "{{ rstudio_vars.RSESSION_FILE_PATH }}"
+    mode: "0644"
+    owner: "root"
+    group: "root"
+  when: rstudio_vars.create_only_backend == "false"
 
-- name: Reload systemd
-  systemd:
-    daemon_reload: yes
-  when: guacamole_vars.create_only_backend == "true"
+- name: Flush rstudio handlers
+  meta: flush_handlers
+  when: rstudio_vars.create_only_backend == "false"
 
 - name: Enable periodic updates
   block:
@@ -77,5 +70,4 @@
         - unattended-upgrades
         - apt-daily
         - apt-daily.timer
-        - apt-daily-upgrade
         - apt-daily-upgrade.timer
