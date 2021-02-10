@@ -17,6 +17,11 @@
         - apt-daily-upgrade
         - apt-daily-upgrade.timer
 
+- name: Update apt cache
+  apt:
+    update_cache: true
+  become: yes
+
 - name: Wait for automatic system updates 1
   shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
   when: theiaide_vars.create_only_backend == "false"
