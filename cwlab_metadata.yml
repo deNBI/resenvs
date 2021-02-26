@@ -4,8 +4,7 @@ port: 80
 needs_forc_support: True
 forc_versions:
     - v01
-incompatible_versions:
-    - None known
+incompatible_versions: []
 direction: "ingress"
 protocol: "tcp"
 securitygroup_name: "_cwlab"
