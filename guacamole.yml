@@ -34,9 +34,8 @@
 
 - name: Setup password for default user
   user:
-      name: ubuntu
-      update_password: always
-      password: "{{ denbi|password_hash('sha512') }}"
+    name: "{{ guacamole_vars.DEFAULT_USER }}"
+    password: "{{ guacamole_vars.DEFAULT_PASSWORD_HASHED }}"
   when: guacamole_vars.create_only_backend == "true"
 
 - name: Restart xrdp
