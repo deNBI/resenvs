@@ -3,8 +3,9 @@ is_maintained: True
 port: 8080
 needs_forc_support: True
 forc_versions:
-    - v02
-    - v01
+  - v03
+  - v02
+  - v01
 incompatible_versions:
     - Ubuntu 16.04
     - Ubuntu 20.04

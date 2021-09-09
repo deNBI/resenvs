@@ -120,5 +120,5 @@
       with_items:
         - unattended-upgrades
         - apt-daily
-        - apt-daily.timer
-        - apt-daily-upgrade.timer
+       # - apt-daily.timer
+       # - apt-daily-upgrade.timer

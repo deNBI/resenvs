@@ -3,11 +3,11 @@ is_maintained: True
 port: 8787
 needs_forc_support: True
 forc_versions:
+  - v04
   - v03
   - v02
   - v01
-incompatible_versions:
-      - Ubuntu 20.04
+incompatible_versions: []
 direction: "ingress"
 protocol: "tcp"
 securitygroup_name: "_rstudio"

@@ -32,7 +32,7 @@
 
 - name: Install R role
   include_role:
-    name: oefenweb.r
+    name: oefenweb.latest_r
   when: rstudio_vars.create_only_backend == "false"
 
 - name: Install rstudio-server role
@@ -72,5 +72,5 @@
         - unattended-upgrades
         - apt-daily
         - apt-daily.timer
-        - apt-daily-upgrade
-        - apt-daily-upgrade.timer
+      #  - apt-daily-upgrade
+      #  - apt-daily-upgrade.timer

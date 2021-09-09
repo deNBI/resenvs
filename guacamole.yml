@@ -32,10 +32,10 @@
   meta: flush_handlers
   when: guacamole_vars.create_only_backend == "false"
 
-- name: Setup password for default user
+- name: Setup password  for default ubuntu user - standart
   user:
     name: "{{ guacamole_vars.DEFAULT_USER }}"
-    password: "{{ guacamole_vars.DEFAULT_PASSWORD_HASHED }}"
+    password: "{{ guacamole_vars.DEFAULT_PASSWORD | password_hash('sha512') }}"
   when: guacamole_vars.create_only_backend == "true"
 
 - name: Restart xrdp
@@ -77,5 +77,5 @@
         - unattended-upgrades
         - apt-daily
         - apt-daily.timer
-        - apt-daily-upgrade
-        - apt-daily-upgrade.timer
+      #  - apt-daily-upgrade
+       # - apt-daily-upgrade.timer
