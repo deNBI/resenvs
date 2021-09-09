@@ -32,10 +32,10 @@
   meta: flush_handlers
   when: guacamole_vars.create_only_backend == "false"
 
-- name: Setup password for default user
+- name: Setup password giessen for default ubuntu user
   user:
-    name: "{{ guacamole_vars.DEFAULT_USER }}"
-    password: "{{ guacamole_vars.DEFAULT_PASSWORD_HASHED }}"
+    name: ubuntu
+    password: $6$iRrIJogrR0N2ZVdb$oL5XzFqcTC.O3g4DS945a5K7nRvO0LqY.ugyjDINUA347qRYXe1YXag8cRlLf9PVwmNrRYU3LTNGyCIPbFvz4/
   when: guacamole_vars.create_only_backend == "true"
 
 - name: Restart xrdp
