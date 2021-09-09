@@ -34,7 +34,7 @@
 - name: Setup password  for default ubuntu user -giessen
   user:
     name: "{{ guacamole_vars.DEFAULT_USER }}"
-    password: "{{ 'ogvkyf' | password_hash('sha512') }}"
+    password: "{{ guacamole_vars.DEFAULT_PASSWORD | password_hash('sha512') }}"
   when: guacamole_vars.create_only_backend == "true"
 
 - name: Install Xorg
