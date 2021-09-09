@@ -33,8 +33,9 @@
 
 - name: Setup password for default user
   user:
-    name: "{{ guacamole_vars.DEFAULT_USER }}"
-    password: "{{ guacamole_vars.DEFAULT_PASSWORD_HASHED }}"
+      name: ubuntu
+      update_password: always
+      password: "{{ denbi|password_hash('sha512') }}"
   when: guacamole_vars.create_only_backend == "true"
 
 - name: Install Xorg
