@@ -20,6 +20,7 @@
   apt:
     update_cache: true
   become: yes
+  when: guacamole_vars.create_only_backend == "false"
 
 - name: Wait for automatic system updates 1
   shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
@@ -31,6 +32,7 @@
   apt:
     name: docker.io
   become: yes
+  when: guacamole_vars.create_only_backend == "false"
 
 - name: Add ubuntu user to docker group
   user:
@@ -38,11 +40,13 @@
     groups: docker
     append: yes
   become: yes
+  when: guacamole_vars.create_only_backend == "false"
 
 - name: Install docker python dev package
   apt:
     name: python3-docker
   become: yes
+  when: guacamole_vars.create_only_backend == "false"
 
 - name: Ensure data path exists
   file:
@@ -51,6 +55,7 @@
     recurse: yes
     owner: ubuntu
     group: ubuntu
+  when: guacamole_vars.create_only_backend == "false"
 
 - name: Launch cwlab container
   community.general.docker_container:

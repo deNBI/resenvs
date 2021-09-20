@@ -45,6 +45,7 @@
     - appmenu-gtk3-module
     - xubuntu-desktop
     state: present
+  when: guacamole_vars.create_only_backend == "false"
 
 - name: Restart xrdp
   systemd:
