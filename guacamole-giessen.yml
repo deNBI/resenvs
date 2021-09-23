@@ -15,12 +15,15 @@
         - apt-daily
         - apt-daily.timer
         - apt-daily-upgrade.timer
+  when: guacamole_vars.create_only_backend == "false"
 
 - name: Wait for automatic system updates 1
   shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+  when: guacamole_vars.create_only_backend == "false"
 
 - name: Wait for automatic system updates 2
   shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
+  when: guacamole_vars.create_only_backend == "false"
 
 - name: Install guacamole role
   include_role:
@@ -87,3 +90,4 @@
         - apt-daily
         - apt-daily.timer
         - apt-daily-upgrade.timer
+  when: guacamole_vars.create_only_backend == "false"
