@@ -16,11 +16,13 @@
         - apt-daily.timer
         - apt-daily-upgrade
         - apt-daily-upgrade.timer
+  when: theiaide_vars.create_only_backend == "false"
 
 - name: Update apt cache
   apt:
     update_cache: true
   become: yes
+  when: theiaide_vars.create_only_backend == "false"
 
 - name: Wait for automatic system updates 1
   shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
@@ -103,7 +105,6 @@
         name: theia-ide.service
         enabled: true
         state: started
-
   when: theiaide_vars.create_only_backend == "false"
 
 - name: Enable periodic updates
@@ -124,3 +125,4 @@
         - apt-daily.timer
       #  - apt-daily-upgrade
        # - apt-daily-upgrade.timer
+  when: theiaide_vars.create_only_backend == "false"
