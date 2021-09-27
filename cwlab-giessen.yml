@@ -15,6 +15,7 @@
         - apt-daily
         - apt-daily.timer
         - apt-daily-upgrade.timer
+  when: cwlab_vars.create_only_backend == "false"
 
 - name: Update apt cache
   apt:
@@ -24,9 +25,11 @@
 
 - name: Wait for automatic system updates 1
   shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+  when: cwlab_vars.create_only_backend == "false"
 
 - name: Wait for automatic system updates 2
   shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
+  when: cwlab_vars.create_only_backend == "false"
 
 - name: Install docker.io package
   apt:
@@ -89,3 +92,4 @@
         - apt-daily
         - apt-daily.timer
         - apt-daily-upgrade.timer
+  when: cwlab_vars.create_only_backend == "false"
