@@ -1,0 +1,12 @@
+- name: Setting up cwlab
+  hosts: all
+  become: yes
+  connection: paramiko_ssh
+  gather_facts: yes
+  vars_files:
+  tasks:
+    - name: Import vars
+      include_vars: cwlab_vars_file.yml
+
+    - name: Setting up virtual machine with cwlab
+      import_tasks: cwlab.yml

@@ -1,0 +1,18 @@
+{
+  "builders":
+  [{
+      "type": "openstack",
+      "image_name": "Ubuntu with cwlab",
+      "source_image": "e0432b2e-7e70-472f-b1cf-8d8af62ecd72",
+      "networks": "053f75d5-e7ea-4ccc-8519-3c896c27a2c2",
+      "floating_ip_network": "f8f2b7e2-9113-4f3c-a072-38e87126a123",
+      "floating_ip": "a96f1761-9194-4051-a9b1-eda6c23eea6a",
+      "flavor": "de.NBI tiny",
+      "ssh_username": "ubuntu"
+  }],
+  "provisioners":
+  [{
+    "type": "ansible",
+    "playbook_file": "./packer_cwlab.yml"
+  }]
+}
