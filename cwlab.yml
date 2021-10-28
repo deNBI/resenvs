@@ -105,6 +105,7 @@
     privileged: yes
     working_dir: "/cwlab"
     container_default_behavior: no_defaults
+  when: cwlab_vars.create_only_backend == "false"
 
 - name: Enable periodic updates
   block:
