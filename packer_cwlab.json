@@ -9,7 +9,7 @@
       "floating_ip": "a96f1761-9194-4051-a9b1-eda6c23eea6a",
       "flavor": "de.NBI tiny",
       "ssh_username": "ubuntu",
-      "image_tags": ["portalclient"]
+      "image_tags": ["cwlab"]
   }],
   "provisioners":
   [{
