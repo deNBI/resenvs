@@ -1,0 +1,10 @@
+- name: Setting up guacamole
+  hosts: all
+  become: yes
+  connection: paramiko_ssh
+  gather_facts: yes
+  vars_files:
+    - guacamole_vars_file.yml
+  tasks:
+    - name: Setting up virtual machine with guacamole
+      import_tasks: guacamole.yml

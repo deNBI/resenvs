@@ -4,9 +4,7 @@
   connection: paramiko_ssh
   gather_facts: yes
   vars_files:
+    - cwlab_vars_file.yml
   tasks:
-    - name: Import vars
-      include_vars: cwlab_vars_file.yml
-
     - name: Setting up virtual machine with cwlab
       import_tasks: cwlab.yml
