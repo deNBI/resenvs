@@ -1,0 +1,55 @@
+name: Update Images with ResEnvs
+
+on:
+  workflow_dispatch:
+    inputs:
+      update_cwlab:
+        description: 'Build new cwlab image'
+        required: false
+        default: 'true'
+        
+      update_guacamole:
+        description: 'Build new guacamole image'
+        required: false
+        default: 'true'
+        
+      update_rstudio:
+        description: 'Build new rstudio image'
+        required: false
+        default: 'true'
+        
+      update_theiaide:
+        description: 'Build new theiaide image'
+        required: false
+        default: 'true'
+        
+jobs:
+    
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Build and update cwlab image with packer
+        if: ${{ github.event.inputs.update_cwlab == 'true' }}
+        run: |
+          . ~/portal-pool-dev-openrc.sh
+          packer build packer_cwlab.json
+      
+      - name: Build and update guacamole image with packer
+        if: ${{ github.event.inputs.update_guacamole == 'true' }}
+        run: |
+          . ~/portal-pool-dev-openrc.sh
+          packer build packer_guacamole.json
+          
+      - name: Build and update rstudio image with packer
+        if: ${{ github.event.inputs.update_rstudio == 'true' }}
+        run: |
+          . ~/portal-pool-dev-openrc.sh
+          packer build packer_rstudio.json
+      
+      - name: Build and update theiaide image with packer
+        if: ${{ github.event.inputs.update_theiaide == 'true' }}
+        run: |
+          . ~/portal-pool-dev-openrc.sh
+          packer build packer_theiaide.json
