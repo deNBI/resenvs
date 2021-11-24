@@ -1,3 +1,0 @@
-- name: Test function
-  shell: echo foo
-  when: cwlab_vars.create_only_backend == "true"
