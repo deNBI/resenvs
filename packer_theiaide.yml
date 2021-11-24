@@ -4,7 +4,7 @@
   connection: paramiko_ssh
   gather_facts: yes
   vars_files:
-    - theiaide_vars_file.yml
+    - packer_theiaide_vars_file.yml
   tasks:
     - name: Setting up virtual machine with theiaide
       import_tasks: theiaide.yml

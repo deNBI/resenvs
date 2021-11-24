@@ -4,7 +4,7 @@
   connection: paramiko_ssh
   gather_facts: yes
   vars_files:
-    - rstudio_vars_file.yml
+    - packer_rstudio_vars_file.yml
   tasks:
     - name: Setting up virtual machine with rstudio
       import_tasks: rstudio.yml
