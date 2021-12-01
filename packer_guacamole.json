@@ -2,7 +2,7 @@
   "builders":
   [{
     "type": "openstack",
-    "image_name": "Guacamole_ubuntu18.04",
+    "image_name": "Guacamole-ubuntu18.04",
     "source_image": "a23a6305-4220-4389-b841-3cf976dff582",
     "networks": "053f75d5-e7ea-4ccc-8519-3c896c27a2c2",
     "flavor": "de.NBI tiny",

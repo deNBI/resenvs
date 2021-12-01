@@ -2,7 +2,7 @@
   "builders":
   [{
     "type": "openstack",
-    "image_name": "CWLab_ubuntu20.04",
+    "image_name": "CWLab-ubuntu20.04",
     "source_image": "e0432b2e-7e70-472f-b1cf-8d8af62ecd72",
     "networks": "053f75d5-e7ea-4ccc-8519-3c896c27a2c2",
     "flavor": "de.NBI tiny",
