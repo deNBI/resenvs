@@ -3,7 +3,15 @@
   [{
     "type": "openstack",
     "image_name": "RStudio-ubuntu20",
-    "source_image": "e0432b2e-7e70-472f-b1cf-8d8af62ecd72",
+    "source_image_filter": {
+      "filters": {
+        "properties": {
+          "os_distro": "ubuntu",
+          "os_version": "2004"
+        }
+      },
+      "most_recent": true
+    },
     "networks": "053f75d5-e7ea-4ccc-8519-3c896c27a2c2",
     "flavor": "de.NBI tiny",
     "ssh_username": "ubuntu",
