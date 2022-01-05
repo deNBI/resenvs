@@ -1,0 +1,23 @@
+- name: Autoupdate RStudio image
+  hosts: localhost
+
+  tasks:
+    - name: Retrieve list of all images
+      openstack.cloud.image_info:
+      register: images
+
+    - set_fact:
+        newest_base_image: "{{ images.openstack_image | json_query(filter) | sort(attribute='created_at') | last }}"
+      vars:
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
+
+    - set_fact:
+        newest_rstudio_image: "{{ images.openstack_image | selectattr('tags', 'search', 'rstudio') | sort(attribute='created_at') | last }}"
+
+    - name: Build new RStudio image
+      shell: packer build packer_rstudio_bielefeld.json
+      when: newest_base_image.created_at > newest_rstudio_image.created_at
+
+
+
+
