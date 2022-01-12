@@ -46,14 +46,14 @@
         - index < rstudio_list | length - 2
 
     - name: Clean up old TheiaIDE images
-        openstack.cloud.image:
-          name: "{{ item.id }}"
-          state: absent
-        loop: "{{ theiaide_list }}"
-        loop_control:
-          index_var: index
-        vars:
-          theiaide_list: "{{ images.openstack_image | selectattr('tags', 'search', 'theiaide') | sort(attribute='created_at') }}"
-        when:
-          - theiaide_list | length > 2
-          - index < theiaide_list | length - 2
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ theiaide_list }}"
+      loop_control:
+        index_var: index
+      vars:
+        theiaide_list: "{{ images.openstack_image | selectattr('tags', 'search', 'theiaide') | sort(attribute='created_at') }}"
+      when:
+        - theiaide_list | length > 2
+        - index < theiaide_list | length - 2
