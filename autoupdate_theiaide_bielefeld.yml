@@ -7,7 +7,7 @@
       register: images
 
     - set_fact:
-        newest_base_image: "{{ images.openstack_image | json_query(filter) | sort(attribute='created_at') | last }}"
+        newest_base_image: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') | last }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
 
