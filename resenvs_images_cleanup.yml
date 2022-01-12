@@ -1,0 +1,59 @@
+- name: ResEnvs Images Cleanup
+  hosts: localhost
+
+  tasks:
+    - name: Retrieve list of all images
+      openstack.cloud.image_info:
+      register: images
+
+    - name: Clean up old CWLab images
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ cwlab_list }}"
+      loop_control:
+        index_var: index
+      vars:
+        cwlab_list: "{{ images.openstack_image | selectattr('tags', 'search', 'cwlab') | sort(attribute='created_at') }}"
+      when:
+        - cwlab_list | length > 2
+        - index < cwlab_list | length - 2
+
+    - name: Clean up old Guacamole images
+        openstack.cloud.image:
+          name: "{{ item.id }}"
+          state: absent
+        loop: "{{ guacamole_list }}"
+        loop_control:
+          index_var: index
+        vars:
+          guacamole_list: "{{ images.openstack_image | selectattr('tags', 'search', 'guacamole') | sort(attribute='created_at') }}"
+        when:
+          - guacamole_list | length > 2
+          - index < guacamole_list | length - 2
+
+    - name: Clean up old RStudio images
+        openstack.cloud.image:
+          name: "{{ item.id }}"
+          state: absent
+        loop: "{{ rstudio_list }}"
+        loop_control:
+          index_var: index
+        vars:
+          rstudio_list: "{{ images.openstack_image | selectattr('tags', 'search', 'rstudio') | sort(attribute='created_at') }}"
+        when:
+          - rstudio_list | length > 2
+          - index < rstudio_list | length - 2
+
+    - name: Clean up old TheiaIDE images
+        openstack.cloud.image:
+          name: "{{ item.id }}"
+          state: absent
+        loop: "{{ theiaide_list }}"
+        loop_control:
+          index_var: index
+        vars:
+          theiaide_list: "{{ images.openstack_image | selectattr('tags', 'search', 'theiaide') | sort(attribute='created_at') }}"
+        when:
+          - theiaide_list | length > 2
+          - index < theiaide_list | length - 2
