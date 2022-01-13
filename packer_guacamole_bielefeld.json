@@ -5,6 +5,7 @@
     "image_name": "Guacamole-ubuntu18",
     "source_image_filter": {
       "filters": {
+        "tags": ["portalclient"],
         "properties": {
           "os_distro": "ubuntu",
           "os_version": "1804"

@@ -5,6 +5,7 @@
     "image_name": "TheiaIDE-ubuntu20",
     "source_image_filter": {
       "filters": {
+        "tags": ["portalclient"],
         "properties": {
           "os_distro": "ubuntu",
           "os_version": "2004"
