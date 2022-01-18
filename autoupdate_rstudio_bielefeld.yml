@@ -2,21 +2,31 @@
   hosts: localhost
 
   tasks:
+    - set_fact:
+        update: false
+
     - name: Retrieve list of all images
       openstack.cloud.image_info:
       register: images
 
     - set_fact:
-        newest_base_image: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') | last }}"
+        base_images: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
 
     - set_fact:
-        newest_rstudio_image: "{{ images.openstack_image | selectattr('tags', 'search', 'rstudio') | sort(attribute='created_at') | last }}"
+        rstudio_images: "{{ images.openstack_image | selectattr('tags', 'search', 'rstudio') | sort(attribute='created_at') }}"
+
+    - set_fact:
+        update: true
+        when:
+          - base_images | length > 0
+          - rstudio_images | length == 0 or
+            (rstudio_images | length > 0 and (base_images | last).created_at > (rstudio_images | last).created_at)
 
     - name: Build new RStudio image
       shell: packer build packer_rstudio_bielefeld.json
-      when: newest_base_image.created_at > newest_rstudio_image.created_at
+      when: update == true
 
 
 

@@ -2,22 +2,31 @@
   hosts: localhost
 
   tasks:
+    - set_fact:
+        update: false
+
     - name: Retrieve list of all images
       openstack.cloud.image_info:
       register: images
 
     - set_fact:
-        newest_base_image: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') | last }}"
+        base_images: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
 
     - set_fact:
-        newest_cwlab_image: "{{ images.openstack_image | selectattr('tags', 'search', 'cwlab') | sort(attribute='created_at') | last }}"
+        cwlab_images: "{{ images.openstack_image | selectattr('tags', 'search', 'cwlab') | sort(attribute='created_at') }}"
+
+    - set_fact:
+        update: true
+      when:
+        - base_images | length > 0
+        - cwlab_images | length == 0 or
+          (cwlab_images | length > 0 and (base_images | last).created_at > (cwlab_images | last).created_at)
 
     - name: Build new CWLab image
       shell: packer build packer_cwlab_bielefeld.json
-      when: newest_base_image.created_at > newest_cwlab_image.created_at
-
+      when: update == true
 
 
 
