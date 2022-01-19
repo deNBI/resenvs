@@ -2,7 +2,7 @@
   "builders":
   [{
     "type": "openstack",
-    "image_name": "Guacamole-ubuntu18",
+    "image_name": "Guacamole-ubuntu18 ({{isotime `2006-01-02`}})",
     "source_image_filter": {
       "filters": {
         "tags": ["portalclient"],

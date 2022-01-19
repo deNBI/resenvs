@@ -2,7 +2,7 @@
   "builders":
   [{
     "type": "openstack",
-    "image_name": "CWLab-ubuntu20",
+    "image_name": "CWLab-ubuntu20 ({{isotime `2006-01-02`}})",
     "source_image_filter": {
       "filters": {
         "tags": ["portalclient"],
