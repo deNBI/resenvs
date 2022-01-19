@@ -6,7 +6,7 @@
   tasks:
     - set_fact:
         limit: "{{ keep | int }}"
-      when: keep | int > 0
+      when: keep is defined and keep | int > 0
 
     - name: Retrieve list of all images
       openstack.cloud.image_info:
@@ -22,8 +22,8 @@
       vars:
         cwlab_list: "{{ images.openstack_image | selectattr('tags', 'search', 'cwlab') | sort(attribute='created_at') }}"
       when:
-        - cwlab_list | length > limit
-        - index < cwlab_list | length - limit
+        - cwlab_list | length > limit | int
+        - index < cwlab_list | length - limit | int
 
     - name: Clean up old Guacamole images
       openstack.cloud.image:
@@ -35,8 +35,8 @@
       vars:
         guacamole_list: "{{ images.openstack_image | selectattr('tags', 'search', 'guacamole') | sort(attribute='created_at') }}"
       when:
-        - guacamole_list | length > limit
-        - index < guacamole_list | length - limit
+        - guacamole_list | length > limit | int
+        - index < guacamole_list | length - limit | int
 
     - name: Clean up old RStudio images
       openstack.cloud.image:
@@ -48,8 +48,8 @@
       vars:
         rstudio_list: "{{ images.openstack_image | selectattr('tags', 'search', 'rstudio') | sort(attribute='created_at') }}"
       when:
-        - rstudio_list | length > limit
-        - index < rstudio_list | length - limit
+        - rstudio_list | length > limit | int
+        - index < rstudio_list | length - limit | int
 
     - name: Clean up old TheiaIDE images
       openstack.cloud.image:
@@ -61,5 +61,5 @@
       vars:
         theiaide_list: "{{ images.openstack_image | selectattr('tags', 'search', 'theiaide') | sort(attribute='created_at') }}"
       when:
-        - theiaide_list | length > limit
-        - index < theiaide_list | length - limit
+        - theiaide_list | length > limit | int
+        - index < theiaide_list | length - limit | int
