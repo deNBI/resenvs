@@ -1,0 +1,42 @@
+- name: Autoupdate CWLab image
+  hosts: localhost
+  vars:
+    resenv: "dummy"
+    location: "bielefeld"
+
+  tasks:
+    - set_fact:
+        update: false
+
+    - name: Retrieve list of all images
+      openstack.cloud.image_info:
+      register: images
+
+    - set_fact:
+        base_images: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') }}"
+      vars:
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='1804']"
+      when: resenv == "guacamole"
+
+    - set_fact:
+        base_images: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') }}"
+      vars:
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
+      when: resenv != "guacamole"
+
+    - set_fact:
+        resenv_images: "{{ images.openstack_image | selectattr('tags', 'search', '{{ resenv }}') | sort(attribute='created_at') }}"
+
+    - set_fact:
+        update: true
+      when:
+        - base_images | length > 0
+        - resenv_images | length == 0 or
+          (resenv_images | length > 0 and (base_images | last).created_at > (resenv_images | last).created_at)
+
+    - name: Build new {{ resenv }} image
+      shell: packer build packer_{{ resenv }}_{{ location }}.json
+      when: update
+
+
+

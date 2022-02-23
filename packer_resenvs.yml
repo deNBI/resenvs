@@ -1,0 +1,22 @@
+- name: Setting up research environment
+  hosts: all
+  become: yes
+  connection: paramiko_ssh
+  gather_facts: yes
+
+  vars:
+    resenv:
+    location:
+
+  tasks:
+    - name: Include {{ resenv }} variables
+      include_vars:
+        file: packer_{{ resenv }}_vars_file.yml
+
+    - name: Setting up virtual machine with {{ resenv }} (Bielefeld)
+      import_tasks: {{ resenv }}.yml
+      when: location == "bielefeld"
+
+    - name: Setting up virtual machine with {{ resenv }} (Giessen)
+      import_tasks: {{ resenv }}-giessen.yml
+      when: location == "giessen"

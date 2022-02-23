@@ -1,0 +1,27 @@
+{
+  "builders":
+  [{
+    "type": "openstack",
+    "image_name": "CWLab-ubuntu20 ({{isotime `2006-01-02`}})",
+    "source_image_filter": {
+      "filters": {
+        "tags": ["portalclient"],
+        "properties": {
+          "os_distro": "ubuntu",
+          "os_version": "2004"
+        }
+      },
+      "most_recent": true
+    },
+    "networks": "c0ac8288-c1c7-4458-8d86-71eca7008fab",
+    "flavor": "de.NBI tiny",
+    "ssh_username": "ubuntu",
+    "image_tags": ["cwlab"]
+  }],
+  "provisioners":
+  [{
+    "type": "ansible",
+    "playbook_file": "./packer_resenvs.yml",
+    "extra_arguments": ["-e", "\"resenv=cwlab location=giessen\""]
+  }]
+}
