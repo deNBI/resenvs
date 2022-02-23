@@ -1,0 +1,42 @@
+- name: Check image update
+  hosts: localhost
+  vars:
+    name: "Dummy"
+    date: "2000-01-01"
+    distro: "ubuntu"
+    version: "2004"
+
+  tasks:
+    - set_fact:
+        update: false
+
+    - name: Retrieve list of all images
+      openstack.cloud.image_info:
+      register: images
+
+    - set_fact:
+        base_images: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') }}"
+      vars:
+        filter: "[?properties.os_distro=='{{ distro }}' && properties.os_version=='{{ version }}']"
+
+    - set_fact:
+        update: true
+      when: base_images | length == 0 or
+        ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) < (date | to_datetime('%Y-%m-%d'))
+
+    - name: Download new base image
+      command: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
+      when: update
+
+    - name: Upload image to Openstack Giessen
+      openstack.cloud.image:
+        name: "{{ name + ' (' + date + ')' }}"
+        state: present
+        filename: "{{ name }}"
+        tags:
+          - portalclient
+        properties:
+          os_distro: "{{ distro }}"
+          os_version: "{{ version }}"
+      when: update
+
