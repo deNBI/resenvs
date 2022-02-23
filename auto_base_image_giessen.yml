@@ -35,6 +35,7 @@
         filename: "{{ name }}"
         tags:
           - portalclient
+        is_public: yes
         properties:
           os_distro: "{{ distro }}"
           os_version: "{{ version }}"
