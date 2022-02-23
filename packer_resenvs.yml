@@ -11,7 +11,7 @@
   tasks:
     - name: Include {{ resenv }} variables
       include_vars:
-        file: packer_{{ resenv }}_vars_file.yml
+        file: "packer_{{ resenv }}_vars_file.yml"
 
     - name: Setting up virtual machine with {{ resenv }} (Bielefeld)
       import_tasks: "{{ resenv }}.yml"

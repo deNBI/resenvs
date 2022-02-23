@@ -14,6 +14,8 @@
       "most_recent": true
     },
     "networks": "053f75d5-e7ea-4ccc-8519-3c896c27a2c2",
+    "floating_ip_network": "f8f2b7e2-9113-4f3c-a072-38e87126a123",
+    "floating_ip": "18316034-5a6f-4cd6-934f-264c66b3b131",
     "flavor": "de.NBI tiny",
     "ssh_username": "ubuntu",
     "image_tags": ["cwlab"]
@@ -22,6 +24,6 @@
   [{
     "type": "ansible",
     "playbook_file": "./packer_resenvs.yml",
-    "extra_arguments": ["-e", "\"resenv=cwlab location=bielefeld\""]
+    "extra_arguments": ["--extra-vars", "resenv=cwlab location=bielefeld"]
   }]
 }
