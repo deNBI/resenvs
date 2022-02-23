@@ -20,6 +20,7 @@
   }],
   "provisioners":
   [{
+    "type": "ansible",
     "playbook_file": "./packer_resenvs.yml",
     "extra_arguments": ["-e", "\"resenv=rstudio location=bielefeld\""]
   }]
