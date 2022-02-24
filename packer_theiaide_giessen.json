@@ -13,7 +13,7 @@
       },
       "most_recent": true
     },
-    "networks": "c0ac8288-c1c7-4458-8d86-71eca7008fab",
+    "networks": "2a365100-62e9-4d0e-8be0-911a3d8f18c5",
     "flavor": "de.NBI tiny",
     "ssh_username": "ubuntu",
     "image_tags": ["theiaide"]
