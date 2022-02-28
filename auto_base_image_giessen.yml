@@ -18,6 +18,9 @@
         base_images: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='{{ distro }}' && properties.os_version=='{{ version }}']"
+        
+    - debug:
+        msg: "{{ base_images }}"
 
     - set_fact:
         update: true
