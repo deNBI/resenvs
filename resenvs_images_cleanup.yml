@@ -20,7 +20,8 @@
       loop_control:
         index_var: index
       vars:
-        cwlab_list: "{{ images.openstack_image | selectattr('tags', 'search', 'cwlab') | sort(attribute='created_at') }}"
+        cwlab_list: "{{ images.openstack_image | selectattr('tags', 'search', 'cwlab') | selectattr('image_type', '==', 'image')
+        | sort(attribute='created_at') }}"
       when:
         - cwlab_list | length > limit | int
         - index < cwlab_list | length - limit | int
@@ -33,7 +34,8 @@
       loop_control:
         index_var: index
       vars:
-        guacamole_list: "{{ images.openstack_image | selectattr('tags', 'search', 'guacamole') | sort(attribute='created_at') }}"
+        guacamole_list: "{{ images.openstack_image | selectattr('tags', 'search', 'guacamole') | selectattr('image_type', '==', 'image')
+        | sort(attribute='created_at') }}"
       when:
         - guacamole_list | length > limit | int
         - index < guacamole_list | length - limit | int
@@ -46,7 +48,8 @@
       loop_control:
         index_var: index
       vars:
-        rstudio_list: "{{ images.openstack_image | selectattr('tags', 'search', 'rstudio') | sort(attribute='created_at') }}"
+        rstudio_list: "{{ images.openstack_image | selectattr('tags', 'search', 'rstudio') | selectattr('image_type', '==', 'image')
+        | sort(attribute='created_at') }}"
       when:
         - rstudio_list | length > limit | int
         - index < rstudio_list | length - limit | int
@@ -59,7 +62,8 @@
       loop_control:
         index_var: index
       vars:
-        theiaide_list: "{{ images.openstack_image | selectattr('tags', 'search', 'theiaide') | sort(attribute='created_at') }}"
+        theiaide_list: "{{ images.openstack_image | selectattr('tags', 'search', 'theiaide') | selectattr('image_type', '==', 'image')
+        | sort(attribute='created_at') }}"
       when:
         - theiaide_list | length > limit | int
         - index < theiaide_list | length - limit | int
