@@ -1,10 +1,12 @@
-- name: Check image update
+- name: Check base image update
   hosts: localhost
   vars:
     name: "Dummy"
     date: "2000-01-01"
     distro: "ubuntu"
     version: "2004"
+  vars_files:
+    - tags.json
 
   tasks:
     - set_fact:
@@ -15,12 +17,9 @@
       register: images
 
     - set_fact:
-        base_images: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') }}"
+        base_images: "{{ images.openstack_image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='{{ distro }}' && properties.os_version=='{{ version }}']"
-        
-    - debug:
-        msg: "{{ base_images }}"
 
     - set_fact:
         update: true
@@ -38,7 +37,7 @@
         filename: "{{ name }}"
         tags:
           - portalclient
-        #is_public: yes
+          - base_image
         properties:
           os_distro: "{{ distro }}"
           os_version: "{{ version }}"
