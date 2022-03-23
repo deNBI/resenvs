@@ -1,7 +1,9 @@
-- name: ResEnvs Images Cleanup
+- name: Cleanup ResEnvs images
   hosts: localhost
   vars:
     limit: 2
+  vars_files:
+    - tags.json
 
   tasks:
     - set_fact:
@@ -20,7 +22,7 @@
       loop_control:
         index_var: index
       vars:
-        cwlab_list: "{{ images.openstack_image | selectattr('tags', 'search', 'cwlab') | selectattr('image_type', '==', 'image')
+        cwlab_list: "{{ images.openstack_image | selectattr('tags', 'search', cwlab_tag) | selectattr('image_type', '==', 'image')
         | sort(attribute='created_at') }}"
       when:
         - cwlab_list | length > limit | int
@@ -34,7 +36,7 @@
       loop_control:
         index_var: index
       vars:
-        guacamole_list: "{{ images.openstack_image | selectattr('tags', 'search', 'guacamole') | selectattr('image_type', '==', 'image')
+        guacamole_list: "{{ images.openstack_image | selectattr('tags', 'search', guacamole_tag) | selectattr('image_type', '==', 'image')
         | sort(attribute='created_at') }}"
       when:
         - guacamole_list | length > limit | int
@@ -48,7 +50,7 @@
       loop_control:
         index_var: index
       vars:
-        rstudio_list: "{{ images.openstack_image | selectattr('tags', 'search', 'rstudio') | selectattr('image_type', '==', 'image')
+        rstudio_list: "{{ images.openstack_image | selectattr('tags', 'search', rstudio_tag) | selectattr('image_type', '==', 'image')
         | sort(attribute='created_at') }}"
       when:
         - rstudio_list | length > limit | int
@@ -62,7 +64,7 @@
       loop_control:
         index_var: index
       vars:
-        theiaide_list: "{{ images.openstack_image | selectattr('tags', 'search', 'theiaide') | selectattr('image_type', '==', 'image')
+        theiaide_list: "{{ images.openstack_image | selectattr('tags', 'search', theiaide_tag) | selectattr('image_type', '==', 'image')
         | sort(attribute='created_at') }}"
       when:
         - theiaide_list | length > limit | int
