@@ -14,58 +14,11 @@
       openstack.cloud.image_info:
       register: images
 
-    - name: Clean up old CWLab images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ cwlab_list }}"
+    - include_tasks: cleanup_resenvs_images_subloop.yml
+      loop:
+        - cwlab
+        - guacamole
+        - rstudio
+        - theiaide
       loop_control:
-        index_var: index
-      vars:
-        cwlab_list: "{{ images.openstack_image | selectattr('tags', 'search', cwlab_tag) | selectattr('image_type', '==', 'image')
-        | sort(attribute='created_at') }}"
-      when:
-        - cwlab_list | length > limit | int
-        - index < cwlab_list | length - limit | int
-
-    - name: Clean up old Guacamole images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ guacamole_list }}"
-      loop_control:
-        index_var: index
-      vars:
-        guacamole_list: "{{ images.openstack_image | selectattr('tags', 'search', guacamole_tag) | selectattr('image_type', '==', 'image')
-        | sort(attribute='created_at') }}"
-      when:
-        - guacamole_list | length > limit | int
-        - index < guacamole_list | length - limit | int
-
-    - name: Clean up old RStudio images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ rstudio_list }}"
-      loop_control:
-        index_var: index
-      vars:
-        rstudio_list: "{{ images.openstack_image | selectattr('tags', 'search', rstudio_tag) | selectattr('image_type', '==', 'image')
-        | sort(attribute='created_at') }}"
-      when:
-        - rstudio_list | length > limit | int
-        - index < rstudio_list | length - limit | int
-
-    - name: Clean up old TheiaIDE images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ theiaide_list }}"
-      loop_control:
-        index_var: index
-      vars:
-        theiaide_list: "{{ images.openstack_image | selectattr('tags', 'search', theiaide_tag) | selectattr('image_type', '==', 'image')
-        | sort(attribute='created_at') }}"
-      when:
-        - theiaide_list | length > limit | int
-        - index < theiaide_list | length - limit | int
+        loop_var: resenv
