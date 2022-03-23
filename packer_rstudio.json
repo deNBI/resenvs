@@ -1,11 +1,15 @@
 {
+  "variables": {
+    "network": "",
+    "location": ""
+  },
   "builders":
   [{
     "type": "openstack",
-    "image_name": "TheiaIDE-ubuntu20 ({{isotime `2006-01-02`}})",
+    "image_name": "RStudio-ubuntu20 ({{isotime `2006-01-02`}})",
     "source_image_filter": {
       "filters": {
-        "tags": ["portalclient"],
+        "tags": ["{{user `base_image_tag`}}"],
         "properties": {
           "os_distro": "ubuntu",
           "os_version": "2004"
@@ -13,15 +17,15 @@
       },
       "most_recent": true
     },
-    "networks": "053f75d5-e7ea-4ccc-8519-3c896c27a2c2",
+    "networks": "{{user `network`}}",
     "flavor": "de.NBI tiny",
     "ssh_username": "ubuntu",
-    "image_tags": ["theiaide"]
+    "image_tags": ["{{user `rstudio_tag`}}"]
   }],
   "provisioners":
   [{
     "type": "ansible",
     "playbook_file": "./packer_resenvs.yml",
-    "extra_arguments": ["--extra-vars", "resenv=theiaide location=bielefeld"]
+    "extra_arguments": ["--extra-vars", "resenv=rstudio location={{user `location`}}"]
   }]
 }

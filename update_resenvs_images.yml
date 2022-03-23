@@ -1,8 +1,12 @@
-- name: Autoupdate CWLab image
+- name: Update ResEnv image
   hosts: localhost
   vars:
-    resenv: "dummy"
+    resenv: "cwlab"
     location: "bielefeld"
+    upload_environment: "staging"
+  vars_files:
+    - tags.json
+    - networks.json
 
   tasks:
     - set_fact:
@@ -13,19 +17,20 @@
       register: images
 
     - set_fact:
-        base_images: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') }}"
+        base_images: "{{ images.openstack_image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='1804']"
       when: resenv == "guacamole"
 
     - set_fact:
-        base_images: "{{ images.openstack_image | selectattr('tags', 'search', 'portalclient') | json_query(filter) | sort(attribute='created_at') }}"
+        base_images: "{{ images.openstack_image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
       when: resenv != "guacamole"
 
     - set_fact:
-        resenv_images: "{{ images.openstack_image | selectattr('tags', 'search', '{{ resenv }}') | sort(attribute='created_at') }}"
+        resenv_images: "{{ images.openstack_image | selectattr('tags', 'search', vars[resenv + '_tag']) | sort(attribute='created_at') }}"
+        update: true
 
     - set_fact:
         update: true
@@ -35,7 +40,7 @@
           (resenv_images | length > 0 and (base_images | last).created_at > (resenv_images | last).created_at)
 
     - name: Build new {{ resenv }} image
-      shell: packer build packer_{{ resenv }}_{{ location }}.json
+      shell: packer build -var-file=tags.json -var 'network={{ vars[location + '_' + upload_environment] }}' -var 'location={{ location }}' packer_{{ vars[resenv + '_tag'] }}.json
       when: update
 
 

@@ -1,11 +1,15 @@
 {
+  "variables": {
+    "network": "",
+    "location": ""
+  },
   "builders":
   [{
     "type": "openstack",
-    "image_name": "CWLab-ubuntu20 ({{isotime `2006-01-02`}})",
+    "image_name": "TheiaIDE-ubuntu20 ({{isotime `2006-01-02`}})",
     "source_image_filter": {
       "filters": {
-        "tags": ["portalclient"],
+        "tags": ["{{user `base_image_tag`}}"],
         "properties": {
           "os_distro": "ubuntu",
           "os_version": "2004"
@@ -13,15 +17,15 @@
       },
       "most_recent": true
     },
-    "networks": "2a365100-62e9-4d0e-8be0-911a3d8f18c5",
+    "networks": "{{user `network`}}",
     "flavor": "de.NBI tiny",
     "ssh_username": "ubuntu",
-    "image_tags": ["cwlab"]
+    "image_tags": ["{{user `theiaide_tag`}}"]
   }],
   "provisioners":
   [{
     "type": "ansible",
     "playbook_file": "./packer_resenvs.yml",
-    "extra_arguments": ["--extra-vars", "resenv=cwlab location=giessen"]
+    "extra_arguments": ["--extra-vars", "resenv=theiaide location={{user `location`}}"]
   }]
 }
