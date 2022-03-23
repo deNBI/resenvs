@@ -32,7 +32,7 @@
 
     - name: Upload image to Openstack
       openstack.cloud.image:
-        name: "{{ name + ' (' + date + ')' }}"
+        name: "{{ name + ' [' + date + ']' }}"
         state: present
         filename: "{{ name }}"
         tags:
