@@ -30,7 +30,7 @@
       command: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
       when: update
 
-    - name: Upload image to Openstack Giessen
+    - name: Upload image to Openstack
       openstack.cloud.image:
         name: "{{ name + ' (' + date + ')' }}"
         state: present
