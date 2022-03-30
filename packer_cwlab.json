@@ -1,7 +1,6 @@
 {
   "variables": {
-    "network": "",
-    "location": ""
+    "network": ""
   },
   "builders":
   [{
@@ -26,6 +25,6 @@
   [{
     "type": "ansible",
     "playbook_file": "./packer_resenvs.yml",
-    "extra_arguments": ["--extra-vars", "resenv=cwlab location={{user `location`}}"]
+    "extra_arguments": ["--extra-vars", "resenv=cwlab"]
   }]
 }
