@@ -1,7 +1,6 @@
 - name: Setting up research environment
   hosts: all
   become: yes
-  connection: paramiko_ssh
   gather_facts: yes
 
   vars:
