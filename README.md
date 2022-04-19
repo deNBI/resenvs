@@ -38,6 +38,19 @@ graph LR
 2. After the base image workflow is finished, resenv images will be checkced for both locations. If the newest base image has a later upload date than the newest resenv image, a new version of the resenv image will be built with the newest base.
 3. After the resenv image workflow is finished, a worklflow deleting duplicating base and resenv images will be executed. One base image and two images from each resenv will be kept in the cloud locations.
 
+### Composing scripts for Packer
+[packer_resenvs.yml](https://github.com/deNBI/resenvs/blob/feat/packer/packer_resenvs.yml) is used to combine ansible script and variable file for any research environment. The generated result will be executed by Packer to install the declared dependencies.
+```mermaid
+graph TD
+    S[RESEARCH_ENV.yml] --imported by-->
+    P[packer_resenvs.yml]
+    V[RESEARCH_ENV_vars_file.yml] --imported by--> P
+    P --executed on--> O[Base image<br> instance]
+```
+
+#### Adding a new resenv
+Alongside the YAML files containing installation steps and variables, the name for the new resenv should be denoted in [cleanup_resenvs_images.yml](https://github.com/deNBI/resenvs/blob/feat/packer/cleanup_resenvs_images.yml) and a resenv-specific tag should be added to [tags.json](https://github.com/deNBI/resenvs/blob/feat/packer/tags.json).
+
 ## Configuration of GitHub Runners
 In order to run the workflows with internal GitHub runners, they should have the following dependencies installed:
 - [Packer](https://www.packer.io/downloads) (v. 1.6 or higher)
