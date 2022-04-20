@@ -5,7 +5,7 @@
   "builders":
   [{
     "type": "openstack",
-    "image_name": "RStudioTest-ubuntu20 ({{isotime `2006-01-02`}})",
+    "image_name": "RStudio-ubuntu20 ({{isotime `2006-01-02`}})",
     "source_image_filter": {
       "filters": {
         "tags": ["{{user `base_image_tag`}}"],
