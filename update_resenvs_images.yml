@@ -30,7 +30,6 @@
 
     - set_fact:
         resenv_images: "{{ images.openstack_image | selectattr('tags', 'search', vars[resenv + '_tag']) | sort(attribute='created_at') }}"
-        update: true
 
     - set_fact:
         update: true
