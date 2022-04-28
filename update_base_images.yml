@@ -37,9 +37,10 @@
         filename: "{{ name }}"
         tags:
           - portalclient
-          - base_image
+          - "{{ base_image_tag }}"
         properties:
           os_distro: "{{ distro }}"
           os_version: "{{ version }}"
+          description: "Ubuntu is a free and open source operating system and Linux distribution based on Debian."
       when: update
 
