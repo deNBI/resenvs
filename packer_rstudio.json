@@ -33,7 +33,7 @@
       "securitygroup_description": "RStudio",
       "securitygroup_ssh": "False",
       "title": "RStudio",
-      "description": "RStudio is an integrated development environment for R.",
+      "description": "RStudio is an integrated development environment for R. version: 1.4.1103",
       "logo_url": "https://cloud.denbi.de/wp-content/uploads/2019/02/RStudio-Logo-Flat-1024x360-1.png",
       "info_url": "",
       "information_for_display": "{'version': '1.4.1103'}"

@@ -33,7 +33,7 @@
       "securitygroup_description": "Theiaide",
       "securitygroup_ssh": "False",
       "title": "Theia - Cloud and Desktop IDE",
-      "description": "Browser based IDE that offers among others a terminal, editor and a file browser.",
+      "description": "Browser based IDE that offers among others a terminal, editor and a file browser. version: 12",
       "logo_url": "https://cloud.denbi.de/wp-content/uploads/2019/02/RStudio-Logo-Flat-1024x360-1.png",
       "info_url": "https://cloud.denbi.de/wp-content/uploads/2020/02/theia.png",
       "information_for_display": "{'version': '12'}"

@@ -33,7 +33,7 @@
       "securitygroup_description": "CWLab",
       "securitygroup_ssh": "False",
       "title": "CWLab",
-      "description": "",
+      "description": "version: 0.3.2",
       "logo_url": "",
       "info_url": "",
       "information_for_display": "{'version': '0.3.2'}"
