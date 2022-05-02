@@ -15,7 +15,7 @@ securitygroup_description: "Theaide"
 securitygroup_ssh: False
 title: "Theia - Cloud and Desktop IDE"
 description: "Browser based IDE that offers among others a terminal, editor and a file browser."
-logo_url: "https://cloud.denbi.de/wp-content/uploads/2020/02/theia.png"
+logo_url: "https://cloud.denbi.de/static/images/theia.png"
 info_url: ""
 information_for_display:
      version: 12
