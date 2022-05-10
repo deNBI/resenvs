@@ -106,10 +106,11 @@
 
 - name: Install chosen packages
   become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
-  shell: "timeout {{ jupyterhub_vars.TIMEOUT_LENGTH }} bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda activate {{ jupyterhub_vars.ENV_NAME| quote}} && conda install --yes {{ item.key }}={{ item.value.version }}'"
+  shell: "timeout {{ jupyterhub_vars.TIMEOUT_LENGTH }} bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda activate {{ jupyterhub_vars.ENV_NAME| quote}} && conda install --yes {{ item.name }}={{ item.version }}'"
   args:
     executable: /bin/bash
-  loop: "{{ q('dict', jupyterhub_vars.PACKAGES) }}"
+  with_items:
+    - { name: 'jupyterhub', version: '1.5.0'}
   when: added_packages.stdout.find(item.key) == -1
 
 
