@@ -111,6 +111,10 @@
     executable: /bin/bash
   with_items:
     - { name: 'jupyterhub', version: '1.5.0'}
+    - { name: 'notebook', version: '6.4.8'}
+    - {name: 'jupyterlab', version: '1.0.9'}
+    - {name: 'jupyter_contrib_nbextensions', version: '0.5.1'}
+    - {name: 'ipykernel', version: '6.9.2' }
   when: added_packages.stdout.find(item.key) == -1
 
 
