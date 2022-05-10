@@ -32,7 +32,7 @@
     password: "{{ jupyterhub_vars.DEFAULT_PASSWORD_HASHED }}"
 
 - name: Download miniconda install script
-  become_user: "{{ jupyterhub_vars.name }}"
+  become_user: "{{ jupyterhub_vars.DEFAULT_USER }}"
   get_url:
   args:
     url: "{{ jupyterhub_vars.CONDA_INSTALLER_URL }}"
@@ -111,6 +111,8 @@
     executable: /bin/bash
   loop: "{{ q('dict', jupyterhub_vars.PACKAGES) }}"
   when: added_packages.stdout.find(item.key) == -1
+
+
 - name: Enable periodic updates
   block:
     - name: enable unattended upgrades
