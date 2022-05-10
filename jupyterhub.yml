@@ -115,7 +115,7 @@
     - {name: 'jupyterlab', version: '1.0.9'}
     - {name: 'jupyter_contrib_nbextensions', version: '0.5.1'}
     - {name: 'ipykernel', version: '6.9.2' }
-  when: added_packages.stdout.find(item.key) == -1
+  when: added_packages.stdout.find(item.name) == -1
 
 
 - name: Enable periodic updates
