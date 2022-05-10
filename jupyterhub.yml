@@ -99,10 +99,6 @@
     executable: /bin/bash
   when: added_envs.stdout.find(jupyterhub_vars.ENV_NAME) == -1
 
-- name: Check for installed packages
-  become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda activate {{ jupyterhub_vars.ENV_NAME| quote}} && conda list'"
-  register: added_packages
 
 - name: Install chosen packages
   become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
@@ -115,7 +111,6 @@
     - {name: 'jupyterlab', version: '1.0.9'}
     - {name: 'jupyter_contrib_nbextensions', version: '0.5.1'}
     - {name: 'ipykernel', version: '6.9.2' }
-  when: added_packages.stdout.find(item.name) == -1
 
 
 - name: Enable periodic updates
