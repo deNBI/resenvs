@@ -26,11 +26,6 @@
   shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
   when: jupyternotebook_vars.create_only_backend == "false"
 
-- name: Setup password for default user
-  user:
-    name: "{{ jupyternotebook_vars.DEFAULT_USER }}"
-    password: "{{ jupyternotebook_vars.DEFAULT_PASSWORD_HASHED }}"
-
 - name: Download miniconda install script
   become_user: "{{ jupyternotebook_vars.DEFAULT_USER }}"
   get_url:
@@ -111,6 +106,31 @@
     - jupyterlab
     - jupyter_contrib_nbextensions
     - ipykernel
+
+- name: Create Service File
+  become: yes
+  file:
+      path: "/lib/systemd/system/jupyter-notebook.service"
+      state: touch
+      mode: 0755
+      owner: root
+
+  - name: Creating a file with content
+    copy:
+      dest: "/your path"
+      content: |
+        [Unit]
+            Description=Jupyter notebook
+        [Service]
+            Type=simple
+            PIDFile=/var/run/jupyter-notebook.pid
+            Environment="PATH="{{jupyternotebook_vars.CONDA_DIR}}"/envs/"{{jupyternotebook_vars.ENV_NAME}}"/bin:"{{CONDA_DIR}}"/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ExecStart="{{jupyternotebook_vars.CONDA_DIR}}"/envs/"{{jupyternotebook_vars.ENV_NAME}}"/bin/jupyter-notebook --no-browser --notebook-dir=/home/"{{   jupyternotebook_vars.DEFAULT_USER  }}" --NotebookApp.base_url="{{   jupyternotebook_vars.BASE_URL  }}" -  --NotebookApp.token='"{{   jupyternotebook_vars.DEFAULT_TOKEN  }}"' --ip=0.0.0.0 --port=8888
+            User=ubuntu
+            Group=ubuntu
+            WorkingDirectory=/home/"{{   jupyternotebook_vars.DEFAULT_USER  }}"
+        [Install]
+            WantedBy=multi-user.target
 
 
 - name: Enable periodic updates
