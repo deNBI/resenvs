@@ -1,4 +1,4 @@
-jupyterhub_vars:
+jupyternotebook_vars:
   template_version:
   create_only_backend:
   DEFAULT_USER: ubuntu
@@ -8,6 +8,3 @@ jupyterhub_vars:
   CONDA_DIR: /home/ubuntu/miniconda3
   ENV_NAME: denbi
   TIMEOUT_LENGTH: 5m
-  PACKAGES:
-    - jupyterhub:
-        version: 1.5.0

@@ -16,93 +16,93 @@
         - apt-daily.timer
         - apt-daily-upgrade
         - apt-daily-upgrade.timer
-  when: jupyterhub_vars.create_only_backend == "false"
+  when: jupyternotebook_vars.create_only_backend == "false"
 
 - name: Wait for automatic system updates 1
   shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
-  when: jupyterhub_vars.create_only_backend == "false"
+  when: jupyternotebook_vars.create_only_backend == "false"
 
 - name: Wait for automatic system updates 2
   shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
-  when: jupyterhub_vars.create_only_backend == "false"
+  when: jupyternotebook_vars.create_only_backend == "false"
 
 - name: Setup password for default user
   user:
-    name: "{{ jupyterhub_vars.DEFAULT_USER }}"
-    password: "{{ jupyterhub_vars.DEFAULT_PASSWORD_HASHED }}"
+    name: "{{ jupyternotebook_vars.DEFAULT_USER }}"
+    password: "{{ jupyternotebook_vars.DEFAULT_PASSWORD_HASHED }}"
 
 - name: Download miniconda install script
-  become_user: "{{ jupyterhub_vars.DEFAULT_USER }}"
+  become_user: "{{ jupyternotebook_vars.DEFAULT_USER }}"
   get_url:
   args:
-    url: "{{ jupyterhub_vars.CONDA_INSTALLER_URL }}"
-    dest: "{{jupyterhub_vars.MINICONDA_INSTALL_SCRIPT}}"
+    url: "{{ jupyternotebook_vars.CONDA_INSTALLER_URL }}"
+    dest: "{{jupyternotebook_vars.MINICONDA_INSTALL_SCRIPT}}"
     mode: 0755
     timeout: 180
     force: no
 
 - name: Install miniconda
-  become_user: "{{ jupyterhub_vars.DEFAULT_USER }}"
-  shell: "timeout 3m {{jupyterhub_vars.MINICONDA_INSTALL_SCRIPT}} -b"
+  become_user: "{{ jupyternotebook_vars.DEFAULT_USER }}"
+  shell: "timeout 3m {{jupyternotebook_vars.MINICONDA_INSTALL_SCRIPT}} -b"
   args:
     executable: /bin/bash
-    creates: "{{jupyterhub_vars.CONDA_DIR}} "
+    creates: "{{jupyternotebook_vars.CONDA_DIR}} "
 
 - name: Check for channels
-  become_user: "{{  jupyterhub_vars.DEFAULT_USER }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda config --get channels'"
+  become_user: "{{  jupyternotebook_vars.DEFAULT_USER }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda config --get channels'"
   register: added_channels
 
 - name: Add default channel
-  become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda config --add channels default'"
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda config --add channels default'"
   args:
     executable: /bin/bash
   when: added_channels.stdout.find('default') == -1
 
 - name: Add bioconda channel
-  become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'"
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'"
   args:
     executable: /bin/bash
   when: added_channels.stdout.find('bioconda') == -1
 
 - name: Add conda-forge channel
-  become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'"
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'"
   args:
     executable: /bin/bash
   when: added_channels.stdout.find('conda-forge') == -1
 
 - name: Init .bashrc for conda
-  become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda init'"
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda init'"
   args:
     executable: /bin/bash
 
 - name: Check for environment
-  become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda info -e'"
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda info -e'"
   register: added_envs
 
 - name: Create alias for environment
-  become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
   shell: "echo $ALIAS_VARIABLE > ~/.bash_aliases"
   environment:
-    ALIAS_VARIABLE: 'alias {{ jupyterhub_vars.ENV_NAME| quote }}="conda activate {{ jupyterhub_vars.ENV_NAME| quote }}"'
-  when: added_envs.stdout.find(jupyterhub_vars.ENV_NAME) == -1
+    ALIAS_VARIABLE: 'alias {{ jupyternotebook_vars.ENV_NAME| quote }}="conda activate {{ jupyternotebook_vars.ENV_NAME| quote }}"'
+  when: added_envs.stdout.find(jupyternotebook_vars.ENV_NAME) == -1
 
 - name: Create environment
-  become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
-  shell: "timeout 2m bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda create --yes -n {{ jupyterhub_vars.ENV_NAME| quote}}'"
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 2m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda create --yes -n {{ jupyternotebook_vars.ENV_NAME| quote}}'"
   args:
     executable: /bin/bash
-  when: added_envs.stdout.find(jupyterhub_vars.ENV_NAME) == -1
+  when: added_envs.stdout.find(jupyternotebook_vars.ENV_NAME) == -1
 
 
 - name: Install chosen packages
-  become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
-  shell: "timeout {{ jupyterhub_vars.TIMEOUT_LENGTH }} bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda activate {{ jupyterhub_vars.ENV_NAME| quote}} && conda install --yes {{ item.name }}'"
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout {{ jupyternotebook_vars.TIMEOUT_LENGTH }} bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda activate {{ jupyternotebook_vars.ENV_NAME| quote}} && conda install --yes {{ item.name }}'"
   args:
     executable: /bin/bash
   loop:
@@ -131,4 +131,4 @@
         - apt-daily.timer
       #  - apt-daily-upgrade
       #  - apt-daily-upgrade.timer
-  when: jupyterhub_vars.create_only_backend == "false"
+  when: jupyternotebook_vars.create_only_backend == "false"

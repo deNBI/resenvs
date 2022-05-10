@@ -1,4 +1,4 @@
-template_name: jupyterhub
+template_name: jupyternotebook
 is_maintained: True
 port: 8000
 needs_forc_support: True
@@ -10,11 +10,11 @@ forc_versions:
 incompatible_versions: []
 direction: "ingress"
 protocol: "tcp"
-securitygroup_name: "_jupyterhub"
-securitygroup_description: "Jupyterhub"
+securitygroup_name: "_jupyternotebook"
+securitygroup_description: "Jupyternotebook"
 securitygroup_ssh: False
-title: "Jupyterhub"
-description: "Jupyterhub"
+title: "Jupyternotebook"
+description: "Jupyternotebook"
 logo_url: ""
 info_url: ""
 information_for_display:
