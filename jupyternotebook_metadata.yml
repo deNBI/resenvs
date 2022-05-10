@@ -1,6 +1,6 @@
 template_name: jupyternotebook
 is_maintained: True
-port: 8000
+port: 8888
 needs_forc_support: True
 forc_versions:
   - v03
