@@ -1,6 +1,7 @@
 jupyternotebook_vars:
   template_version:
   create_only_backend:
+  base_url:
   DEFAULT_USER: ubuntu
   DEFAULT_TOKEN: simplevm
   CONDA_INSTALLER_URL: https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
