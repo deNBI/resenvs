@@ -102,7 +102,7 @@
 
 - name: Install chosen packages
   become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
-  shell: "timeout {{ jupyternotebook_vars.TIMEOUT_LENGTH }} bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda activate {{ jupyternotebook_vars.ENV_NAME| quote}} && conda install --yes {{ item.name }}'"
+  shell: "timeout {{ jupyternotebook_vars.TIMEOUT_LENGTH }} bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda activate {{ jupyternotebook_vars.ENV_NAME| quote}} && conda install --yes {{ item }}'"
   args:
     executable: /bin/bash
   loop:
