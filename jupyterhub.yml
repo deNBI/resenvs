@@ -102,15 +102,15 @@
 
 - name: Install chosen packages
   become_user: "{{   jupyterhub_vars.DEFAULT_USER  }}"
-  shell: "timeout {{ jupyterhub_vars.TIMEOUT_LENGTH }} bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda activate {{ jupyterhub_vars.ENV_NAME| quote}} && conda install --yes {{ item.name }}={{ item.version }}'"
+  shell: "timeout {{ jupyterhub_vars.TIMEOUT_LENGTH }} bash -c 'source {{ jupyterhub_vars.CONDA_DIR}}/bin/activate && conda activate {{ jupyterhub_vars.ENV_NAME| quote}} && conda install --yes {{ item.name }}'"
   args:
     executable: /bin/bash
-  with_items:
-    - { name: 'jupyterhub', version: '1.5.0'}
-    - { name: 'notebook', version: '6.4.8'}
-    - {name: 'jupyterlab', version: '1.0.9'}
-    - {name: 'jupyter_contrib_nbextensions', version: '0.5.1'}
-    - {name: 'ipykernel', version: '6.9.2' }
+  loop:
+    - jupyterhub
+    - notebook
+    - jupyterlab
+    - jupyter_contrib_nbextensions
+    - ipykernel
 
 
 - name: Enable periodic updates
