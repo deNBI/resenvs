@@ -116,6 +116,7 @@
     owner: root
 
 - name: Creating a file with content
+  become: yes
   copy:
     dest: "/lib/systemd/system/jupyter-notebook.service"
     content: |
@@ -124,7 +125,7 @@
       [Service]
           Type=simple
           PIDFile=/var/run/jupyter-notebook.pid
-          Environment="PATH="{{jupyternotebook_vars.CONDA_DIR}}"/envs/"{{jupyternotebook_vars.ENV_NAME}}"/bin:"{{CONDA_DIR}}"/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          Environment="PATH="{{jupyternotebook_vars.CONDA_DIR}}"/envs/"{{jupyternotebook_vars.ENV_NAME}}"/bin:"{{jupyternotebook_vars.CONDA_DIR}}"/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
           ExecStart="{{jupyternotebook_vars.CONDA_DIR}}"/envs/"{{jupyternotebook_vars.ENV_NAME}}"/bin/jupyter-notebook --no-browser --notebook-dir=/home/"{{   jupyternotebook_vars.DEFAULT_USER  }}" --NotebookApp.base_url="{{   jupyternotebook_vars.BASE_URL  }}" -  --NotebookApp.token='"{{   jupyternotebook_vars.DEFAULT_TOKEN  }}"' --ip=0.0.0.0 --port=8888
           User=ubuntu
           Group=ubuntu
