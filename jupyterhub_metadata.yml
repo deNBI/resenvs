@@ -1,0 +1,21 @@
+template_name: jupyterhub
+is_maintained: True
+port: 8000
+needs_forc_support: True
+forc_versions:
+  - v04
+  - v03
+  - v02
+  - v01
+incompatible_versions: []
+direction: "ingress"
+protocol: "tcp"
+securitygroup_name: "_jupyterhub"
+securitygroup_description: "Jupyterhub"
+securitygroup_ssh: False
+title: "Jupyterhub"
+description: "Jupyterhub"
+logo_url: ""
+info_url: ""
+information_for_display:
+     version: 1.5.0

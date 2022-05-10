@@ -1,0 +1,13 @@
+jupyterhub_vars:
+  template_version:
+  create_only_backend:
+  DEFAULT_USER: ubuntu
+  DEFAULT_PASSWORD_HASHED: $6$rounds=656000$kDXfaoylNAAH4hiN$Se1C7um7OW7ETs.L19uy1xn9SJjtjHylbF.Xv/YhRWilSyzDcX7nSajMth8LgZNiRJmO3.wBxcYeJnsgW4CLL1
+  CONDA_INSTALLER_URL: https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  MINICONDA_INSTALL_SCRIPT: /home/ubuntu/install_miniconda3.sh
+  CONDA_DIR: /home/ubuntu/miniconda3
+  ENV_NAME: denbi
+  TIMEOUT_LENGTH: 5m
+  PACKAGES:
+    - jupyterhub:
+        version: 1.5.0
