@@ -106,6 +106,7 @@
     - jupyter_contrib_nbextensions
     - ipykernel
     - widgetsnbextension
+    - ipyparallel
 
 - name: Create Service File
   become: yes
