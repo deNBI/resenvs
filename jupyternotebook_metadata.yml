@@ -17,4 +17,4 @@ description: "Jupyternotebook"
 logo_url: ""
 info_url: ""
 information_for_display:
-     version: 1.5.0
+     packages: "notebook, jupyter_contrib_nbextensions, ipykernel, widgetsnbextension, ipyparallel"
