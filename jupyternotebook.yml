@@ -101,11 +101,11 @@
   args:
     executable: /bin/bash
   loop:
-    - jupyterhub
     - notebook
     - jupyterlab
     - jupyter_contrib_nbextensions
     - ipykernel
+    - widgetsnbextension
 
 - name: Create Service File
   become: yes
