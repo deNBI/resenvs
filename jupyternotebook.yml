@@ -102,11 +102,13 @@
     executable: /bin/bash
   loop:
     - notebook
-    - jupyterlab
     - jupyter_contrib_nbextensions
     - ipykernel
     - widgetsnbextension
     - ipyparallel
+    - r-essentials
+    - r-recommended
+    - r-irkernel
 
 - name: Create Service File
   become: yes
