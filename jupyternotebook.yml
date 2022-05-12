@@ -106,9 +106,9 @@
     - ipykernel
     - widgetsnbextension
     - ipyparallel
-    - r-essentials
-    - r-recommended
-    - r-irkernel
+  #  - r-essentials
+  #  - r-recommended
+   # - r-irkernel
 
 - name: Create Service File
   become: yes
