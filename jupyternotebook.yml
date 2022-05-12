@@ -1,0 +1,169 @@
+- name: Disable periodic updates
+  block:
+    - name: Disable unattended upgrades
+      lineinfile:
+        path: /etc/apt/apt.conf.d/10periodic
+        regexp: "^APT::Periodic::Unattended-Upgrade"
+        line: 'APT::Periodic::Unattended-Upgrade "0";'
+        create: yes
+    - name: Stop apt-daily.* systemd services
+      service:
+        name: "{{ item }}"
+        state: stopped
+      with_items:
+        - unattended-upgrades
+        - apt-daily
+        - apt-daily.timer
+        - apt-daily-upgrade
+        - apt-daily-upgrade.timer
+  when: jupyternotebook_vars.create_only_backend == "false"
+
+- name: Wait for automatic system updates 1
+  shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+  when: jupyternotebook_vars.create_only_backend == "false"
+
+- name: Wait for automatic system updates 2
+  shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
+  when: jupyternotebook_vars.create_only_backend == "false"
+
+- name: Download miniconda install script
+  become_user: "{{ jupyternotebook_vars.DEFAULT_USER }}"
+  get_url:
+  args:
+    url: "{{ jupyternotebook_vars.CONDA_INSTALLER_URL }}"
+    dest: "{{jupyternotebook_vars.MINICONDA_INSTALL_SCRIPT}}"
+    mode: 0755
+    timeout: 180
+    force: no
+
+- name: Install miniconda
+  become_user: "{{ jupyternotebook_vars.DEFAULT_USER }}"
+  shell: "timeout 3m {{jupyternotebook_vars.MINICONDA_INSTALL_SCRIPT}} -b"
+  args:
+    executable: /bin/bash
+    creates: "{{jupyternotebook_vars.CONDA_DIR}} "
+
+- name: Check for channels
+  become_user: "{{  jupyternotebook_vars.DEFAULT_USER }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda config --get channels'"
+  register: added_channels
+
+- name: Add default channel
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda config --add channels default'"
+  args:
+    executable: /bin/bash
+  when: added_channels.stdout.find('default') == -1
+
+- name: Add bioconda channel
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'"
+  args:
+    executable: /bin/bash
+  when: added_channels.stdout.find('bioconda') == -1
+
+- name: Add conda-forge channel
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'"
+  args:
+    executable: /bin/bash
+  when: added_channels.stdout.find('conda-forge') == -1
+
+- name: Add r channel
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda config --add channels r'"
+  args:
+    executable: /bin/bash
+  when: added_channels.stdout.find('conda-forge') == -1
+
+- name: Init .bashrc for conda
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda init'"
+  args:
+    executable: /bin/bash
+
+- name: Check for environment
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda info -e'"
+  register: added_envs
+
+- name: Create alias for environment
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "echo $ALIAS_VARIABLE > ~/.bash_aliases"
+  environment:
+    ALIAS_VARIABLE: 'alias {{ jupyternotebook_vars.ENV_NAME| quote }}="conda activate {{ jupyternotebook_vars.ENV_NAME| quote }}"'
+  when: added_envs.stdout.find(jupyternotebook_vars.ENV_NAME) == -1
+
+- name: Create environment
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout 2m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda create --yes -n {{ jupyternotebook_vars.ENV_NAME| quote}}'"
+  args:
+    executable: /bin/bash
+  when: added_envs.stdout.find(jupyternotebook_vars.ENV_NAME) == -1
+
+
+- name: Install chosen packages
+  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
+  shell: "timeout {{ jupyternotebook_vars.TIMEOUT_LENGTH }} bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda activate {{ jupyternotebook_vars.ENV_NAME| quote}} && conda install --yes {{ item }}'"
+  args:
+    executable: /bin/bash
+  loop:
+    - notebook
+    - jupyter_contrib_nbextensions
+    - ipykernel
+    - widgetsnbextension
+    - ipyparallel
+    - r-essentials
+    - r-recommended
+    - r-irkernel
+
+- name: Create Service File
+  become: yes
+  file:
+    path: "/lib/systemd/system/jupyter-notebook.service"
+    state: touch
+    mode: 0755
+    owner: root
+
+- name: Fill Jupyter Notebook  Service
+  become: yes
+  copy:
+    dest: "/lib/systemd/system/jupyter-notebook.service"
+    content: |
+      [Unit]
+          Description=Jupyter notebook
+      [Service]
+          Type=simple
+          PIDFile=/var/run/jupyter-notebook.pid
+          Environment="PATH={{jupyternotebook_vars.CONDA_DIR}}/envs/{{jupyternotebook_vars.ENV_NAME}}/bin:{{jupyternotebook_vars.CONDA_DIR}}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          ExecStart={{jupyternotebook_vars.CONDA_DIR}}/envs/{{jupyternotebook_vars.ENV_NAME}}/bin/jupyter-notebook --no-browser --notebook-dir=/home/{{   jupyternotebook_vars.DEFAULT_USER  }} --NotebookApp.base_url='{{   jupyternotebook_vars.base_url  }}' --NotebookApp.token='{{   jupyternotebook_vars.DEFAULT_TOKEN  }}' --ip=0.0.0.0 --port=8888
+          User=ubuntu
+          Group=ubuntu
+          WorkingDirectory=/home/{{   jupyternotebook_vars.DEFAULT_USER  }}
+      [Install]
+          WantedBy=multi-user.target
+- name: Start  Jupyter Notebook Service
+  systemd:
+    name: jupyter-notebook
+    state: started
+    enabled: True
+
+- name: Enable periodic updates
+  block:
+    - name: enable unattended upgrades
+      lineinfile:
+        path: /etc/apt/apt.conf.d/10periodic
+        regexp: "^APT::Periodic::Unattended-Upgrade"
+        line: 'APT::Periodic::Unattended-Upgrade "1";'
+        create: yes
+    - name: Start apt-daily.* systemd services
+      service:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - unattended-upgrades
+        - apt-daily
+        - apt-daily.timer
+      #  - apt-daily-upgrade
+      #  - apt-daily-upgrade.timer
+  when: jupyternotebook_vars.create_only_backend == "false"
