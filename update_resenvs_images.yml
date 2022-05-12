@@ -56,5 +56,5 @@
 
     - name: Build new {{ resenv }} image - Ubuntu 20
       shell: packer build -var-file=tags.json -var 'os_distro=ubuntu' -var 'os_version=2004' -var 'network={{ vars[location + '_' + upload_environment] }}' packer_{{ vars[resenv + '_tag'] }}.json
-      when: update_18
+      when: update_20
 
