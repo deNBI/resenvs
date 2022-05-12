@@ -10,7 +10,10 @@
 
   tasks:
     - set_fact:
-        update: false
+        update_18: false
+        
+    - set_fact:
+        update_20: false
 
     - name: Retrieve list of all images
       openstack.cloud.image_info:
