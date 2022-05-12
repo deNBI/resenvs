@@ -43,7 +43,7 @@
         - resenv_images_18 | length == 0 or
           (resenv_images_18 | length > 0 and (base_images_18 | last).created_at > (resenv_images_18 | last).created_at)
  
-     - set_fact:
+    - set_fact:
         update_20: true
       when:
         - base_images_20 | length > 0
