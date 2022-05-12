@@ -41,6 +41,14 @@
     state: latest
     name: python3-pip
   when: cwlab_vars.create_only_backend == "false"
+  
+- name: install the package, force upgrade
+  pip:
+    name: pip
+    executable: pip3
+    state: latest
+  when: cwlab_vars.create_only_backend == "false"
+
 
 - name: Add Docker GPG apt Key
   apt_key:
