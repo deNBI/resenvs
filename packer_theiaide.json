@@ -1,17 +1,19 @@
 {
   "variables": {
-    "network": ""
+    "network": "",
+    "os_distro": "",
+    "os_version":""
   },
   "builders":
   [{
     "type": "openstack",
-    "image_name": "TheiaIDE-ubuntu20 de.NBI ({{isotime `2006-01-02`}})",
+    "image_name": "TheiaIDE-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
     "source_image_filter": {
       "filters": {
         "tags": ["{{user `base_image_tag`}}"],
         "properties": {
-          "os_distro": "ubuntu",
-          "os_version": "2004"
+          "os_distro": "{{user `os_distro`}}",
+          "os_version": "{{user `os_version`}}"
         }
       },
       "most_recent": true
@@ -26,7 +28,7 @@
       "port": "8080",
       "needs_forc_support": "True",
       "forc_versions": "['v03', 'v02', 'v01']",
-      "incompatible_versions": "['Ubuntu 20.04']",
+      "incompatible_versions": "[]",
       "direction": "ingress",
       "protocol": "tcp",
       "securitygroup_name": "_theiaide",
