@@ -38,6 +38,7 @@
         tags:
           - portalclient
           - "{{ base_image_tag }}"
+          - deNBI
         properties:
           os_distro: "{{ distro }}"
           os_version: "{{ version }}"
