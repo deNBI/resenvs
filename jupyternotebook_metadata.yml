@@ -17,4 +17,4 @@ description: "Jupyternotebook"
 logo_url: ""
 info_url: ""
 information_for_display:
-     packages: "notebook, jupyter_contrib_nbextensions, ipykernel, widgetsnbextension, ipyparallel"
+     packages: "Jupyternotebook with IPython and R-Kernel preinstalled
