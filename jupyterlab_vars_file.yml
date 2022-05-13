@@ -1,4 +1,4 @@
-jupyternotebook_vars:
+jupyterlab_vars:
   template_version:
   create_only_backend:
   base_url:
