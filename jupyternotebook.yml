@@ -69,12 +69,6 @@
     executable: /bin/bash
   when: added_channels.stdout.find('conda-forge') == -1
 
-- name: Add r channel
-  become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
-  shell: "timeout 1m bash -c 'source {{ jupyternotebook_vars.CONDA_DIR}}/bin/activate && conda config --add channels r'"
-  args:
-    executable: /bin/bash
-  when: added_channels.stdout.find('conda-forge') == -1
 
 - name: Init .bashrc for conda
   become_user: "{{   jupyternotebook_vars.DEFAULT_USER  }}"
@@ -113,9 +107,7 @@
     - ipykernel
     - widgetsnbextension
     - ipyparallel
-    - r-essentials
-    - r-recommended
-    - r-irkernel
+
 
 - name: Create Service File
   become: yes
