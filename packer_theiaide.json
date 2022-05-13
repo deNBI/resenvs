@@ -1,8 +1,8 @@
 {
   "variables": {
-    "network": ""
-    "os_distro":""
-    "os_version":""
+    "network": "",
+    "os_distro": "",
+    "os_version": ""
   },
   "builders":
   [{
