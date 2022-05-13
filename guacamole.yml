@@ -55,7 +55,7 @@
 
 - name: Restart Tomcat
   systemd:
-    name: tomcat8
+    name: tomcat9
     state: restarted
   when: guacamole_vars.create_only_backend == "true"
 
