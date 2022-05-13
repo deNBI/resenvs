@@ -1,0 +1,20 @@
+template_name: jupyterlab
+is_maintained: True
+port: 8888
+needs_forc_support: True
+forc_versions:
+  - v03
+  - v02
+  - v01
+incompatible_versions: []
+direction: "ingress"
+protocol: "tcp"
+securitygroup_name: "_jupyterlab"
+securitygroup_description: "Jupyterlab"
+securitygroup_ssh: False
+title: "Jupyterlab"
+description: "Jupyterlab"
+logo_url: ""
+info_url: ""
+information_for_display:
+     packages: "Jupyterlab with ipykernel preinstalled - install additional packages via conda"
