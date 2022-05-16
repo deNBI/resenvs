@@ -29,7 +29,7 @@
 - name: Setup password for default user
   user:
     name: "{{ rstudio_vars.DEFAULT_USER }}"
-    password: "{{ rstudio_vars.DEFAULT_PASSWORD_HASHED }}"
+    password: "{{ rstudio_vars.DEFAULT_PASSWORD | password_hash('sha512') }}"
 
 - name: Install R role
   include_role:

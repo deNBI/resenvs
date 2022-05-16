@@ -1,0 +1,99 @@
+# tasks file
+---
+- name: packages | copy r scripts
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ r_scripts_install_path }}/{{ item.dest }}"
+    owner: "{{ r_scripts_install_owner }}"
+    group: "{{ r_scripts_install_group }}"
+    mode: 0755
+  with_items:
+    - src: R-list-installed-packages.j2
+      dest: R-list-installed-packages
+    - src: R-install-package.j2
+      dest: R-install-package
+    - src: R-remove-package.j2
+      dest: R-remove-package
+    - src: R-update-package.j2
+      dest: R-update-package
+    - src: R-install-requirements.j2
+      dest: R-install-requirements
+  tags:
+    - r-packages-copy-r-scripts
+
+- block:
+
+    - name: packages | list installed packages
+      command: >
+        R-list-installed-packages {{ r_packages_lib }}
+      environment: "{{ r_environment }}"
+      register: _r_installed_packages
+      changed_when: false
+
+    - name: packages | set_fact list installed packages
+      set_fact:
+        r_installed_packages: "{{ _r_installed_packages.stdout_lines }}"
+
+  when: r_list_packages_once | bool
+  tags:
+    - r-packages-list-installed
+
+- name: packages | install
+  command: >
+    {{ r_scripts_install_path }}/R-install-package
+      {{ item.name }}
+      {{ item.type | default(r_packages_type) }}
+      {{ item.lib | default(r_packages_lib) }}
+      {% if item.repos is defined %}{{ item.repos }}{% endif %}
+  environment: "{{ r_environment }}"
+  register: _r_install_package
+  changed_when: "_r_install_package.stdout_lines[-1] is defined and _r_install_package.stdout_lines[-1] == 'changed'"
+  with_items:
+    "{{
+        r_packages_from_github | ternary (r_preset_package_remotes, []) +
+        r_packages_from_bioconductor | ternary ((r_version is version('35', '>=') | ternary (r_preset_package_bioconductor, [])), []) +
+        r_packages
+    }}"
+  when:
+    - not r_list_packages_once or item.name not in r_installed_packages
+    - item.state is undefined or item.state == 'present'
+  tags:
+    - r-packages-install
+
+- name: packages | remove
+  command: >
+    {{ r_scripts_install_path }}/R-remove-package
+      {{ item.name }}
+      {% if item.lib is defined %}{{ item.lib }}{% endif %}
+  environment: "{{ r_environment }}"
+  register: _r_remove_package
+  changed_when: "_r_remove_package.stdout_lines[-1] is defined and _r_remove_package.stdout_lines[-1] == 'changed'"
+  with_items: "{{ r_packages }}"
+  when:
+    - not r_list_packages_once or item.name in r_installed_packages
+    - item.state is defined
+    - item.state == 'absent'
+  tags:
+    - r-packages-remove
+
+- name: packages | update
+  command: >
+    {{ r_scripts_install_path }}/R-update-package
+      {{ item.name }}
+      {{ item.type | default(r_packages_type) }}
+      {{ item.lib | default(r_packages_lib) }}
+      {% if item.repos is defined %}{{ item.repos }}{% endif %}
+  environment: "{{ r_environment }}"
+  register: _r_update_package
+  changed_when: "_r_update_package.stdout_lines[-1] is defined and _r_update_package.stdout_lines[-1] == 'changed'"
+  with_items:
+    "{{
+        r_packages_from_github | ternary (r_preset_package_remotes, []) +
+        r_packages_from_bioconductor | ternary ((r_version is version('35', '>=') | ternary (r_preset_package_bioconductor, [])), []) +
+        r_packages
+    }}"
+  when:
+    - item.state is defined
+    - item.state == 'updated'
+  tags:
+    - r-packages-update
