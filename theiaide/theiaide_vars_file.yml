@@ -6,4 +6,4 @@ theiaide_vars:
   THEIA_USER: ubuntu
   THEIA_BIND_ADDRESS: 0.0.0.0
   THEIA_BIND_PORT: 8080
-  templates_path: ./roles/theia/templates/
+  templates_path: ./templates/
