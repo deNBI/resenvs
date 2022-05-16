@@ -26,48 +26,21 @@
   shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
   when: jupyterlab_vars.create_only_backend == "false"
 
-- name: Download miniconda install script
-  become_user: "{{ jupyterlab_vars.DEFAULT_USER }}"
-  get_url:
-  args:
-    url: "{{ jupyterlab_vars.CONDA_INSTALLER_URL }}"
-    dest: "{{jupyterlab_vars.MINICONDA_INSTALL_SCRIPT}}"
-    mode: 0755
-    timeout: 180
-    force: no
+- name: Install miniconda role
+  include_role:
+    name: andrewrothstein.miniconda
+  vars:
+    miniconda_parent_dir: "{{jupyterlab_vars.CONDA_DIR}}"
+  when: jupyterlab_vars.create_only_backend == "false"
 
-- name: Install miniconda
-  become_user: "{{ jupyterlab_vars.DEFAULT_USER }}"
-  shell: "timeout 3m {{jupyterlab_vars.MINICONDA_INSTALL_SCRIPT}} -b"
-  args:
-    executable: /bin/bash
-    creates: "{{jupyterlab_vars.CONDA_DIR}} "
-
-- name: Check for channels
-  become_user: "{{  jupyterlab_vars.DEFAULT_USER }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --get channels'"
-  register: added_channels
-
-- name: Add default channel
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels default'"
-  args:
-    executable: /bin/bash
-  when: added_channels.stdout.find('default') == -1
-
-- name: Add bioconda channel
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'"
-  args:
-    executable: /bin/bash
-  when: added_channels.stdout.find('bioconda') == -1
-
-- name: Add conda-forge channel
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'"
-  args:
-    executable: /bin/bash
-  when: added_channels.stdout.find('conda-forge') == -1
+- name: Install conda-env role
+  include_role:
+    name: andrewrothstein.conda-env
+  vars:
+    conda_env_conda_dir: "{{jupyterlab_vars.CONDA_DIR}}"
+    conda_env_name: "{{ jupyterlab_vars.ENV_NAME| quote }}"
+    conda_env_environment: jupyterlab_env.yml
+  when: jupyterlab_vars.create_only_backend == "false"
 
 
 - name: Init .bashrc for conda
@@ -76,70 +49,25 @@
   args:
     executable: /bin/bash
 
-- name: Check for environment
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
-  shell: "timeout 1m bash -c 'source {{ jupyterlab_vars.CONDA_DIR}}/bin/activate && conda info -e'"
-  register: added_envs
+- name: Set facts for templates
+  set_fact:
+        jupyterlab_conda_dir: "{{jupyterlab_vars.CONDA_DIR}}"
+        jupyterlab_env_name: "{{ jupyterlab_vars.ENV_NAME}}"
+        jupyterlab_default_user: "{{ jupyterlab_vars.DEFAULT_USER  }}"
+        jupyterlab_base_url: "{{ jupyterlab_vars.base_url }}"
+- name: Generate systemd service
+  template:
+        src: "./templates/jupyterlab.service.j2"
+        dest:  "/lib/systemd/system/jupyter-lab.service"
+        mode: 0644
 
-- name: Create alias for environment
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
-  shell: "echo $ALIAS_VARIABLE > ~/.bash_aliases"
-  environment:
-    ALIAS_VARIABLE: 'alias {{ jupyterlab_vars.ENV_NAME| quote }}="conda activate {{ jupyterlab_vars.ENV_NAME| quote }}"'
-  when: added_envs.stdout.find(jupyterlab_vars.ENV_NAME) == -1
-
-- name: Create environment
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
-  shell: "timeout 2m bash -c 'source {{ jupyterlab_vars.CONDA_DIR}}/bin/activate && conda create --yes -n {{ jupyterlab_vars.ENV_NAME| quote}}'"
-  args:
-    executable: /bin/bash
-  when: added_envs.stdout.find(jupyterlab_vars.ENV_NAME) == -1
-
-
-- name: Install chosen packages
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
-  shell: "timeout {{ jupyterlab_vars.TIMEOUT_LENGTH }} bash -c 'source {{ jupyterlab_vars.CONDA_DIR}}/bin/activate && conda activate {{ jupyterlab_vars.ENV_NAME| quote}} && conda install --yes {{ item }}'"
-  args:
-    executable: /bin/bash
-  loop:
-    - notebook
-    - jupyter_contrib_nbextensions
-    - ipykernel
-    - widgetsnbextension
-    - ipyparallel
-    - jupyterlab
-
-
-- name: Create Service File
-  become: yes
-  file:
-    path: "/lib/systemd/system/jupyter-notebook.service"
-    state: touch
-    mode: 0755
-    owner: root
-
-- name: Fill Jupyter Notebook  Service
-  become: yes
-  copy:
-    dest: "/lib/systemd/system/jupyter-notebook.service"
-    content: |
-      [Unit]
-          Description=Jupyter notebook
-      [Service]
-          Type=simple
-          PIDFile=/var/run/jupyter-notebook.pid
-          Environment="PATH={{jupyterlab_vars.CONDA_DIR}}/envs/{{jupyterlab_vars.ENV_NAME}}/bin:{{jupyterlab_vars.CONDA_DIR}}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-          ExecStart={{jupyterlab_vars.CONDA_DIR}}/envs/{{jupyterlab_vars.ENV_NAME}}/bin/jupyter-lab --no-browser --notebook-dir=/home/{{   jupyterlab_vars.DEFAULT_USER  }} --NotebookApp.base_url='{{   jupyterlab_vars.base_url  }}' --NotebookApp.token='{{   jupyterlab_vars.DEFAULT_TOKEN  }}' --ip=0.0.0.0 --port=8888
-          User=ubuntu
-          Group=ubuntu
-          WorkingDirectory=/home/{{   jupyterlab_vars.DEFAULT_USER  }}
-      [Install]
-          WantedBy=multi-user.target
 - name: Start  Jupyter Notebook Service
   systemd:
-    name: jupyter-notebook
+    name: jupyter-lab
     state: started
     enabled: True
+  when: theiaide_vars.create_only_backend == "false"
+
 
 - name: Enable periodic updates
   block:
