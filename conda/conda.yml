@@ -25,6 +25,13 @@
   shell: "timeout 1m bash -c 'source {{ conda_vars.CONDA_DIR}}/bin/activate && conda init'"
   args:
     executable: /bin/bash
+    
+- name: Create alias for environment
+  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
+  shell: "echo $ALIAS_VARIABLE > ~/.bash_aliases"
+  environment:
+    ALIAS_VARIABLE: 'alias {{ jupyterlab_vars.ENV_NAME| quote }}="conda activate {{ jupyterlab_vars.ENV_NAME| quote }}"'
+
 
 - name: Check for installed packages
   become_user: "{{   conda_vars.DEFAULT_USER  }}"
