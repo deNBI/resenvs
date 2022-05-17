@@ -67,7 +67,6 @@
     name: jupyter-lab
     state: started
     enabled: True
-  when: theiaide_vars.create_only_backend == "false"
 
 
 - name: Enable periodic updates
