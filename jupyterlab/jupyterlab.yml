@@ -41,6 +41,8 @@
     conda_env_conda_dir: "{{jupyterlab_vars.CONDA_DIR}}"
     conda_env_name: "{{ jupyterlab_vars.ENV_NAME| quote }}"
     conda_env_environment: jupyterlab_env.yml
+    conda_env_activate_for_login_shell: true
+
   when: jupyterlab_vars.create_only_backend == "false"
 
 
