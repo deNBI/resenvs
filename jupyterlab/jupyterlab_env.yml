@@ -2,6 +2,8 @@ channels:
   - conda-forge
   - bioconda
   - default
+  - anaconda
+
 
 dependencies:
   - notebook
