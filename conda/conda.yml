@@ -20,6 +20,28 @@
     conda_env_environment: conda_env.yml
     conda_env_activate_for_login_shell: true
 
+- name: Add bioconda channel
+  become_user: "{{   conda.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{conda.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'"
+  args:
+    executable: /bin/bash
+
+- name: Add conda-forge channel
+  become_user: "{{   conda.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{conda.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'"
+  args:
+    executable: /bin/bash
+
+- name: Add anaconda channel
+  become_user: "{{   conda.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{conda.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'"
+  args:
+    executable: /bin/bash
+- name: Init .bashrc for conda
+  become_user: "{{   conda.DEFAULT_USER  }}"
+  shell: "timeout 1m bash -c 'source {{ conda.CONDA_DIR}}/bin/activate && conda init'"
+  args:
+    executable: /bin/bash
 
 - name: Init .bashrc for conda
   become_user: "{{   conda_vars.DEFAULT_USER  }}"
