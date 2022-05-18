@@ -17,4 +17,4 @@ description: "Browser based IDE that offers among others a terminal, editor and 
 logo_url: "https://cloud.denbi.de/static/images/theia.png"
 info_url: ""
 information_for_display:
-     version: 12
+     version: "12"
