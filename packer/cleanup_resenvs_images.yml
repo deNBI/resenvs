@@ -1,0 +1,24 @@
+- name: Cleanup ResEnvs images
+  hosts: localhost
+  vars:
+    limit: 2
+  vars_files:
+    - tags.json
+
+  tasks:
+    - set_fact:
+        limit: "{{ keep | int }}"
+      when: keep is defined and keep | int > 0
+
+    - name: Retrieve list of all images
+      openstack.cloud.image_info:
+      register: images
+
+    - include_tasks: cleanup_resenvs_images_subloop.yml
+      loop:
+        - cwlab
+        - guacamole
+        - rstudio
+        - theiaide
+      loop_control:
+        loop_var: resenv

@@ -1,0 +1,50 @@
+{
+  "variables": {
+    "network": "",
+    "os_distro": "",
+    "os_version": ""
+  },
+  "builders":
+  [{
+    "type": "openstack",
+    "image_name": "Guacamole-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
+    "source_image_filter": {
+      "filters": {
+        "tags": ["{{user `base_image_tag`}}"],
+        "properties": {
+          "os_distro": "{{user `os_distro`}}",
+          "os_version": "{{user `os_version`}}"
+        }
+      },
+      "most_recent": true
+    },
+    "networks": "{{user `network`}}",
+    "flavor": "de.NBI tiny",
+    "ssh_username": "ubuntu",
+    "image_tags": ["{{user `guacamole_tag`}}"],
+    "metadata": {
+      "template_name": "guacamole",
+      "is_maintained": "True",
+      "port": "8080",
+      "needs_forc_support": "True",
+      "forc_versions": "['v03', 'v02', 'v01']",
+      "incompatible_versions": "[]",
+      "direction": "ingress",
+      "protocol": "tcp",
+      "securitygroup_name": "_guacamole",
+      "securitygroup_description": "Guacamole",
+      "securitygroup_ssh": "False",
+      "title": "Guacamole",
+      "description": "Guacamole is a browser based remote desktop application. version: 1.4.0",
+      "logo_url": "https://cloud.denbi.de/wp-content/uploads/2020/02/guacamole-7.png",
+      "info_url": "",
+      "information_for_display": "{'version': '1.4.0'}"
+    }
+  }],
+  "provisioners":
+  [{
+    "type": "ansible",
+    "playbook_file": "./packer_resenvs.yml",
+    "extra_arguments": ["--extra-vars", "resenv=guacamole"]
+  }]
+}

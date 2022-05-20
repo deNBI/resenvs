@@ -32,10 +32,48 @@
   shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
   when: cwlab_vars.create_only_backend == "false"
 
-- name: Install docker.io package
+- name: Generate distribution information
+  command: lsb_release -cs
+  register: release
+
+- name: Install python3-pip
   apt:
-    name: docker.io
-  become: yes
+    state: latest
+    name: python3-pip
+  when: cwlab_vars.create_only_backend == "false"
+  
+- name: install the package, force upgrade
+  pip:
+    name: pip
+    executable: pip3
+    state: latest
+  when: cwlab_vars.create_only_backend == "false"
+
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  when: cwlab_vars.create_only_backend == "false"
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: "deb https://download.docker.com/linux/ubuntu {{ release.stdout }} stable"
+    state: present
+  when: cwlab_vars.create_only_backend == "false"
+
+- name: Update apt and install docker-ce
+  apt: update_cache=yes name=docker-ce state=latest
+  when: cwlab_vars.create_only_backend == "false"
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
+  when: cwlab_vars.create_only_backend == "false"
+
+- name: Install Docker Compose Module for Python
+  pip:
+    name: docker-compose
   when: cwlab_vars.create_only_backend == "false"
 
 - name: Add ubuntu user to docker group
@@ -75,6 +113,7 @@
     privileged: yes
     working_dir: "/cwlab"
     container_default_behavior: no_defaults
+  when: cwlab_vars.create_only_backend == "false"
 
 - name: Enable periodic updates
   block:
@@ -92,6 +131,6 @@
         - unattended-upgrades
         - apt-daily
         - apt-daily.timer
-       # - apt-daily-upgrade
+        # - apt-daily-upgrade
       #  - apt-daily-upgrade.timer
   when: cwlab_vars.create_only_backend == "false"

@@ -1,0 +1,14 @@
+---
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+  - anaconda
+
+dependencies:
+  - notebook
+  - jupyter_contrib_nbextensions
+  - ipykernel
+  - widgetsnbextension
+  - ipyparallel
+  - jupyterlab
