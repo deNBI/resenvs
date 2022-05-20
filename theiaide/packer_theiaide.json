@@ -1,0 +1,50 @@
+{
+  "variables": {
+    "network": "",
+    "os_distro": "",
+    "os_version": ""
+  },
+  "builders":
+  [{
+    "type": "openstack",
+    "image_name": "TheiaIDE-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
+    "source_image_filter": {
+      "filters": {
+        "tags": ["{{user `base_image_tag`}}"],
+        "properties": {
+          "os_distro": "{{user `os_distro`}}",
+          "os_version": "{{user `os_version`}}"
+        }
+      },
+      "most_recent": true
+    },
+    "networks": "{{user `network`}}",
+    "flavor": "de.NBI tiny",
+    "ssh_username": "ubuntu",
+    "image_tags": ["{{user `theiaide_tag`}}"],
+    "metadata": {
+      "template_name": "rstudio",
+      "is_maintained": "True",
+      "port": "8080",
+      "needs_forc_support": "True",
+      "forc_versions": "['v03', 'v02', 'v01']",
+      "incompatible_versions": "[]",
+      "direction": "ingress",
+      "protocol": "tcp",
+      "securitygroup_name": "_theiaide",
+      "securitygroup_description": "Theiaide",
+      "securitygroup_ssh": "False",
+      "title": "Theia - Cloud and Desktop IDE",
+      "description": "Browser based IDE that offers among others a terminal, editor and a file browser. version: 12",
+      "logo_url": "https://cloud.denbi.de/wp-content/uploads/2019/02/RStudio-Logo-Flat-1024x360-1.png",
+      "info_url": "https://cloud.denbi.de/wp-content/uploads/2020/02/theia.png",
+      "information_for_display": "{'version': '12'}"
+    }
+  }],
+  "provisioners":
+  [{
+    "type": "ansible",
+    "playbook_file": "./packer_resenvs.yml",
+    "extra_arguments": ["--extra-vars", "resenv=theiaide"]
+  }]
+}
