@@ -1,0 +1,50 @@
+{
+  "variables": {
+    "network": "",
+    "os_distro": "",
+    "os_version": ""
+  },
+  "builders":
+  [{
+    "type": "openstack",
+    "image_name": "CWLab-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
+    "source_image_filter": {
+      "filters": {
+        "tags": ["{{user `base_image_tag`}}"],
+        "properties": {
+           "os_distro": "{{user `os_distro`}}",
+          "os_version": "{{user `os_version`}}"
+        }
+      },
+      "most_recent": true
+    },
+    "networks": "{{user `network`}}",
+    "flavor": "de.NBI tiny",
+    "ssh_username": "ubuntu",
+    "image_tags": ["{{user `cwlab_tag`}}"],
+    "metadata": {
+      "template_name": "cwlab",
+      "is_maintained": "True",
+      "port": "80",
+      "needs_forc_support": "True",
+      "forc_versions": "[v02, v01]",
+      "incompatible_versions": "[]",
+      "direction": "ingress",
+      "protocol": "tcp",
+      "securitygroup_name": "_cwlab",
+      "securitygroup_description": "CWLab",
+      "securitygroup_ssh": "False",
+      "title": "CWLab",
+      "description": "version: 0.3.2",
+      "logo_url": "",
+      "info_url": "",
+      "information_for_display": "{'version': '0.3.2'}"
+    }
+  }],
+  "provisioners":
+  [{
+    "type": "ansible",
+    "playbook_file": "./packer_resenvs.yml",
+    "extra_arguments": ["--extra-vars", "resenv=cwlab"]
+  }]
+}
