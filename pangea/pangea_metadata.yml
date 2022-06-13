@@ -4,6 +4,11 @@ port: 8080
 needs_forc_support: False
 forc_versions:
 incompatible_versions: []
+direction: "ingress"
+protocol: "tcp"
+securitygroup_name: "_pangea"
+securitygroup_description: "Pangea"
+securitygroup_ssh: False
 title: "Pangea"
 description: "Pangea"
 logo_url: "https://cloud.denbi.de/static/images/guacamole.png"
