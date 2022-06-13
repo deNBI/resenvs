@@ -1,4 +1,4 @@
-conda_vars:
+pangea_vars:
   DEFAULT_USER: ubuntu
   CONDA_DIR: /home/ubuntu/miniconda3
   ENV_NAME: denbi
