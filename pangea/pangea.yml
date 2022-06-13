@@ -1,0 +1,171 @@
+- name: Wait for automatic system updates 1
+  shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+
+- name: Wait for automatic system updates 2
+  shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
+
+- name: Download miniconda.
+  ansible.builtin.get_url:
+    url: https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Linux-x86_64.sh
+    dest: /tmp/miniconda3.sh
+    mode: 0744
+- name: Install miniconda.
+  ansible.builtin.command: >
+    /tmp/miniconda3.sh -b -f -p /home/ubuntu/miniconda3
+  args:
+    creates: /home/ubuntu/miniconda3/bin/conda
+- name: Install apt packages.
+  become: true
+  ansible.builtin.apt:
+    update_cache: yes
+    pkg:
+      - build-essential
+      - cmake
+      - python3-distutils
+      - python3-dev
+      - libjemalloc-dev
+      - libz-dev
+      - pkg-config
+      - unzip
+- name: Clone pangenie from github.
+  ansible.builtin.git:
+    repo: 'https://github.com/eblerjana/pangenie.git'
+    dest: /home/ubuntu/pangenie
+- name: Install pangenie.
+  command: /home/ubuntu/miniconda3/bin/conda env create -f environment.yml
+  args:
+    chdir: /home/ubuntu/pangenie
+    creates: /home/ubuntu/miniconda3/envs/pangenie/bin/cpp
+- name: Create build directory.
+  ansible.builtin.file:
+    path: '{{ home_path }}/pangenie/build'
+    state: directory
+    mode: '0755'
+- shell: source /home/ubuntu/miniconda3/etc/profile.d/conda.sh && conda activate pangenie && cmake .. && make
+  args:
+    executable: /bin/bash
+    chdir: '{{ home_path }}/pangenie/build'
+    creates: /home/ubuntu/pangenie/build/src/PanGenie
+- name: Clone minimap2 from github.
+  ansible.builtin.git:
+    repo: 'https://github.com/lh3/minimap2'
+    dest: /home/ubuntu/minimap2
+- name: Build minimap2.
+  command: make
+  args:
+    chdir: /home/ubuntu/minimap2
+    creates: /home/ubuntu/minimap2/minimap2
+- name: Clone miniasm from github.
+  ansible.builtin.git:
+    repo: 'https://github.com/lh3/miniasm'
+    dest: /home/ubuntu/miniasm
+- name: Build miniasm.
+  command: make
+  args:
+    chdir: /home/ubuntu/miniasm
+    creates: /home/ubuntu/miniasm/miniasm
+- name: Download vg.
+  become: true
+  get_url:
+    url: https://github.com/vgteam/vg/releases/download/v1.41.0/vg
+    dest: /usr/local/bin/vg
+    owner: ubuntu
+    mode: 0755
+- name: Download graphtyper2.
+  become: true
+  get_url:
+    url: https://github.com/DecodeGenetics/graphtyper/releases/download/v2.7.4/graphtyper
+    dest: /usr/local/bin/graphtyper
+    owner: ubuntu
+    mode: 0755
+- name: Clone odgi from github.
+  ansible.builtin.git:
+    repo: 'https://github.com/pangenome/odgi.git'
+    dest: '{{ home_path }}/odgi'
+    recursive: true
+- name: Make odgi.
+  ansible.builtin.command: cmake -DBUILD_STATIC=1 -H. -Bbuild
+  args:
+    chdir: '{{ home_path  }}/odgi'
+    creates: '{{ home_path }}/odgi/build/Makefile'
+- name: Make odgi 2.
+  ansible.builtin.command: cmake --build build -- -j 3
+  args:
+    chdir: '{{ home_path  }}/odgi'
+    creates: '{{ home_path }}/odgi/bin/odgi'
+- name: Copy odgi to path.
+  become: true
+  ansible.builtin.copy:
+    src: '{{ home_path }}/odgi/bin/odgi'
+    dest: /usr/local/bin/odgi
+    remote_src: true
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+- name: Get Bandage.
+  ansible.builtin.get_url:
+    url: https://github.com/rrwick/Bandage/releases/download/v0.8.1/Bandage_Ubuntu_dynamic_v0_8_1.zip
+    dest: /tmp/Bandage.zip
+    mode: 0744
+- name: Unzip Bandage.
+  ansible.builtin.unarchive:
+    src: /tmp/Bandage.zip
+    dest: /tmp/
+    remote_src: true
+- name: Copy Bandage to path.
+  become: true
+  ansible.builtin.copy:
+    src: '/tmp/Bandage'
+    dest: /usr/local/bin/Bandage
+    remote_src: true
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+- name: Install x server.
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - xorg
+      - qt5-default
+- name: Clone minigraph from github.
+  ansible.builtin.git:
+    repo: 'https://github.com/lh3/minigraph'
+    dest: '{{ home_path }}/minigraph'
+- name: Build minigraph.
+  command: make
+  args:
+    chdir: '{{ home_path }}/minigraph'
+    creates: '{{ home_path }}/minigraph/minigraph'
+- name: Copy minigraph to path.
+  become: true
+  ansible.builtin.copy:
+    src: '{{ home_path }}/minigraph/minigraph'
+    dest: /usr/local/bin/minigraph
+    remote_src: true
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+- name: Install pggb
+  shell: 'source {{ home_path }}/miniconda3/etc/profile.d/conda.sh && conda install -c bioconda pggb'
+  args:
+    executable: /bin/bash
+
+- name: Enable periodic updates
+  block:
+    - name: enable unattended upgrades
+      lineinfile:
+        path: /etc/apt/apt.conf.d/10periodic
+        regexp: "^APT::Periodic::Unattended-Upgrade"
+        line: 'APT::Periodic::Unattended-Upgrade "1";'
+        create: yes
+    - name: Start apt-daily.* systemd services
+      service:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - unattended-upgrades
+        - apt-daily
+        - apt-daily.timer
+      #  - apt-daily-upgrade
+       # - apt-daily-upgrade.timer
+  when: guacamole_vars.create_only_backend == "false"

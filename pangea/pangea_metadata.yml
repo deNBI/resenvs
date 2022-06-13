@@ -1,0 +1,12 @@
+template_name: pangea
+is_maintained: True
+port: 8080
+needs_forc_support: False
+forc_versions:
+incompatible_versions: []
+title: "Pangea"
+description: "Pangea"
+logo_url: "https://cloud.denbi.de/static/images/guacamole.png"
+info_url: ""
+information_for_display:
+     version: "1.4.0"
