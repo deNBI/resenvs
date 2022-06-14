@@ -19,10 +19,10 @@
     conda_env_name: "{{ conda_vars.ENV_NAME| quote }}"
     conda_env_environment: conda_env.yml
     conda_env_activate_for_login_shell: true
-    
-- name: Adjust miniconda folder rights:
+
+- name: Adjust miniconda folder rights
   become: true
-  shell: "chown -R ubuntu:ubuntu {{conda_vars.CONDA_DIR}}/"
+  shell: "chown -R {{conda_vars.DEFAULT_USER}}:{{conda_vars.DEFAULT_USER}} {{conda_vars.CONDA_DIR}}/"
 
 - name: Add bioconda channel
   become_user: "{{   conda_vars.DEFAULT_USER  }}"
