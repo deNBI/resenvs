@@ -38,13 +38,13 @@
     creates: /home/ubuntu/miniconda3/envs/pangenie/bin/cpp
 - name: Create build directory.
   ansible.builtin.file:
-    path: '{{ home_path }}/pangenie/build'
+    path: '{{ pangea_vars.HOME_PATH }}/pangenie/build'
     state: directory
     mode: '0755'
 - shell: source /home/ubuntu/miniconda3/etc/profile.d/conda.sh && conda activate pangenie && cmake .. && make
   args:
     executable: /bin/bash
-    chdir: '{{ home_path }}/pangenie/build'
+    chdir: '{{ pangea_vars.HOME_PATH }}/pangenie/build'
     creates: /home/ubuntu/pangenie/build/src/PanGenie
 - name: Clone minimap2 from github.
   ansible.builtin.git:
@@ -81,22 +81,22 @@
 - name: Clone odgi from github.
   ansible.builtin.git:
     repo: 'https://github.com/pangenome/odgi.git'
-    dest: '{{ home_path }}/odgi'
+    dest: '{{ pangea_vars.HOME_PATH }}/odgi'
     recursive: true
 - name: Make odgi.
   ansible.builtin.command: cmake -DBUILD_STATIC=1 -H. -Bbuild
   args:
-    chdir: '{{ home_path  }}/odgi'
-    creates: '{{ home_path }}/odgi/build/Makefile'
+    chdir: '{{ pangea_vars.HOME_PATH  }}/odgi'
+    creates: '{{ pangea_vars.HOME_PATH }}/odgi/build/Makefile'
 - name: Make odgi 2.
   ansible.builtin.command: cmake --build build -- -j 3
   args:
-    chdir: '{{ home_path  }}/odgi'
-    creates: '{{ home_path }}/odgi/bin/odgi'
+    chdir: '{{ pangea_vars.HOME_PATH  }}/odgi'
+    creates: '{{ pangea_vars.HOME_PATH }}/odgi/bin/odgi'
 - name: Copy odgi to path.
   become: true
   ansible.builtin.copy:
-    src: '{{ home_path }}/odgi/bin/odgi'
+    src: '{{ pangea_vars.HOME_PATH }}/odgi/bin/odgi'
     dest: /usr/local/bin/odgi
     remote_src: true
     owner: ubuntu
@@ -130,23 +130,23 @@
 - name: Clone minigraph from github.
   ansible.builtin.git:
     repo: 'https://github.com/lh3/minigraph'
-    dest: '{{ home_path }}/minigraph'
+    dest: '{{ pangea_vars.HOME_PATH }}/minigraph'
 - name: Build minigraph.
   command: make
   args:
-    chdir: '{{ home_path }}/minigraph'
-    creates: '{{ home_path }}/minigraph/minigraph'
+    chdir: '{{ pangea_vars.HOME_PATH }}/minigraph'
+    creates: '{{ pangea_vars.HOME_PATH }}/minigraph/minigraph'
 - name: Copy minigraph to path.
   become: true
   ansible.builtin.copy:
-    src: '{{ home_path }}/minigraph/minigraph'
+    src: '{{ pangea_vars.HOME_PATH }}/minigraph/minigraph'
     dest: /usr/local/bin/minigraph
     remote_src: true
     owner: ubuntu
     group: ubuntu
     mode: '0755'
 - name: Install pggb
-  shell: 'source {{ home_path }}/miniconda3/etc/profile.d/conda.sh && conda install -c bioconda pggb'
+  shell: 'source {{ pangea_vars.HOME_PATH }}/miniconda3/etc/profile.d/conda.sh && conda install -c bioconda pggb'
   args:
     executable: /bin/bash
 

@@ -1,6 +1,3 @@
 pangea_vars:
-  DEFAULT_USER: ubuntu
-  CONDA_DIR: /home/ubuntu/miniconda3
-  ENV_NAME: denbi
-  TIMEOUT_LENGTH: 5m
-  packages:
+  HOME_PATH: /home/ubuntu
+
