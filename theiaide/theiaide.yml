@@ -36,12 +36,12 @@
   block:
     - name: Install packages
       apt:
-        name: ["python", "make", "g++", "curl", "git"]
+        name: ["python3", "make", "g++", "curl", "git"]
       when: ansible_distribution_file_variety == 'Debian'
 
     - name: install packages
       yum:
-        name: ["python", "curl", "git", "make", "gcc", "gcc-c++"]
+        name: ["python3", "curl", "git", "make", "gcc", "gcc-c++"]
       when: ansible_distribution_file_variety == 'RedHat'
 
     - name: Create NVM install dir
@@ -61,7 +61,7 @@
 
     - name: Install nvm
       shell: |
-        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.37.0/install.sh | NVM_DIR={{ theiaide_vars.NVM_INSTALL_DIR }} /bin/bash
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | NVM_DIR={{ theiaide_vars.NVM_INSTALL_DIR }} /bin/bash
       args:
         creates: "{{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh"
         warn: false
