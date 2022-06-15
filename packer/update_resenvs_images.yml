@@ -78,5 +78,6 @@
       when: update_20
 
     - name: Build new {{ resenv }} image - Ubuntu 22
+      if: resenv != 'rstudio'
       shell: packer build -var-file=tags.json -var 'os_distro=ubuntu' -var 'os_version=2204' -var 'network={{ vars[location + '_' + upload_environment] }}' ../{{resenv}}/packer_{{ vars[resenv + '_tag'] }}.json
       when: update_22
