@@ -30,6 +30,11 @@
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
 
     - set_fact:
+        base_images_22: "{{ images.openstack_image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
+      vars:
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2204']"
+
+    - set_fact:
         resenv_images_18: "{{ images.openstack_image | selectattr('tags', 'search', vars[resenv + '_tag'])| json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='1804']"  
@@ -38,7 +43,12 @@
         resenv_images_20: "{{ images.openstack_image | selectattr('tags', 'search', vars[resenv + '_tag']) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
-        
+
+    - set_fact:
+        resenv_images_22: "{{ images.openstack_image | selectattr('tags', 'search', vars[resenv + '_tag']) | json_query(filter) | sort(attribute='created_at') }}"
+      vars:
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2204']
+
     - set_fact:
         update_18: true
       when:
@@ -61,3 +71,6 @@
       shell: packer build -var-file=tags.json -var 'os_distro=ubuntu' -var 'os_version=2004' -var 'network={{ vars[location + '_' + upload_environment] }}' ../{{resenv}}/packer_{{ vars[resenv + '_tag'] }}.json
       when: update_20
 
+    - name: Build new {{ resenv }} image - Ubuntu 22
+      shell: packer build -var-file=tags.json -var 'os_distro=ubuntu' -var 'os_version=2204' -var 'network={{ vars[location + '_' + upload_environment] }}' ../{{resenv}}/packer_{{ vars[resenv + '_tag'] }}.json
+      when: update_22
