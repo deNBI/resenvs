@@ -12,6 +12,7 @@
 
 - name: Install Firefox
   apt:
+    update_cache: yes
     name: firefox
     state: latest
 
