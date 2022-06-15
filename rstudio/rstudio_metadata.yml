@@ -7,7 +7,7 @@ forc_versions:
   - v03
   - v02
   - v01
-incompatible_versions: []
+incompatible_versions: ["Ubuntu 22"]
 direction: "ingress"
 protocol: "tcp"
 securitygroup_name: "_rstudio"
