@@ -4,7 +4,6 @@
   apt:
     upgrade: yes
     update_cache: yes
-    cache_valid_time: 7600
 
 - name: Install xfce4
   apt:
