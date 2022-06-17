@@ -14,7 +14,7 @@ securitygroup_description: "Jupyterlab"
 securitygroup_ssh: False
 title: "Jupyterlab"
 description: "Jupyterlab"
-logo_url: ""
+logo_url: "https://cloud.denbi.de/images/DWeSy3W-qRwyp1FJB_QyhhjAwT4=/73/original/"
 info_url: ""
 information_for_display:
      packages: "Jupyterlab with ipykernel preinstalled - install additional packages via conda"
