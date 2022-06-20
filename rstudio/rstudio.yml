@@ -26,6 +26,14 @@
   shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
   when: rstudio_vars.create_only_backend == "false"
 
+- name: Update apt cache
+  apt:
+    upgrade: yes
+    update_cache: yes
+    force_apt_get: yes
+  when: rstudio_vars.create_only_backend == "false"
+
+
 - name: Setup password for default user
   user:
     name: "{{ rstudio_vars.DEFAULT_USER }}"
