@@ -66,6 +66,7 @@
     - set_fact:
         update_22: true
       when:
+        - resenv != 'rstudio'
         - base_images_22 | length > 0
         - resenv_images_22 | length == 0 or (resenv_images_22 | length > 0 and (base_images_22 | last).created_at > (resenv_images_22 | last).created_at)
 

@@ -2,7 +2,8 @@
 
 - name: Update apt cache
   apt:
-    cache_valid_time: 7600
+    upgrade: yes
+    update_cache: yes
 
 - name: Install xfce4
   apt:
@@ -11,6 +12,7 @@
 
 - name: Install Firefox
   apt:
+    update_cache: yes
     name: firefox
     state: latest
 
