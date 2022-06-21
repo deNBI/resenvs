@@ -4,7 +4,6 @@
   ansible.builtin.apt:
     upgrade: true
     update_cache: true
-    force_apt_get: true
 
 - name: Install xfce4
   ansible.builtin.apt:
@@ -19,6 +18,7 @@
 
 - name: Install xrdp and other goodies
   ansible.builtin.apt:
+    update_cache: true
     name:
       - xrdp
       - xorg
