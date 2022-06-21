@@ -1,6 +1,3 @@
----
-# tasks file for guacamolerdp-ansible
-
 - include: 005-desktop.yml
   tags: ['guacamole_desktop']
 

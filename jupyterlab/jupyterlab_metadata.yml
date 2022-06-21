@@ -1,7 +1,7 @@
 template_name: jupyterlab
-is_maintained: True
+is_maintained: true
 port: 8888
-needs_forc_support: True
+needs_forc_support: true
 forc_versions:
   - v03
   - v02
@@ -11,10 +11,10 @@ direction: "ingress"
 protocol: "tcp"
 securitygroup_name: "_jupyterlab"
 securitygroup_description: "Jupyterlab"
-securitygroup_ssh: False
+securitygroup_ssh: false
 title: "Jupyterlab"
 description: "Jupyterlab"
 logo_url: "https://cloud.denbi.de/images/DWeSy3W-qRwyp1FJB_QyhhjAwT4=/73/original/"
 info_url: ""
 information_for_display:
-     packages: "Jupyterlab with ipykernel preinstalled - install additional packages via conda"
+  packages: "Jupyterlab with ipykernel preinstalled - install additional packages via conda"

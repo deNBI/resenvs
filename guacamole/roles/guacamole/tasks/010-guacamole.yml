@@ -1,7 +1,5 @@
-
-
 - name: Install needed libraries and tools
-  apt:
+  ansible.builtin.apt:
     name:
       - make
       - gcc
@@ -30,31 +28,37 @@
       - tomcat9
       - tomcat9-admin
       - tomcat9-user
-    state: latest
+    state: present
 
 - name: Download guacamole src
-  get_url:
+  ansible.builtin.get_url:
     url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/1.4.0/source/guacamole-server-1.4.0.tar.gz
     dest: /usr/share/guacamole.tar.gz
+    mode: 0644
+
 
 - name: Download guacamole war file
-  get_url:
+  ansible.builtin.get_url:
     url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/1.4.0/binary/guacamole-1.4.0.war
     dest: /usr/share/guacamole.war
+    mode: 0644
 
 - name: Prepare build directory
-  file:
+  ansible.builtin.file:
     state: directory
     path: /usr/share/guacamole/
+    mode: 0644
+
 
 - name: Unarchive source files
-  unarchive:
-    remote_src: yes
+  ansibile.builtin.unarchive:
+    remote_src: true
     src: /usr/share/guacamole.tar.gz
     dest: /usr/share/guacamole
+    mode: 0644
 
 - name: Configure systemd unit
-  shell: "./configure --with-systemd-dir=/etc/systemd/system"
+  ansible.builtin.command: "./configure --with-systemd-dir=/etc/systemd/system"
   args:
     chdir: /usr/share/guacamole/guacamole-server-1.4.0/
     creates: /usr/share/guacamole/guacamole-server-1.4.0/Makefile
@@ -69,48 +73,55 @@
     target: install
 
 - name: Link libraries
-  shell: ldconfig
+  ansible.builtin.command: ldconfig
   args:
     chdir: /usr/share/guacamole/guacamole-server-1.4.0/
+  changed_when: false
 
 - name: Enable guacamole daemon
-  systemd:
+  ansible.builtin.systemd:
     name: guacd
-    enabled: yes
+    enabled: true
 
 - name: Create guacamole config folder
-  file:
+  ansible.builtin.file:
     state: directory
     path: /etc/guacamole
+    mode: 0644
+
 
 - name: Create guacamole.properties
-  copy:
+  ansible.builtin.copy:
     src: guacamole.properties
     dest: /etc/guacamole/guacamole.properties
+    mode: 0644
   notify: Restart guacd
 
 - name: Generate guacamole mapping
-  template:
+  ansible.builtin.template:
     src: user-mapping.xml.j2
     dest: /etc/guacamole/user-mapping.xml
+    mode: 0644
   notify: Restart guacd
 
 - name: Register path in env
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/environment
     line: 'GUACAMOLE_HOME="/etc/guacamole"'
     state: present
 
 - name: Copy tomcat guacamole client
-  copy:
-    remote_src: yes
+  ansible.builtin.copy:
+    remote_src: true
     src: /usr/share/guacamole.war
     dest: /var/lib/tomcat9/webapps/guacamole.war
+    mode: 0644
   notify: Restart Tomcat
 
 - name: Link configuration directory to tomcat
-  file:
+  ansible.builtin.file:
     state: link
     src: /etc/guacamole
     dest: /usr/share/tomcat9/.guacamole
+    mode: 0644
   notify: Reload systemd

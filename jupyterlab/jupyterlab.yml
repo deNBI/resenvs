@@ -1,11 +1,11 @@
 - name: Disable periodic updates
   block:
     - name: Disable unattended upgrades
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
         regexp: "^APT::Periodic::Unattended-Upgrade"
         line: 'APT::Periodic::Unattended-Upgrade "0";'
-        create: yes
+        create: true
     - name: Stop apt-daily.* systemd services
       service:
         name: "{{ item }}"
@@ -30,7 +30,7 @@
   include_role:
     name: andrewrothstein.miniconda
   vars:
-    miniconda_parent_dir: "/home/{{jupyterlab_vars.DEFAULT_USER}}"
+    miniconda_parent_dir: "/home/{{jupyterlab_vars.default_user}}"
     miniconda_link_subdir: "miniconda3"
   when: jupyterlab_vars.create_only_backend == "false"
 
@@ -46,30 +46,30 @@
   when: jupyterlab_vars.create_only_backend == "false"
 
 - name: Add bioconda channel
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
+  become_user: "{{   jupyterlab_vars.default_user  }}"
   shell: "timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'"
   args:
     executable: /bin/bash
 
 - name: Add conda-forge channel
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
+  become_user: "{{   jupyterlab_vars.default_user  }}"
   shell: "timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'"
   args:
     executable: /bin/bash
 
 - name: Add anaconda channel
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
+  become_user: "{{   jupyterlab_vars.default_user  }}"
   shell: "timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels anaconda'"
   args:
     executable: /bin/bash
 - name: Init .bashrc for conda
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
+  become_user: "{{   jupyterlab_vars.default_user  }}"
   shell: "timeout 1m bash -c 'source {{ jupyterlab_vars.CONDA_DIR}}/bin/activate && conda init'"
   args:
     executable: /bin/bash
 
 - name: Create alias for environment
-  become_user: "{{   jupyterlab_vars.DEFAULT_USER  }}"
+  become_user: "{{   jupyterlab_vars.default_user  }}"
   shell: "echo $ALIAS_VARIABLE > ~/.bash_aliases"
   environment:
     ALIAS_VARIABLE: 'alias {{ jupyterlab_vars.ENV_NAME| quote }}="conda activate {{ jupyterlab_vars.ENV_NAME| quote }}"'
@@ -77,31 +77,31 @@
 
 - name: Set facts for templates
   set_fact:
-        jupyterlab_conda_dir: "{{jupyterlab_vars.CONDA_DIR}}"
-        jupyterlab_env_name: "{{ jupyterlab_vars.ENV_NAME}}"
-        jupyterlab_default_user: "{{ jupyterlab_vars.DEFAULT_USER  }}"
-        jupyterlab_base_url: "{{ jupyterlab_vars.base_url }}"
+    jupyterlab_conda_dir: "{{jupyterlab_vars.CONDA_DIR}}"
+    jupyterlab_env_name: "{{ jupyterlab_vars.ENV_NAME}}"
+    jupyterlab_default_user: "{{ jupyterlab_vars.default_user  }}"
+    jupyterlab_base_url: "{{ jupyterlab_vars.base_url }}"
 - name: Generate systemd service
   template:
-        src: "./templates/jupyterlab.service.j2"
-        dest:  "/lib/systemd/system/jupyter-lab.service"
-        mode: 0644
+    src: "./templates/jupyterlab.service.j2"
+    dest: "/lib/systemd/system/jupyter-lab.service"
+    mode: 0644
 
 - name: Start  JupyterLab Service
   systemd:
     name: jupyter-lab
     state: started
-    enabled: True
+    enabled: true
 
 
 - name: Enable periodic updates
   block:
     - name: enable unattended upgrades
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
         regexp: "^APT::Periodic::Unattended-Upgrade"
         line: 'APT::Periodic::Unattended-Upgrade "1";'
-        create: yes
+        create: true
     - name: Start apt-daily.* systemd services
       service:
         name: "{{ item }}"

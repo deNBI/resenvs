@@ -1,11 +1,11 @@
 - name: Disable periodic updates
   block:
     - name: Disable unattended upgrades
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
         regexp: "^APT::Periodic::Unattended-Upgrade"
         line: 'APT::Periodic::Unattended-Upgrade "0";'
-        create: yes
+        create: true
     - name: Stop apt-daily.* systemd services
       service:
         name: "{{ item }}"
@@ -19,9 +19,9 @@
   when: cwlab_vars.create_only_backend == "false"
 
 - name: Update apt cache
-  apt:
+  ansible.builtin.apt:
     update_cache: true
-  become: yes
+  become: true
   when: cwlab_vars.create_only_backend == "false"
 
 - name: Wait for automatic system updates 1
@@ -33,20 +33,20 @@
   when: cwlab_vars.create_only_backend == "false"
 
 - name: Generate distribution information
-  command: lsb_release -cs
+  ansibile.builtin.command:: lsb_release -cs
   register: release
 
 - name: Install python3-pip
-  apt:
-    state: latest
+  ansible.builtin.apt:
+    state: present
     name: python3-pip
   when: cwlab_vars.create_only_backend == "false"
-  
+
 - name: install the package, force upgrade
   pip:
     name: pip
     executable: pip3
-    state: latest
+    state: present
   when: cwlab_vars.create_only_backend == "false"
 
 
@@ -63,7 +63,7 @@
   when: cwlab_vars.create_only_backend == "false"
 
 - name: Update apt and install docker-ce
-  apt: update_cache=yes name=docker-ce state=latest
+  ansible.builtin.apt: update_cache=yes name=docker-ce state=latest
   when: cwlab_vars.create_only_backend == "false"
 
 - name: Install Docker Module for Python
@@ -77,24 +77,24 @@
   when: cwlab_vars.create_only_backend == "false"
 
 - name: Add ubuntu user to docker group
-  user:
+  ansibile.builtin.user:
     name: ubuntu
     groups: docker
-    append: yes
-  become: yes
+    append: true
+  become: true
   when: cwlab_vars.create_only_backend == "false"
 
 - name: Install docker python dev package
-  apt:
+  ansible.builtin.apt:
     name: python3-docker
-  become: yes
+  become: true
   when: cwlab_vars.create_only_backend == "false"
 
 - name: Ensure data path exists
-  file:
+  ansible.builtin.file:
     state: directory
     path: "{{ cwlab_vars.data_volume_path }}"
-    recurse: yes
+    recurse: true
     owner: ubuntu
     group: ubuntu
   when: cwlab_vars.create_only_backend == "false"
@@ -109,8 +109,8 @@
       - "{{ cwlab_vars.data_volume_path }}:/cwlab"
     restart_policy: always
     user: 1000:1000
-    recreate: yes
-    privileged: yes
+    recreate: true
+    privileged: true
     working_dir: "/cwlab"
     container_default_behavior: no_defaults
   when: cwlab_vars.create_only_backend == "false"
@@ -118,11 +118,11 @@
 - name: Enable periodic updates
   block:
     - name: enable unattended upgrades
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
         regexp: "^APT::Periodic::Unattended-Upgrade"
         line: 'APT::Periodic::Unattended-Upgrade "1";'
-        create: yes
+        create: true
     - name: Start apt-daily.* systemd services
       service:
         name: "{{ item }}"

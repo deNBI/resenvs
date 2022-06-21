@@ -1,11 +1,11 @@
 - name: Disable periodic updates
   block:
     - name: Disable unattended upgrades
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
         regexp: "^APT::Periodic::Unattended-Upgrade"
         line: 'APT::Periodic::Unattended-Upgrade "0";'
-        create: yes
+        create: true
     - name: Stop apt-daily.* systemd services
       service:
         name: "{{ item }}"
@@ -36,9 +36,9 @@
   when: guacamole_vars.create_only_backend == "false"
 
 - name: Setup password  for default ubuntu user - standart
-  user:
-    name: "{{ guacamole_vars.DEFAULT_USER }}"
-    password: "{{ guacamole_vars.DEFAULT_PASSWORD | password_hash('sha512') }}"
+  ansibile.builtin.user:
+    name: "{{ guacamole_vars.default_user }}"
+    password: "{{ guacamole_vars.default_password | password_hash('sha512') }}"
   when: guacamole_vars.create_only_backend == "true"
 
 - name: Restart xrdp
@@ -61,17 +61,17 @@
 
 - name: Reload systemd
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
   when: guacamole_vars.create_only_backend == "true"
 
 - name: Enable periodic updates
   block:
     - name: enable unattended upgrades
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
         regexp: "^APT::Periodic::Unattended-Upgrade"
         line: 'APT::Periodic::Unattended-Upgrade "1";'
-        create: yes
+        create: true
     - name: Start apt-daily.* systemd services
       service:
         name: "{{ item }}"

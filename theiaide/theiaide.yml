@@ -1,11 +1,11 @@
 - name: Disable periodic updates
   block:
     - name: Disable unattended upgrades
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
         regexp: "^APT::Periodic::Unattended-Upgrade"
         line: 'APT::Periodic::Unattended-Upgrade "0";'
-        create: yes
+        create: true
     - name: Stop apt-daily.* systemd services
       service:
         name: "{{ item }}"
@@ -19,9 +19,9 @@
   when: theiaide_vars.create_only_backend == "false"
 
 - name: Update apt cache
-  apt:
+  ansible.builtin.apt:
     update_cache: true
-  become: yes
+  become: true
   when: theiaide_vars.create_only_backend == "false"
 
 - name: Wait for automatic system updates 1
@@ -35,7 +35,7 @@
 - name: Install theia_ide role
   block:
     - name: Install packages
-      apt:
+      ansible.builtin.apt:
         name: ["python3", "make", "g++", "curl", "git"]
       when: ansible_distribution_file_variety == 'Debian'
 
@@ -45,7 +45,7 @@
       when: ansible_distribution_file_variety == 'RedHat'
 
     - name: Create NVM install dir
-      file:
+      ansible.builtin.file:
         path: "{{ theiaide_vars.NVM_INSTALL_DIR }}"
         state: directory
         mode: 0755
@@ -110,11 +110,11 @@
 - name: Enable periodic updates
   block:
     - name: enable unattended upgrades
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
         regexp: "^APT::Periodic::Unattended-Upgrade"
         line: 'APT::Periodic::Unattended-Upgrade "1";'
-        create: yes
+        create: true
     - name: Start apt-daily.* systemd services
       service:
         name: "{{ item }}"

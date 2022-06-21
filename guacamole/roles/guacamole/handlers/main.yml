@@ -2,20 +2,20 @@
 # handlers file for guacamolerdp-ansible
 
 - name: Restart xrdp
-  systemd:
+  ansible.builtin.systemd:
     name: xrdp
     state: restarted
 
 - name: Restart guacd
-  systemd:
+  ansible.builtin.systemd:
     name: guacd
     state: restarted
 
 - name: Restart Tomcat
-  systemd:
+  ansible.builtin.systemd:
     name: tomcat9
     state: restarted
 
 - name: Reload systemd
-  systemd:
-    daemon_reload: yes
+  ansible.builtin.systemd:
+    daemon_reload: true
