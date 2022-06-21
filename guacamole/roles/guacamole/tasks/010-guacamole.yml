@@ -1,7 +1,6 @@
 - name: Install needed libraries and tools
   ansible.builtin.apt:
     become: true
-    upgrade: true
     update_cache: true
     autoremove: true
     autoclean: true
