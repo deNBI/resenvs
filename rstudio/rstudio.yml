@@ -35,7 +35,7 @@
 
 
 - name: Setup password for default user
-  ansibile.builtin.user:
+  ansible.builtin.user:
     name: "{{ rstudio_vars.default_user }}"
     password: "{{ rstudio_vars.default_password | password_hash('sha512') }}"
 

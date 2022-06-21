@@ -77,7 +77,7 @@
   when: cwlab_vars.create_only_backend == "false"
 
 - name: Add ubuntu user to docker group
-  ansibile.builtin.user:
+  ansible.builtin.user:
     name: ubuntu
     groups: docker
     append: true

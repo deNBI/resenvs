@@ -36,7 +36,7 @@
   when: guacamole_vars.create_only_backend == "false"
 
 - name: Setup password  for default ubuntu user - standart
-  ansibile.builtin.user:
+  ansible.builtin.user:
     name: "{{ guacamole_vars.default_user }}"
     password: "{{ guacamole_vars.default_password | password_hash('sha512') }}"
   when: guacamole_vars.create_only_backend == "true"
