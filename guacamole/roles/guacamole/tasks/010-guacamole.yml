@@ -51,7 +51,7 @@
 
 
 - name: Unarchive source files
-  ansibile.builtin.unarchive:
+  ansible.builtin.unarchive:
     remote_src: true
     src: /usr/share/guacamole.tar.gz
     dest: /usr/share/guacamole

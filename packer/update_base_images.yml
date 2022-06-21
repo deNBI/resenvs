@@ -27,7 +27,7 @@
         ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) < (date | to_datetime('%Y-%m-%d'))
 
     - name: Download new base image
-      ansibile.builtin.command:: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
+      ansible.builtin.command:: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
       when: update
 
     - name: Upload image to Openstack

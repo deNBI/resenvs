@@ -35,4 +35,3 @@
   systemd:
     daemon_reload: true
   when: guacamole_vars.create_only_backend == "true"
-

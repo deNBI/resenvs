@@ -64,5 +64,3 @@
     name: jupyter-lab
     state: started
     enabled: true
-
-
