@@ -62,6 +62,7 @@
 
 - name: Configure systemd unit
   ansible.builtin.command: "./configure --with-systemd-dir=/etc/systemd/system"
+  become: true
   args:
     chdir: /usr/share/guacamole/guacamole-server-1.4.0/
     creates: /usr/share/guacamole/guacamole-server-1.4.0/Makefile
