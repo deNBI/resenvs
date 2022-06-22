@@ -71,10 +71,13 @@
     creates: /usr/share/guacamole/guacamole-server-1.4.0/Makefile
 
 - name: Ignore depcreated warnings Ubuntu 22
-  ansible.builtin.command: "sed -i '/CFLAGS = -g -O2/ s/$/ -Wno-error=deprecated-declarations/' Makefile"
+  ansible.builtin.lineinfile:
+    path: /usr/share/guacamole/guacamole-server-1.4.0/src/common-ssh/Makefile
+    search_string: "CFLAGS = -g -O2"
+    line: "CFLAGS = -g -O2 -Wno-error=deprecated-declarations"
+    state: present
+    firstmatch: true
   become: true
-    args:
-    chdir: /usr/share/guacamole/guacamole-server-1.4.0/src/common-ssh
 
 - name: Compile guacamole
   make:
