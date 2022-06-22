@@ -70,6 +70,12 @@
     chdir: /usr/share/guacamole/guacamole-server-1.4.0/
     creates: /usr/share/guacamole/guacamole-server-1.4.0/Makefile
 
+- name: Ignore depcreated warnings Ubuntu 22
+  ansible.builtin.command: "sed -i '/CFLAGS = -g -O2/ s/$/ -Wno-error=deprecated-declarations/' Makefile"
+  become: true
+    args:
+    chdir: /usr/share/guacamole/guacamole-server-1.4.0/src/common-ssh
+
 - name: Compile guacamole
   make:
     chdir: /usr/share/guacamole/guacamole-server-1.4.0/
