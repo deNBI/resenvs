@@ -77,7 +77,6 @@
     line: "CFLAGS = -g -O2 -Wno-error=deprecated-declarations"
     state: present
     firstmatch: true
-  become: true
 
 - name: Compile guacamole
   make:
