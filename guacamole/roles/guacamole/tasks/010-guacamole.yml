@@ -95,12 +95,15 @@
     state: directory
     path: /etc/guacamole
     mode: 0700
-
+    owner: ubuntu
+    group: ubuntu
 
 - name: Create guacamole.properties
   ansible.builtin.copy:
     src: guacamole.properties
     dest: /etc/guacamole/guacamole.properties
+    owner: ubuntu
+    group: ubuntu
     mode: 0700
   notify: Restart guacd
 
@@ -109,6 +112,7 @@
     src: user-mapping.xml.j2
     dest: /etc/guacamole/user-mapping.xml
     owner: ubuntu
+    group: ubuntu
     mode: 0700
   notify: Restart guacd
 
@@ -124,6 +128,8 @@
     src: /usr/share/guacamole.war
     dest: /var/lib/tomcat9/webapps/guacamole.war
     mode: 0700
+    owner: ubuntu
+    group: ubuntu
   notify: Restart Tomcat
 
 - name: Link configuration directory to tomcat
@@ -132,4 +138,6 @@
     src: /etc/guacamole
     dest: /usr/share/tomcat9/.guacamole
     mode: 0700
+    owner: ubuntu
+    group: ubuntu
   notify: Reload systemd
