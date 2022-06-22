@@ -44,12 +44,14 @@
   ansible.builtin.get_url:
     url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/1.4.0/binary/guacamole-1.4.0.war
     dest: /usr/share/guacamole.war
+    owner: ubuntu
     mode: 0644
 
 - name: Prepare build directory
   ansible.builtin.file:
     state: directory
     path: /usr/share/guacamole/
+    owner: ubuntu
     mode: 0644
 
 
@@ -58,6 +60,7 @@
     remote_src: true
     src: /usr/share/guacamole.tar.gz
     dest: /usr/share/guacamole
+    owner: ubuntu
     mode: 0644
 
 - name: Configure systemd unit
@@ -105,6 +108,7 @@
   ansible.builtin.template:
     src: user-mapping.xml.j2
     dest: /etc/guacamole/user-mapping.xml
+    owner: ubuntu
     mode: 0644
   notify: Restart guacd
 
