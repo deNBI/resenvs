@@ -37,31 +37,27 @@
   ansible.builtin.get_url:
     url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/1.4.0/source/guacamole-server-1.4.0.tar.gz
     dest: /usr/share/guacamole.tar.gz
-    mode: 0700
+    mode: 0777
 
 
 - name: Download guacamole war file
   ansible.builtin.get_url:
     url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/1.4.0/binary/guacamole-1.4.0.war
     dest: /usr/share/guacamole.war
-    owner: ubuntu
-    mode: 0700
+    mode: 0777
 
 - name: Prepare build directory
   ansible.builtin.file:
     state: directory
     path: /usr/share/guacamole/
-    owner: ubuntu
-    mode: 0700
-
+    mode: 0777
 
 - name: Unarchive source files
   ansible.builtin.unarchive:
     remote_src: true
     src: /usr/share/guacamole.tar.gz
     dest: /usr/share/guacamole
-    owner: ubuntu
-    mode: 0700
+    mode: 0777
 
 - name: Configure systemd unit
   ansible.builtin.command: "./configure --with-systemd-dir=/etc/systemd/system"
@@ -102,26 +98,20 @@
   ansible.builtin.file:
     state: directory
     path: /etc/guacamole
-    mode: 0700
-    owner: ubuntu
-    group: ubuntu
+    mode: 0777
 
 - name: Create guacamole.properties
   ansible.builtin.copy:
     src: guacamole.properties
     dest: /etc/guacamole/guacamole.properties
-    owner: ubuntu
-    group: ubuntu
-    mode: 0700
+    mode: 0777
   notify: Restart guacd
 
 - name: Generate guacamole mapping
   ansible.builtin.template:
     src: user-mapping.xml.j2
     dest: /etc/guacamole/user-mapping.xml
-    owner: ubuntu
-    group: ubuntu
-    mode: 0700
+    mode: 0777
   notify: Restart guacd
 
 - name: Register path in env
@@ -135,9 +125,7 @@
     remote_src: true
     src: /usr/share/guacamole.war
     dest: /var/lib/tomcat9/webapps/guacamole.war
-    mode: 0700
-    owner: ubuntu
-    group: ubuntu
+    mode: 0777
   notify: Restart Tomcat
 
 - name: Link configuration directory to tomcat
@@ -145,7 +133,5 @@
     state: link
     src: /etc/guacamole
     dest: /usr/share/tomcat9/.guacamole
-    mode: 0700
-    owner: ubuntu
-    group: ubuntu
+    mode: 0777
   notify: Reload systemd
