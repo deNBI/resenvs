@@ -1,7 +1,7 @@
 - name: Setting up research environment
   hosts: all
-  become: yes
-  gather_facts: yes
+  become: true
+  gather_facts: true
 
   vars:
     resenv:
@@ -9,7 +9,7 @@
   tasks:
     - name: Include {{ resenv }} variables
       include_vars:
-        file: "../{{resenv}}/{{ resenv }}_vars_file.yml"
+        ansible.builtin.file: "../{{resenv}}/{{ resenv }}_vars_file.yml"
 
     - name: Setting up virtual machine with {{ resenv }}
       import_tasks: "../{{resenv}}/{{ resenv }}.yml"

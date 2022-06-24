@@ -4,7 +4,6 @@ channels:
   - bioconda
   - defaults
   - anaconda
-
 dependencies:
   - notebook
   - jupyter_contrib_nbextensions

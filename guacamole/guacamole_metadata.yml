@@ -1,7 +1,7 @@
 template_name: guacamole
-is_maintained: True
+is_maintained: true
 port: 8080
-needs_forc_support: True
+needs_forc_support: true
 forc_versions:
   - v03
   - v02
@@ -11,10 +11,10 @@ direction: "ingress"
 protocol: "tcp"
 securitygroup_name: "_guacamole"
 securitygroup_description: "Guacamole"
-securitygroup_ssh: False
+securitygroup_ssh: false
 title: "Guacamole"
 description: "Guacamole is a browser based remote desktop application."
 logo_url: "https://cloud.denbi.de/static/images/guacamole.png"
 info_url: ""
 information_for_display:
-     version: "1.4.0"
+  version: "1.4.0"

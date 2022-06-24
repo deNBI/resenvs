@@ -24,9 +24,9 @@
     "image_tags": ["{{user `guacamole_tag`}}"],
     "metadata": {
       "template_name": "guacamole",
-      "is_maintained": "True",
+      "is_maintained": "true",
       "port": "8080",
-      "needs_forc_support": "True",
+      "needs_forc_support": "true",
       "forc_versions": "['v03', 'v02', 'v01']",
       "incompatible_versions": "[]",
       "direction": "ingress",
