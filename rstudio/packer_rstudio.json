@@ -24,9 +24,9 @@
     "image_tags": ["{{user `rstudio_tag`}}"],
     "metadata": {
       "template_name": "rstudio",
-      "is_maintained": "True",
+      "is_maintained": "true",
       "port": "8787",
-      "needs_forc_support": "True",
+      "needs_forc_support": "true",
       "forc_versions": "['v04', 'v03', 'v02', 'v01']",
       "incompatible_versions": "[]",
       "direction": "ingress",

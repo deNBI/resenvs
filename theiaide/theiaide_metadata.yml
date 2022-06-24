@@ -1,7 +1,7 @@
 template_name: theiaide
-is_maintained: True
+is_maintained: true
 port: 8080
-needs_forc_support: True
+needs_forc_support: true
 forc_versions:
   - v03
   - v02
@@ -11,10 +11,10 @@ direction: "ingress"
 protocol: "tcp"
 securitygroup_name: "_theaide"
 securitygroup_description: "Theaide"
-securitygroup_ssh: False
+securitygroup_ssh: false
 title: "Theia - Cloud and Desktop IDE"
 description: "Browser based IDE that offers among others a terminal, editor and a file browser."
 logo_url: "https://cloud.denbi.de/static/images/theia.png"
 info_url: ""
 information_for_display:
-     version: "12"
+  version: "12"

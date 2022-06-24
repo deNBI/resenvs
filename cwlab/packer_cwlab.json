@@ -24,9 +24,9 @@
     "image_tags": ["{{user `cwlab_tag`}}"],
     "metadata": {
       "template_name": "cwlab",
-      "is_maintained": "True",
+      "is_maintained": "true",
       "port": "80",
-      "needs_forc_support": "True",
+      "needs_forc_support": "true",
       "forc_versions": "[v02, v01]",
       "incompatible_versions": "[]",
       "direction": "ingress",

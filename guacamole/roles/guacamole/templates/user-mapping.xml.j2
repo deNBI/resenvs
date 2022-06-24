@@ -1,15 +1,15 @@
 <user-mapping>
 
         <authorize
-                username="{{ GUAC_USER }}"
-                password="{{ GUAC_PASSWORD }}">
+                username="{{ guac_user }}"
+                password="{{ guac_password }}">
 
         <connection name="Ubuntu Server">
                 <protocol>rdp</protocol>
                 <param name="hostname">127.0.0.1</param>
                 <param name="port">3389</param>
-                <param name="username">{{ DEFAULT_USER }}</param>
-                <param name="password">{{ DEFAULT_PASSWORD }}</param>
+                <param name="username">{{ default_user }}</param>
+                <param name="password">{{ default_password }}</param>
         </connection>
 
         </authorize>
