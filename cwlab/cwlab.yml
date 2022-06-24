@@ -7,7 +7,7 @@
   when: cwlab_vars.create_only_backend == "false"
 
 - name: Generate distribution information
-  ansible.builtin.command:: lsb_release -cs
+  ansible.builtin.command: lsb_release -cs
   register: release
 
 - name: Install python3-pip
