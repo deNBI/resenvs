@@ -1,5 +1,5 @@
 conda_vars:
-  DEFAULT_USER: ubuntu
+  default_user: ubuntu
   CONDA_DIR: /home/ubuntu/miniconda3
   ENV_NAME: denbi
   TIMEOUT_LENGTH: 5m

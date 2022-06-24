@@ -31,11 +31,11 @@ Role Variables
 
 | Variable                  | Description           | Default                                                                       | Mandatory |
 | -------------             |-------------          |            -----                                                              |     ---   |
-| DEFAULT_USER           | Default unix user on which guacamole connects to |                ubuntu                                                    | Yes       |
-| DEFAULT_PASSWORD              | Default password of the unix user. Change it when target is not externally protected via ReverseProxy or other.                                  |        ogvkyf                       | Yes       |
-| DEFAULT_PASSWORD_HASHED         | Hashed password of DEFAULT_PASSWORD      |    $6$iRrIJogr...    |   Yes     |
-| GUAC_USER        | Default guacamole user                 | denbi      | Yes       |
-| GUAC_PASSWORD         | Default guacamole password                        | denbi                          | Yes       |
+| default_user           | Default unix user on which guacamole connects to |                ubuntu                                                    | Yes       |
+| default_password              | Default password of the unix user. Change it when target is not externally protected via ReverseProxy or other.                                  |        ogvkyf                       | Yes       |
+| default_password_hashed         | Hashed password of default_password      |    $6$iRrIJogr...    |   Yes     |
+| guac_user        | Default guacamole user                 | denbi      | Yes       |
+| guac_password         | Default guacamole password                        | denbi                          | Yes       |
 
 
 Dependencies
@@ -46,10 +46,10 @@ Dependencies
 Example Playbook
 ----------------
 
-Make sure to include `become: yes`. Using this role in a playbook is straight forward:
+Make sure to include `become: true`. Using this role in a playbook is straight forward:
 
     - hosts: servers
-      become: yes
+      become: true
       roles:
          - guacamolerdp-ansible
 

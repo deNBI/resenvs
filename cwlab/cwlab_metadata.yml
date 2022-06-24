@@ -1,7 +1,7 @@
 template_name: cwlab
-is_maintained: True
+is_maintained: true
 port: 80
-needs_forc_support: True
+needs_forc_support: true
 forc_versions:
   - v02
   - v01
@@ -10,10 +10,10 @@ direction: "ingress"
 protocol: "tcp"
 securitygroup_name: "_cwlab"
 securitygroup_description: "CWLab"
-securitygroup_ssh: False
+securitygroup_ssh: false
 title: "CWLab"
 description: ""
 logo_url: ""
 info_url: ""
 information_for_display:
-     version: "0.3.2"
+  version: "0.3.2"

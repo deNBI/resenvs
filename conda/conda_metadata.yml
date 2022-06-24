@@ -1,2 +1,2 @@
 template_name: conda
-needs_forc_support: False
+needs_forc_support: false

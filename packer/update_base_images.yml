@@ -27,7 +27,7 @@
         ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) < (date | to_datetime('%Y-%m-%d'))
 
     - name: Download new base image
-      command: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
+      ansible.builtin.command:: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
       when: update
 
     - name: Upload image to Openstack
@@ -44,4 +44,3 @@
           os_version: "{{ version }}"
           description: "Ubuntu is a free and open source operating system and Linux distribution based on Debian."
       when: update
-
