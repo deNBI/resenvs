@@ -24,7 +24,7 @@
     - set_fact:
         update: true
       when: base_images | length == 0 or
-        ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) < (date | to_datetime('%Y-%m-%d'))
+        ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) < (date | to_datetime('%Y-%m-%dT%H:%M:%SZ))
 
     - name: Download new base image
       ansible.builtin.command: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
