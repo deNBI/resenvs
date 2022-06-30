@@ -9,22 +9,24 @@
     - tags.json
 
   tasks:
-    - set_fact:
+    - name: Set Update default false
+      ansible.builtin.set_fact:
         update: false
 
     - name: Retrieve list of all images
       openstack.cloud.image_info:
       register: images
 
-    - set_fact:
+    - name: Set Base Image Fact
+      ansible.builtin.set_fact:
         base_images: "{{ images.openstack_image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='{{ distro }}' && properties.os_version=='{{ version }}']"
 
-    - set_fact:
+    - name: Set Update  Fact
+      ansible.builtin.set_fact:
         update: true
-      when: base_images | length == 0 or
-        ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) < (date | to_datetime('%Y-%m-%dT%H:%M:%SZ))
+      when: base_images | length == 0 or ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%Z')) < (date | to_datetime('%Y-%m-%dT%H:%M:%Z))
 
     - name: Download new base image
       ansible.builtin.command: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
