@@ -1,3 +1,4 @@
+---
 template_name: jupyterlab
 is_maintained: true
 port: 8888
@@ -7,14 +8,14 @@ forc_versions:
   - v02
   - v01
 incompatible_versions: []
-direction: "ingress"
-protocol: "tcp"
-securitygroup_name: "_jupyterlab"
-securitygroup_description: "Jupyterlab"
+direction: ingress
+protocol: tcp
+securitygroup_name: _jupyterlab
+securitygroup_description: Jupyterlab
 securitygroup_ssh: false
-title: "Jupyterlab"
-description: "Jupyterlab"
-logo_url: "https://cloud.denbi.de/images/DWeSy3W-qRwyp1FJB_QyhhjAwT4=/73/original/"
+title: Jupyterlab
+description: Jupyterlab
+logo_url: https://cloud.denbi.de/images/DWeSy3W-qRwyp1FJB_QyhhjAwT4=/73/original/
 info_url: ""
 information_for_display:
-  packages: "Jupyterlab with ipykernel preinstalled - install additional packages via conda"
+  packages: Jupyterlab with ipykernel preinstalled - install additional packages via conda

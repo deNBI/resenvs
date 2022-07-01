@@ -1,13 +1,14 @@
+---
 - name: Install theia_ide role
   block:
     - name: Install packages
       ansible.builtin.apt:
-        name: ["python3", "make", "g++", "curl", "git"]
+        name: [python3, make, g++, curl, git]
       when: ansible_distribution_file_variety == 'Debian'
 
     - name: install packages
       yum:
-        name: ["python3", "curl", "git", "make", "gcc", "gcc-c++"]
+        name: [python3, curl, git, make, gcc, gcc-c++]
       when: ansible_distribution_file_variety == 'RedHat'
 
     - name: Create NVM install dir
@@ -23,7 +24,7 @@
 
     - name: Set fact 'theia_ide_workspace' to '${HOME}'
       set_fact:
-        theia_ide_workspace: "${HOME}"
+        theia_ide_workspace: ${HOME}
 
     - name: Install nvm
       shell: |
@@ -44,7 +45,7 @@
       shell: |
         curl -o- https://bibiserv.cebitec.uni-bielefeld.de/resources/bibigrid/plugins/theia-ide_node12.tar.gz | tar -xzf -
       args:
-        chdir: "/opt"
+        chdir: /opt
         creates: "{{ theiaide_vars.THEIA_INSTALL_DIR }}"
 
     - name: Set facts for templates

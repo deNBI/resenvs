@@ -1,3 +1,4 @@
+---
 cwlab_vars:
   exposed_port: 80
   data_volume_path: /home/ubuntu/cwlab-data/

@@ -1,5 +1,4 @@
 ---
-
 - name: Update apt cache
   ansible.builtin.apt:
     upgrade: true
@@ -29,7 +28,7 @@
 - name: Config xrdp to start xfce4
   ansible.builtin.lineinfile:
     path: /etc/xrdp/xrdp.ini
-    line: "exec startxfce4"
+    line: exec startxfce4
   notify: Restart xrdp
 
 - name: Setup password for default user

@@ -1,3 +1,4 @@
+---
 - name: Install guacamole role
   include_role:
     name: guacamole

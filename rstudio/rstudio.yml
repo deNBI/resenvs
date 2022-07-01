@@ -1,3 +1,4 @@
+---
 - name: Setup password for default user
   ansible.builtin.user:
     name: "{{ rstudio_vars.default_user }}"
@@ -18,11 +19,11 @@
 
 - name: Copy session file if also installing rstudio
   ansible.builtin.copy:
-    content: "session-timeout-minutes=180"
+    content: session-timeout-minutes=180
     dest: "{{ rstudio_vars.RSESSION_FILE_PATH }}"
     mode: "0644"
-    owner: "root"
-    group: "root"
+    owner: root
+    group: root
   when: rstudio_vars.create_only_backend == "false"
 
 - name: Flush rstudio handlers
