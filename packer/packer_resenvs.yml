@@ -25,10 +25,10 @@
         - apt-daily-upgrade.timer
 
     - name: PRE_TASK   Wait for automatic system updates 1
-      ansible.builtin.command: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+      ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
 
     - name: PRE_TASK  Wait for automatic system updates 2
-      ansible.builtin.command: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
+      ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
 
     - name: PRE_TASK   Update apt cache
       become: true
