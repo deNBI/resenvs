@@ -19,7 +19,7 @@
       "most_recent": true
     },
     "networks": "{{user `network`}}",
-    "flavor": "de.NBI tiny",
+    "flavor": "de.NBI tiny LEGACY",
     "ssh_username": "ubuntu",
     "image_tags": ["{{user `cwlab_tag`}}"],
     "metadata": {
