@@ -72,4 +72,4 @@
         name: theia-ide.service
         enabled: true
         state: started
-  when: theiaide_vars.create_only_backend == "false"
+  when: not theiaide_vars.create_only_backend

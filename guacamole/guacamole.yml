@@ -2,37 +2,37 @@
 - name: Install guacamole role
   include_role:
     name: guacamole
-  when: guacamole_vars.create_only_backend == "false"
+  when: not guacamole_vars.create_only_backend
 
 - name: Flush guacamole handlers
   meta: flush_handlers
-  when: guacamole_vars.create_only_backend == "false"
+  when: not guacamole_vars.create_only_backend
 
 - name: Setup password  for default ubuntu user - standart
   ansible.builtin.user:
     name: "{{ guacamole_vars.default_user }}"
     password: "{{ guacamole_vars.default_password | password_hash('sha512') }}"
-  when: guacamole_vars.create_only_backend == "true"
+  when: not guacamole_vars.create_only_backend
 
 - name: Restart xrdp
   systemd:
     name: xrdp
     state: restarted
-  when: guacamole_vars.create_only_backend == "true"
+  when: gnot guacamole_vars.create_only_backend
 
 - name: Restart guacd
   systemd:
     name: guacd
     state: restarted
-  when: guacamole_vars.create_only_backend == "true"
+  when: not guacamole_vars.create_only_backend
 
 - name: Restart Tomcat
   systemd:
     name: tomcat9
     state: restarted
-  when: guacamole_vars.create_only_backend == "true"
+  when: not guacamole_vars.create_only_backend
 
 - name: Reload systemd
   systemd:
     daemon_reload: true
-  when: guacamole_vars.create_only_backend == "true"
+  when: not guacamole_vars.create_only_backend

@@ -1,7 +1,7 @@
 ---
 theiaide_vars:
   template_version:
-  create_only_backend:
+  create_only_backend: false
   NVM_INSTALL_DIR: /opt/nvm
   THEIA_INSTALL_DIR: /opt/theia-ide
   THEIA_USER: ubuntu

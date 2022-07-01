@@ -7,6 +7,13 @@
   vars:
     resenv:
   tasks:
+    - name:  PRE_TASK   Update apt cache
+      become: true
+      apt:
+        upgrade: true
+        update_cache: true
+        autoremove: true
+        autoclean: true
     - name: Include {{ resenv }} variables
       include_vars:
         file: ../{{resenv}}/{{ resenv }}_vars_file.yml

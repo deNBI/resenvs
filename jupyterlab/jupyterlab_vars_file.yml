@@ -1,7 +1,7 @@
 ---
 jupyterlab_vars:
   template_version:
-  create_only_backend:
+  create_only_backend: false
   base_url:
   default_user: ubuntu
   DEFAULT_TOKEN: simplevm

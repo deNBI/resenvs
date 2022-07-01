@@ -7,7 +7,7 @@
 - name: Install R role
   include_role:
     name: oefenweb.latest_r
-  when: rstudio_vars.create_only_backend == "false"
+  when: not rstudio_vars.create_only_backend
 
 - name: Install rstudio-server role
   include_role:
@@ -15,7 +15,7 @@
   vars:
     rstudio_install: [r-base]
     rstudio_server_version: "{{ rstudio_vars.RSTUDIO_VERSION }}"
-  when: rstudio_vars.create_only_backend == "false"
+  when: not rstudio_vars.create_only_backend
 
 - name: Copy session file if also installing rstudio
   ansible.builtin.copy:
@@ -24,8 +24,8 @@
     mode: "0644"
     owner: root
     group: root
-  when: rstudio_vars.create_only_backend == "false"
+  when: not rstudio_vars.create_only_backend
 
 - name: Flush rstudio handlers
   meta: flush_handlers
-  when: rstudio_vars.create_only_backend == "false"
+  when: not rstudio_vars.create_only_backend

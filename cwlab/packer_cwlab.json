@@ -12,7 +12,7 @@
       "filters": {
         "tags": ["{{user `base_image_tag`}}"],
         "properties": {
-           "os_distro": "{{user `os_distro`}}",
+          "os_distro": "{{user `os_distro`}}",
           "os_version": "{{user `os_version`}}"
         }
       },

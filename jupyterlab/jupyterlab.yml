@@ -5,7 +5,7 @@
   vars:
     miniconda_parent_dir: /home/{{jupyterlab_vars.default_user}}
     miniconda_link_subdir: miniconda3
-  when: jupyterlab_vars.create_only_backend == "false"
+  when: not jupyterlab_vars.create_only_backend
 
 - name: Install conda-env role
   include_role:
@@ -16,7 +16,7 @@
     conda_env_environment: jupyterlab_env.yml
     conda_env_activate_for_login_shell: true
 
-  when: jupyterlab_vars.create_only_backend == "false"
+  when: not jupyterlab_vars.create_only_backend
 
 - name: Add bioconda channel
   become_user: "{{   jupyterlab_vars.default_user  }}"
