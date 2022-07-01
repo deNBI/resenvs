@@ -34,7 +34,7 @@
       when: update
 
     - name: Echo Timestamp
-      run: echo "The Timestamp is  ${{ date_time  }}"
+      ansible.builtin.command: echo "The Timestamp is  ${{ date_time  }}"
       when: update
 
 
