@@ -18,7 +18,7 @@
   ansible.builtin.systemd:
     name: xrdp
     state: restarted
-  when: gnot guacamole_vars.create_only_backend
+  when: not guacamole_vars.create_only_backend
 
 - name: Restart guacd
   ansible.builtin.systemd:
