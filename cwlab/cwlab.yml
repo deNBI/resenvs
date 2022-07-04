@@ -14,10 +14,9 @@
   when: not cwlab_vars.create_only_backend
 
 
-- name: install docker
-  package:
-    name: docker-ce
-    state: present
+- name: Install docker role
+  include_role:
+    name: geerlinguy.docker
   when: not cwlab_vars.create_only_backend
 
 
