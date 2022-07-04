@@ -14,32 +14,12 @@
   when: not cwlab_vars.create_only_backend
 
 
-- name: Add signing key
-  ansible.builtin.apt_key:
-        url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
-        state: present
+- name: install docker
+  package:
+    name: docker-ce
+    state: present
   when: not cwlab_vars.create_only_backend
 
-- name: Add repository into sources list
-  ansible.builtin.apt_repository:
-        repo: "deb [arch={{ ansible_architecture }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
-        state: present
-  when: not cwlab_vars.create_only_backend
-
-- name: Install Docker
-  ansible.builtin.apt:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-        state: latest
-        update_cache: true
-  when: not cwlab_vars.create_only_backend
-
-- name: Install Docker Module for Python
-  ansible.builtin.pip:
-    name: docker
-  when: not cwlab_vars.create_only_backend
 
 - name: Install Setuptools
   ansible.builtin.apt:
