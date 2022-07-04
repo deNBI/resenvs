@@ -16,7 +16,7 @@
 
 - name: Install docker role
   include_role:
-    name: geerlinguy.docker
+    name: geerlingguy.docker
   when: not cwlab_vars.create_only_backend
 
 
