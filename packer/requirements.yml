@@ -10,4 +10,6 @@ roles:
     version: v6.1.5
 
   - name: andrewrothstein.conda-env
+    version: v2.1.7
   - name: geerlingguy.docker
+    version: 4.2.4
