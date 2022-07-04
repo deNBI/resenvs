@@ -18,17 +18,22 @@
   ansible.builtin.apt_key:
         url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
         state: present
+  when: not cwlab_vars.create_only_backend
 
 - name: Add repository into sources list
   ansible.builtin.apt_repository:
         repo: "deb [arch={{ ansible_architecture }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
         state: present
+  when: not cwlab_vars.create_only_backend
 
-- name: Update apt and install docker-ce
+- name: Install Docker
   ansible.builtin.apt:
-    update_cache: true
-    name: docker-ce
-    state: latest
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: latest
+        update_cache: true
   when: not cwlab_vars.create_only_backend
 
 - name: Install Docker Module for Python
