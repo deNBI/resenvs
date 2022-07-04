@@ -13,17 +13,16 @@
     state: latest
   when: not cwlab_vars.create_only_backend
 
-- name: Add Docker GPG apt Key
-  ansible.builtin.apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
-  when: not cwlab_vars.create_only_backend
 
-- name: Add Docker Repository
+- name: Add signing key
+  ansible.builtin.apt_key:
+        url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+        state: present
+
+- name: Add repository into sources list
   ansible.builtin.apt_repository:
-    repo: deb https://download.docker.com/linux/ubuntu {{ release.stdout }} stable
-    state: present
-  when: not cwlab_vars.create_only_backend
+        repo: "deb [arch={{ ansible_architecture }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+        state: present
 
 - name: Update apt and install docker-ce
   ansible.builtin.apt:
