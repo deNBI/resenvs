@@ -3,7 +3,6 @@
   ansible.builtin.apt:
     state: latest
     update: true
-    upgrade: true
     name: python3-pip
   when: not cwlab_vars.create_only_backend
 
@@ -42,7 +41,6 @@
   ansible.builtin.apt:
     name: python3-setuptools
     update: true
-    upgrade: true
   when: not cwlab_vars.create_only_backend
 
 - name: Install Docker Compose Module for Python
@@ -63,7 +61,6 @@
   ansible.builtin.apt:
     name: python3-docker
     update: true
-    upgrade: true
     state: latest
   become: true
   when: not cwlab_vars.create_only_backend
