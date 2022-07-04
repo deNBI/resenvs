@@ -1,5 +1,5 @@
+---
 - include_tasks: 005-desktop.yml
-  tags: ['guacamole_desktop']
-
+  tags: [guacamole_desktop]
 - include_tasks: 010-guacamole.yml
-  tags: ['guacamole_guacamole']
+  tags: [guacamole_guacamole]

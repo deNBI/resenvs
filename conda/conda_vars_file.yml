@@ -1,3 +1,4 @@
+---
 conda_vars:
   default_user: ubuntu
   CONDA_DIR: /home/ubuntu/miniconda3

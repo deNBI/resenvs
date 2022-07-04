@@ -53,7 +53,7 @@ Alongside the YAML files containing installation steps and variables, the name f
 
 ## Configuration of GitHub Runners
 In order to run the workflows with internal GitHub runners, they should have the following dependencies installed:
-- [Packer](https://www.packer.io/downloads) (v. 1.6 or higher)
+- [Packer](https://www.packer.io/downloads) (v. 1.8.2 or higher)
 - [Minio CLI](https://min.io/download#/linux)  
 Also setup valid credentials for Minio client with `./mc alias set osbielefeld https://openstack.cebitec.uni-bielefeld.de:8080 ACCESS_KEY SECRET_KEY`. You can create a keypair with `openstack credential create`
 - openstacksdk `pip install openstacksdk`

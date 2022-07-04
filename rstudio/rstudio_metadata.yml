@@ -1,3 +1,4 @@
+---
 template_name: rstudio
 is_maintained: true
 port: 8787
@@ -8,14 +9,14 @@ forc_versions:
   - v02
   - v01
 incompatible_versions: []
-direction: "ingress"
-protocol: "tcp"
-securitygroup_name: "_rstudio"
-securitygroup_description: "Rstudio"
+direction: ingress
+protocol: tcp
+securitygroup_name: _rstudio
+securitygroup_description: Rstudio
 securitygroup_ssh: false
-title: "RStudio"
-description: "RStudio is an integrated development environment for R."
-logo_url: "https://cloud.denbi.de/static/images/rstudio.png"
+title: RStudio
+description: RStudio is an integrated development environment for R.
+logo_url: https://cloud.denbi.de/static/images/rstudio.png
 info_url: ""
 information_for_display:
   version: 2022.02.3-492

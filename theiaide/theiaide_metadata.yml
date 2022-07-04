@@ -1,3 +1,4 @@
+---
 template_name: theiaide
 is_maintained: true
 port: 8080
@@ -7,14 +8,14 @@ forc_versions:
   - v02
   - v01
 incompatible_versions: []
-direction: "ingress"
-protocol: "tcp"
-securitygroup_name: "_theaide"
-securitygroup_description: "Theaide"
+direction: ingress
+protocol: tcp
+securitygroup_name: _theaide
+securitygroup_description: Theaide
 securitygroup_ssh: false
-title: "Theia - Cloud and Desktop IDE"
-description: "Browser based IDE that offers among others a terminal, editor and a file browser."
-logo_url: "https://cloud.denbi.de/static/images/theia.png"
+title: Theia - Cloud and Desktop IDE
+description: Browser based IDE that offers among others a terminal, editor and a file browser.
+logo_url: https://cloud.denbi.de/static/images/theia.png
 info_url: ""
 information_for_display:
   version: "12"
