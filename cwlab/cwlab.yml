@@ -21,7 +21,7 @@
   pip:
     name: pip
     executable: pip3
-    state: present
+    state: latest
   when: not cwlab_vars.create_only_backend
 
 - name: Add Docker GPG apt Key
