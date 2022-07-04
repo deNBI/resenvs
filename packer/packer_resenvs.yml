@@ -37,6 +37,7 @@
         update_cache: true
         autoremove: true
         autoclean: true
+        forc_apt_get: true
   tasks:
     - name: Include {{ resenv }} variables
       ansible.builtin.include_vars:
