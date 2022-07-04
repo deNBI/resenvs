@@ -1,5 +1,6 @@
+---
 guacamole_vars:
   template_version:
-  create_only_backend:
+  create_only_backend: false
   default_user: ubuntu
   default_password: ogvkyf

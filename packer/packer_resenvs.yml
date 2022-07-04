@@ -1,3 +1,4 @@
+---
 - name: Setting up research environment
   hosts: all
   become: true
@@ -5,11 +6,59 @@
 
   vars:
     resenv:
+  pre_tasks:
+    - name: PRE_TASK Disable unattended upgrades
+      ansible.builtin.lineinfile:
+        path: /etc/apt/apt.conf.d/10periodic
+        regexp: "^APT::Periodic::Unattended-Upgrade"
+        line: 'APT::Periodic::Unattended-Upgrade "0";'
+        create: true
+    - name: PRE_TASK Stop apt-daily.* systemd services
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: stopped
+      with_items:
+        - unattended-upgrades
+        - apt-daily
+        - apt-daily.timer
+        - apt-daily-upgrade
+        - apt-daily-upgrade.timer
+
+    - name: PRE_TASK   Wait for automatic system updates 1
+      ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+
+    - name: PRE_TASK  Wait for automatic system updates 2
+      ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
+
+    - name: PRE_TASK   Update apt cache
+      become: true
+      ansible.builtin.apt:
+        upgrade: true
+        update_cache: true
+        autoremove: true
+        autoclean: true
+        force_apt_get: true
 
   tasks:
     - name: Include {{ resenv }} variables
-      include_vars:
-        ansible.builtin.file: "../{{resenv}}/{{ resenv }}_vars_file.yml"
+      ansible.builtin.include_vars:
+        file: ../{{ resenv }}/{{ resenv }}_vars_file.yml
 
     - name: Setting up virtual machine with {{ resenv }}
-      import_tasks: "../{{resenv}}/{{ resenv }}.yml"
+      import_tasks: ../{{ resenv }}/{{ resenv }}.yml
+
+  post_tasks:
+    - name: POST_TASK  enable unattended upgrades
+      ansible.builtin.lineinfile:
+        path: /etc/apt/apt.conf.d/10periodic
+        regexp: "^APT::Periodic::Unattended-Upgrade"
+        line: 'APT::Periodic::Unattended-Upgrade "1";'
+        create: true
+    - name: POST_TASK Start apt-daily.* systemd services
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - unattended-upgrades
+        - apt-daily
+        - apt-daily.timer

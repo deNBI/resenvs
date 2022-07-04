@@ -1,3 +1,4 @@
+---
 galaxy_info:
   author: Alex Walender
   description: Installs guacamole, xrdp and xfce4 for a target which will act as a SimpleVM in the de.NBI Cloud SimpleVM context.
