@@ -1,9 +1,10 @@
+---
 - name: Check base image update
   hosts: localhost
   vars:
-    name: "Dummy"
+    name: Dummy
     date: "2000-01-01"
-    distro: "ubuntu"
+    distro: ubuntu
     version: "2004"
   vars_files:
     - tags.json
@@ -30,7 +31,11 @@
 
     - name: Set Date Fact
       ansible.builtin.set_fact:
-        date_time: "{{ (date | to_datetime('%Y-%m-%dT%H:%M:%SZ')).date }}"
+        date_time: "{{ (date | to_datetime('%Y-%m-%dT%H:%M:%SZ')).date() }}"
+      when: update
+
+    - name: Echo Timestamp
+      ansible.builtin.command: echo "The Timestamp is  ${{ date_time  }}"
       when: update
 
 
@@ -50,5 +55,5 @@
         properties:
           os_distro: "{{ distro }}"
           os_version: "{{ version }}"
-          description: "Ubuntu is a free and open source operating system and Linux distribution based on Debian."
+          description: Ubuntu is a free and open source operating system and Linux distribution based on Debian.
       when: update

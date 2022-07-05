@@ -1,54 +1,35 @@
-- name: Wait for automatic system updates 1
-  shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
-  when: cwlab_vars.create_only_backend == "false"
-
-- name: Wait for automatic system updates 2
-  shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
-  when: cwlab_vars.create_only_backend == "false"
-
-- name: Generate distribution information
-  ansible.builtin.command: lsb_release -cs
-  register: release
-
+---
 - name: Install python3-pip
   ansible.builtin.apt:
-    state: present
+    state: latest
+    update_cache: true
     name: python3-pip
-  when: cwlab_vars.create_only_backend == "false"
+  when: not cwlab_vars.create_only_backend
 
 - name: install the package, force upgrade
-  pip:
+  ansible.builtin.pip:
     name: pip
     executable: pip3
-    state: present
-  when: cwlab_vars.create_only_backend == "false"
+    state: latest
+  when: not cwlab_vars.create_only_backend
 
 
-- name: Add Docker GPG apt Key
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
-  when: cwlab_vars.create_only_backend == "false"
+- name: Install docker role
+  include_role:
+    name: geerlingguy.docker
+  when: not cwlab_vars.create_only_backend
 
-- name: Add Docker Repository
-  apt_repository:
-    repo: "deb https://download.docker.com/linux/ubuntu {{ release.stdout }} stable"
-    state: present
-  when: cwlab_vars.create_only_backend == "false"
 
-- name: Update apt and install docker-ce
-  ansible.builtin.apt: update_cache=yes name=docker-ce state=latest
-  when: cwlab_vars.create_only_backend == "false"
-
-- name: Install Docker Module for Python
-  pip:
-    name: docker
-  when: cwlab_vars.create_only_backend == "false"
+- name: Install Setuptools
+  ansible.builtin.apt:
+    name: python3-setuptools
+    update_cache: true
+  when: not cwlab_vars.create_only_backend
 
 - name: Install Docker Compose Module for Python
-  pip:
+  ansible.builtin.pip:
     name: docker-compose
-  when: cwlab_vars.create_only_backend == "false"
+  when: not cwlab_vars.create_only_backend
 
 - name: Add ubuntu user to docker group
   ansible.builtin.user:
@@ -56,13 +37,16 @@
     groups: docker
     append: true
   become: true
-  when: cwlab_vars.create_only_backend == "false"
+  when: not cwlab_vars.create_only_backend
+
 
 - name: Install docker python dev package
   ansible.builtin.apt:
     name: python3-docker
+    update_cache: true
+    state: latest
   become: true
-  when: cwlab_vars.create_only_backend == "false"
+  when: not cwlab_vars.create_only_backend
 
 - name: Ensure data path exists
   ansible.builtin.file:
@@ -71,7 +55,7 @@
     recurse: true
     owner: ubuntu
     group: ubuntu
-  when: cwlab_vars.create_only_backend == "false"
+  when: not cwlab_vars.create_only_backend
 
 - name: Launch cwlab container
   community.general.docker_container:
@@ -85,6 +69,6 @@
     user: 1000:1000
     recreate: true
     privileged: true
-    working_dir: "/cwlab"
+    working_dir: /cwlab
     container_default_behavior: no_defaults
-  when: cwlab_vars.create_only_backend == "false"
+  when: not cwlab_vars.create_only_backend

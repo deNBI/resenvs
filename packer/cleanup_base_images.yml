@@ -1,3 +1,4 @@
+---
 - name: Clean up base images
   hosts: localhost
   vars:
