@@ -34,10 +34,10 @@
         date_time: "{{ (date | to_datetime('%Y-%m-%dT%H:%M:%SZ')).date() }}"
       when: update
 
+
     - name: Echo Timestamp
       ansible.builtin.command: echo "The Timestamp is  ${{ date_time  }}"
       when: update
-
 
     - name: Download new base image
       ansible.builtin.command: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
