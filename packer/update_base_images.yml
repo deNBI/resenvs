@@ -38,6 +38,7 @@
       ansible.builtin.command: echo "The Timestamp is  ${{ date_time  }}"
       when: update
 
+
     - name: Download new base image
       ansible.builtin.command: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
       when: update
