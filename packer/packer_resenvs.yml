@@ -7,6 +7,10 @@
   vars:
     resenv:
   pre_tasks:
+    - name: PRE_TASK Wait for cloud-init / user-data to finish
+      ansible.builtin.command: cloud-init status --wait
+      changed_when: false
+      
     - name: PRE_TASK Disable unattended upgrades
       ansible.builtin.lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
