@@ -10,15 +10,29 @@
     - name: PRE_TASK Wait for cloud-init / user-data to finish
       ansible.builtin.command: cloud-init status --wait
       changed_when: false
-      
+
+    - name: Populate service facts
+      ansible.builtin.service_facts:
+
+    - name: Set if APT-Mirror Service Exists
+      set_fact:
+        bielefeld_mirror_service_exist:  "'de.NBI_Bielefeld_environment' in services"
+
+
+    - name: Stop service Apt-Mirror-Bielefeld, if started
+      ansible.builtin.service:
+        name: de.NBI_Bielefeld_environment
+        state: stopped
+      when: bielefeld_mirror_service_exist
+
     - name: PRE_TASK Disable unattended upgrades
-      ansible.builtin.lineinfile:
+      lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
         regexp: "^APT::Periodic::Unattended-Upgrade"
         line: 'APT::Periodic::Unattended-Upgrade "0";'
-        create: true
+        create: yes
     - name: PRE_TASK Stop apt-daily.* systemd services
-      ansible.builtin.service:
+      service:
         name: "{{ item }}"
         state: stopped
       with_items:
@@ -29,19 +43,19 @@
         - apt-daily-upgrade.timer
 
     - name: PRE_TASK   Wait for automatic system updates 1
-      ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+      shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
 
     - name: PRE_TASK  Wait for automatic system updates 2
-      ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
+      shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
 
     - name: PRE_TASK   Update apt cache
       become: true
-      ansible.builtin.apt:
+      apt:
         upgrade: true
         update_cache: true
         autoremove: true
         autoclean: true
-        force_apt_get: true
+
 
   tasks:
     - name: Include {{ resenv }} variables
@@ -52,6 +66,13 @@
       import_tasks: ../{{ resenv }}/{{ resenv }}.yml
 
   post_tasks:
+
+    - name: Start service Apt-Mirror-Bielefeld
+      ansible.builtin.service:
+        name: de.NBI_Bielefeld_environment
+        state: started
+      when: bielefeld_mirror_service_exist
+
     - name: POST_TASK  enable unattended upgrades
       ansible.builtin.lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
