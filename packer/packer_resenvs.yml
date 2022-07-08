@@ -24,6 +24,7 @@
         name: de.NBI_Bielefeld_environment
         state: stopped
       when: bielefeld_mirror_service_exist
+
     - name: PRE_TASK Disable unattended upgrades
       lineinfile:
         path: /etc/apt/apt.conf.d/10periodic
