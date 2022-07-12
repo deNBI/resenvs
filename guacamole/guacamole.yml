@@ -12,27 +12,22 @@
   ansible.builtin.user:
     name: "{{ guacamole_vars.default_user }}"
     password: "{{ guacamole_vars.default_password | password_hash('sha512') }}"
-  when: not guacamole_vars.create_only_backend
 
 - name: Restart xrdp
   ansible.builtin.systemd:
     name: xrdp
     state: restarted
-  when: not guacamole_vars.create_only_backend
 
 - name: Restart guacd
   ansible.builtin.systemd:
     name: guacd
     state: restarted
-  when: not guacamole_vars.create_only_backend
 
 - name: Restart Tomcat
   ansible.builtin.systemd:
     name: tomcat9
     state: restarted
-  when: not guacamole_vars.create_only_backend
 
 - name: Reload systemd
   ansible.builtin.systemd:
     daemon_reload: true
-  when: not guacamole_vars.create_only_backend
