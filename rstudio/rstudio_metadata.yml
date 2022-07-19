@@ -19,5 +19,4 @@ description: RStudio is an integrated development environment for R.
 logo_url: https://cloud.denbi.de/static/images/rstudio.png
 info_url: ""
 information_for_display:
-  # renovate: datasource=github-tags depName=rsutdio/rstudio 
   version: v2021.09.1+372
