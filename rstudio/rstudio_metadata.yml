@@ -20,4 +20,4 @@ logo_url: https://cloud.denbi.de/static/images/rstudio.png
 info_url: ""
 information_for_display:
   # renovate: datasource=github-tags depName=rsutdio/rstudio 
-  version: v2022.07.0+548
+  version: v2021.09.1+372
