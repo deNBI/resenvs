@@ -9,7 +9,7 @@
         "(^|/)rstudio_vars.yml",
       ],
       "matchStrings": [
-        "#\\srenovate:\\sdatasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?( extractVersion=(?<extractVersion>.*?))?\\s(version|RSTUDIO_VERSION) .*?_VERSION=(?<currentValue>.*)\\s"
+        "datasource=(?<datasource>.+?) depName=(?<depName>.+?)( versioning=(?<versioning>.*?))?\s+\w+?_VERSION:\s'?(?<currentValue>.+?)'?\s"
       ]
     }
   ],
