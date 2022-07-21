@@ -3,16 +3,6 @@
     "config:base",
     ":automergePatch"
   ],
-  "regexManagers": [
-    {
-      "fileMatch": [
-        "(^|/)rstudio_vars.yml",
-      ],
-      "matchStrings": [
-        "datasource=(?<datasource>.+?) depName=(?<depName>.+?)( versioning=(?<versioning>.*?))?\s+\w+?_VERSION:\s'?(?<currentValue>.+?)'?\s"
-      ]
-    }
-  ],
   "packageRules": [
     {
       "updateTypes": ["major"],

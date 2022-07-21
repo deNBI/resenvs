@@ -16,16 +16,19 @@
 - name: Restart xrdp
   ansible.builtin.systemd:
     name: xrdp
+    enabled: true
     state: restarted
 
 - name: Restart guacd
   ansible.builtin.systemd:
     name: guacd
+    enabled: true
     state: restarted
 
 - name: Restart Tomcat
   ansible.builtin.systemd:
     name: tomcat9
+    enabled: true
     state: restarted
 
 - name: Reload systemd
