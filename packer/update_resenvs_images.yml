@@ -28,7 +28,7 @@
         dest:     ./{{ resenv }}_metadata.json
 
     - name: Convert non string json_metadata values to string
-      script: ./convert_json_values_to_string --file ./{{ resenv }}_metadata.json
+      script: ../packer/convert_json_values_to_string --file ./{{ resenv }}_metadata.json
       args:
         executable: python3
 
