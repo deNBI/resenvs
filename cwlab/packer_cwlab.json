@@ -27,7 +27,7 @@
       "is_maintained": "{{user `is_maintained`}}",
       "port": "{{user `port`}}",
       "needs_forc_support": "{{user `needs_forc_support`}}",
-      "forc_versions": "[v02, v01]",
+      "forc_versions": "{{user `forc_versions`}}",
       "incompatible_versions": "[]",
       "direction": "{{user `direction`}}",
       "protocol": "{{user `protocol`}}",
@@ -35,10 +35,10 @@
       "securitygroup_description": "{{user `securitygroup_description`}}",
       "securitygroup_ssh": "{{user `securitygroup_ssh`}}",
       "title": "{{user `title`}}",
-      "description": "version: 0.3.2",
+      "description": "{{user `information_for_display`}}",
       "logo_url": "{{user `logo_url`}}",
       "info_url": "{{user `info_url`}}",
-      "information_for_display": "{'version': '0.3.2'}"
+      "information_for_display": "{{user `information_for_display`}}"
     }
   }],
   "provisioners":
