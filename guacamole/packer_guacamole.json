@@ -22,23 +22,25 @@
     "flavor": "de.NBI tiny",
     "ssh_username": "ubuntu",
     "image_tags": ["{{user `guacamole_tag`}}"],
-    "metadata": {
-      "template_name": "guacamole",
-      "is_maintained": "true",
-      "port": "8080",
-      "needs_forc_support": "true",
-      "forc_versions": "['v03', 'v02', 'v01']",
+       "metadata": {
+      "template_name": "{{user `template_name`}}",
+      "is_maintained": "{{user `is_maintained`}}",
+      "port": "{{user `port`}}",
+      "needs_forc_support": "{{user `needs_forc_support`}}",
+      "forc_versions": "{{user `forc_versions`}}",
       "incompatible_versions": "[]",
-      "direction": "ingress",
-      "protocol": "tcp",
-      "securitygroup_name": "_guacamole",
-      "securitygroup_description": "Guacamole",
-      "securitygroup_ssh": "False",
-      "title": "Guacamole",
-      "description": "Guacamole is a browser based remote desktop application. version: 1.4.0",
-      "logo_url": "https://cloud.denbi.de/wp-content/uploads/2020/02/guacamole-7.png",
-      "info_url": "",
-      "information_for_display": "{'version': '1.4.0'}"
+      "direction": "{{user `direction`}}",
+      "protocol": "{{user `protocol`}}",
+      "securitygroup_name": "{{user `securitygroup_name`}}",
+      "securitygroup_description": "{{user `securitygroup_description`}}",
+      "securitygroup_ssh": "{{user `securitygroup_ssh`}}",
+      "title": "{{user `title`}}",
+      "description": "{{user `information_for_display`}}",
+      "logo_url": "{{user `logo_url`}}",
+      "info_url": "{{user `info_url`}}",
+      "information_for_display": "{{user `information_for_display`}}",
+      "github_hash": "{{user `github_hash`}}"
+
     }
   }],
   "provisioners":
