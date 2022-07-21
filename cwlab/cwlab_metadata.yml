@@ -1,7 +1,7 @@
 ---
 template_name: cwlab
 is_maintained: true
-port: 80
+port: "80"
 needs_forc_support: true
 forc_versions:
   - v02
