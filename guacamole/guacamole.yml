@@ -17,18 +17,21 @@
 - name: Restart xrdp
   ansible.builtin.systemd:
     name: xrdp
+    enabled: true
     state: restarted
   when: not guacamole_vars.create_only_backend
 
 - name: Restart guacd
   ansible.builtin.systemd:
     name: guacd
+    enabled: true
     state: restarted
   when: not guacamole_vars.create_only_backend
 
 - name: Restart Tomcat
   ansible.builtin.systemd:
     name: tomcat9
+    enabled: true
     state: restarted
   when: not guacamole_vars.create_only_backend
 
