@@ -27,11 +27,12 @@
         content: "{{ resenv_metadata.stdout | from_yaml | to_json }}"
         dest:     ./{{ resenv }}_metadata.json
 
-    - name: Replace boolean with string in metadata json - true
-      ansible.builtin.command:     sed -i 's/true/\"true\"/g'  ./{{ resenv }}_metadata.json
+    - name: Convert non string json_metadata values to string
+      script: convert_json_values_to_string --file {{ resenv }}_metadata.json
+      args:
+        executable: python3
 
-    - name: Replace boolean with string in metadata json - false
-      ansible.builtin.command:     sed -i 's/false/\"false\"/g'  ./{{ resenv }}_metadata.json
+
 
 
     - name: Set Base Images
