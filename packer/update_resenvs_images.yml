@@ -19,7 +19,7 @@
       register: images
 
     - name: Get Latest Master Branch Commit
-      ansible.builtin.command: git rev-parse --short --verify master
+      ansible.builtin.command: git rev-parse --short --verify origin/master
       register: github_hash
 
     - name: Include {{ resenv }} metadata
