@@ -56,9 +56,9 @@
         update: true
       when:
         - base_images | length > 0
-        - resenv_images | length == 0 or (resenv_images | length > 0 and (base_images | last).created_at > (resenv_images | last).created_at) or (resenv_images | length > 0 and (resenv_images | last).github_hash  != github_hash)
+        - resenv_images | length == 0 or (resenv_images | length > 0 and (base_images | last).created_at > (resenv_images | last).created_at) or (resenv_images | length > 0 and (resenv_images | last).github_hash  != github_hash.stdout)
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}
-      ansible.builtin.command: packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json -var 'os_distro={{ os_distro }}' -var 'github_hash={{ github_hash }}'  -var 'os_version={{ os_version }}' -var 'network={{ vars[location
+      ansible.builtin.command: packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json -var 'os_distro={{ os_distro }}' -var 'github_hash={{ github_hash.stdout }}'  -var 'os_version={{ os_version }}' -var 'network={{ vars[location
         + '_' + upload_environment] }}' ../{{resenv}}/packer_{{ vars[resenv + '_tag'] }}.json
       when: update
