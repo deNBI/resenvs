@@ -27,6 +27,13 @@
         content: "{{ resenv_metadata.stdout | from_yaml | to_json }}"
         dest:     ./{{ resenv }}_metadata.json
 
+    - name: Replace boolean with string in metadata json - true
+      ansible.builtin.command:     sed -i 's/true/\"true\"/g'  ./{{ resenv }}_metadata.json
+
+    - name: Replace boolean with string in metadata json - false
+      ansible.builtin.command:     sed -i 's/false/\"false\"/g'  ./{{ resenv }}_metadata.json
+
+
     - name: Set Base Images
       ansible.builtin.set_fact:
         base_images: "{{ images.openstack_image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
