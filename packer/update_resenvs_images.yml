@@ -51,6 +51,9 @@
       vars:
         filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
 
+    - name: Echo actual github hash
+      ansible.builtin.command: echo "Newest -  ${{ github_hash.stdout }}" | Last Image Taged - (resenv_images | last).github_hash|default ('undefined')
+      when:  resenv_images | length > 0
 
 
     - name: Set Update facts
