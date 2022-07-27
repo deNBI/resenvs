@@ -39,7 +39,7 @@
       "securitygroup_description": "{{user `securitygroup_description`}}",
       "securitygroup_ssh": "{{user `securitygroup_ssh`}}",
       "title": "{{user `title`}}",
-      "description": "{user `description`}\n\n{{user `information_for_display`}}",
+      "description": "{{user `description`}}",
       "logo_url": "{{user `logo_url`}}",
       "info_url": "{{user `info_url`}}",
       "information_for_display": "{{user `information_for_display`}}",
