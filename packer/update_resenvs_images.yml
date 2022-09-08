@@ -54,7 +54,7 @@
       when:
         - base_images | length > 0
         - resenv_images | length == 0 or (resenv_images | length > 0 and \
-        (base_images | last).created_at > (resenv_images | last).created_at) or (resenv_images | length > 0 and\
+        (base_images | last).created_at > (resenv_images | last).created_at) or (resenv_images | length > 0 and \
         (resenv_images | last).github_hash|default ('undefined')  != github_hash.stdout)
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}
