@@ -7,7 +7,9 @@
   loop_control:
     index_var: index
   vars:
-    resenv_list: "{{ images.openstack_image | selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('image_type', '==', 'image') | sort(attribute='created_at')\
+    resenv_list: "{{ images.openstack_image | \
+    selectattr('tags', 'search', vars[resenv + '_tag']) \
+    | selectattr('image_type', '==', 'image') | sort(attribute='created_at')\
       \ }}"
   when:
     - resenv_list | length > limit | int

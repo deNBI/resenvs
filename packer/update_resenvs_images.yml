@@ -29,15 +29,12 @@
     - name: Generate JSON from  {{ resenv }} metadata
       ansible.builtin.copy:
         content: "{{ resenv_metadata.stdout | from_yaml | to_json }}"
-        dest:     ./{{ resenv }}_metadata.json
+        dest: ./{{ resenv }}_metadata.json
 
     - name: Convert non string json_metadata values to string
       ansible.builtin.script: ../packer/convert_json_values_to_string.py --file ./{{ resenv }}_metadata.json
       args:
         executable: python3
-
-
-
 
     - name: Set Base Images
       ansible.builtin.set_fact:
@@ -51,16 +48,18 @@
       vars:
         filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
 
-
-
     - name: Set Update facts
       ansible.builtin.set_fact:
         update: true
       when:
         - base_images | length > 0
-        - resenv_images | length == 0 or (resenv_images | length > 0 and (base_images | last).created_at > (resenv_images | last).created_at) or (resenv_images | length > 0 and (resenv_images | last).github_hash|default ('undefined')  != github_hash.stdout)
+        - resenv_images | length == 0 or (resenv_images | length > 0 and
+            (base_images | last).created_at > (resenv_images | last).created_at) or (resenv_images | length > 0
+            and (resenv_images | last).github_hash|default ('undefined')  != github_hash.stdout)
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}
-      ansible.builtin.command: packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json -var 'os_distro={{ os_distro }}' -var 'github_hash={{ github_hash.stdout }}'  -var 'os_version={{ os_version }}' -var 'network={{ vars[location
-        + '_' + upload_environment] }}' ../{{resenv}}/packer_{{ vars[resenv + '_tag'] }}.json
+      ansible.builtin.command:
+        packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json -var'os_distro={{ os_distro }}'
+        -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}' -var
+        'network={{ vars[location + '_' + upload_environment] }}' ../{{resenv}}/packer_{{ vars[resenv + '_tag'] }}.json
       when: update
