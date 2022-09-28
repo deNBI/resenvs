@@ -1,0 +1,22 @@
+---
+template_name: vscode
+needs_forc_support: true
+is_maintained: true
+port: 3000
+forc_versions:
+  - v03
+incompatible_versions: []
+direction: ingress
+protocol: tcp
+securitygroup_name: _vscode
+securitygroup_description: VsCode
+securitygroup_ssh: false
+title: Visual Studio Code
+description: >
+            Visual Studio Code combines the simplicity of a code editor with what developers need for their core edit-build-debug cycle.
+            It provides comprehensive code editing, navigation, and understanding support along with lightweight debugging,
+            a rich extensibility model, and lightweight integration with existing tools
+logo_url: https://cloud.denbi.de/static/images/vscode.png
+info_url: ""
+information_for_display:
+  version: "4.7.0"
