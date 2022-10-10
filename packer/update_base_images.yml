@@ -20,7 +20,7 @@
 
     - name: Show images
       debug:
-        msg: "{{ result.image }}"
+        msg: "{{ images }}"
 
     - name: Set Base Image Fact
       ansible.builtin.set_fact:
