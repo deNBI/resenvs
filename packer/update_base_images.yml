@@ -18,6 +18,10 @@
       openstack.cloud.image_info:
       register: images
 
+    - name: Show images
+      debug:
+        msg: "{{ result.image }}"
+
     - name: Set Base Image Fact
       ansible.builtin.set_fact:
         base_images: "{{ images.openstack_images | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
