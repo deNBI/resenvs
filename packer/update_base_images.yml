@@ -24,7 +24,7 @@
 
     - name: Set Base Image Fact
       ansible.builtin.set_fact:
-        base_images: "{{ images.openstack_images | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
+        base_images: "{{ images.openstack_image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='{{ distro }}' && properties.os_version=='{{ version }}']"
 
