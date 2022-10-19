@@ -21,5 +21,6 @@
         - guacamole
         - rstudio
         - theiaide
+        - vscode
       loop_control:
         loop_var: resenv
