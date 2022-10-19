@@ -1,6 +1,5 @@
 {
   "base_image_tag": "base_image",
-  "cwlab_tag": "cwlab",
   "guacamole_tag": "guacamole",
   "rstudio_tag": "rstudio",
   "theiaide_tag": "theiaide",
