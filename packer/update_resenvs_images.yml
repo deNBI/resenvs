@@ -2,7 +2,7 @@
 - name: Update ResEnv image
   hosts: localhost
   vars:
-    resenv: cwlab
+    resenv: rstudio
     location: bielefeld
     upload_environment: staging
   vars_files:

@@ -1,7 +1,7 @@
 # resenvs
 This repository is used to create ready-to-launch images installed with a research environment of choice.
 
-Currently available research environments: CWLab, Guacamole, RStudio, TheiaIDE
+Currently available research environments: VSCode, Guacamole, RStudio, TheiaIDE
 
 ## Development workflow
 ### Base images

@@ -17,7 +17,6 @@
 
     - include_tasks: cleanup_resenvs_images_subloop.yml
       loop:
-        - cwlab
         - guacamole
         - rstudio
         - theiaide
