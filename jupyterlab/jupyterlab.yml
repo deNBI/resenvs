@@ -15,8 +15,11 @@
     conda_env_name: "{{ jupyterlab_vars.ENV_NAME| quote }}"
     conda_env_environment: jupyterlab_env.yml
     conda_env_activate_for_login_shell: true
-
   when: not jupyterlab_vars.create_only_backend
+
+- name: Adjust miniconda folder rights
+  become: true
+  shell: chown -R {{jupyterlab_vars.default_user}}:{{jupyterlab_vars.default_user}} {{jupyterlab_vars.CONDA_DIR}}/
 
 - name: Add bioconda channel
   become_user: "{{   jupyterlab_vars.default_user  }}"
@@ -35,6 +38,7 @@
   shell: timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels anaconda'
   args:
     executable: /bin/bash
+
 - name: Init .bashrc for conda
   become_user: "{{   jupyterlab_vars.default_user  }}"
   shell: timeout 1m bash -c 'source {{ jupyterlab_vars.CONDA_DIR}}/bin/activate && conda init'
