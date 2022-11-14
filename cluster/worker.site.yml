@@ -1,13 +1,12 @@
-- hosts: master
+- hosts: localhost
   become: 'yes'
   vars_files:
-  - ../vars/common_configuration.yml
+  - vars/common_configuration.yml
   roles:
   - common
-  - master
+  - worker
   - role: slurm
     tags:
     - slurm
     - scale-up
     - scale-down
-    - autoscaling
