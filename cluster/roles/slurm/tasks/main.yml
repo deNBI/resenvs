@@ -19,43 +19,8 @@
     - slurmctld
     - slurmd
 
-- name: SLURM cgroup configuration
-  copy:
-    src: cgroup.conf
-    dest: /etc/slurm/cgroup.conf
-    owner: slurm
-    group: root
-    mode: 0444
-  notify:
-    - slurmctld
-    - slurmd
-
-- name: SLURM cgroup allowed devices conf
-  copy:
-    src: cgroup_allowed_devices_file.conf
-    dest: /etc/slurm/cgroup_allowed_devices_file.conf
-    owner: root
-    group: root
-    mode: 0444
-  notify:
-    - slurmctld
-    - slurmd
 
 - block:
-  - name: Create slurm db
-    mysql_db:
-      name: "{{slurmConf.db}}"
-      state: present
-      login_unix_socket: /var/run/mysqld/mysqld.sock
-
-  - name: Create slurm db user
-    mysql_user:
-      name: "{{slurmConf.db_user}}"
-      password: "{{slurmConf.db_password}}"
-      priv: '*.*:ALL'
-      state: present
-      login_unix_socket: /var/run/mysqld/mysqld.sock
-
   - name: Install Slurm database and RestAPI packages
     apt:
       name:
@@ -63,16 +28,6 @@
         - slurmrestd
       state: latest
 
-  - name: Create slurmdb configuration file
-    template:
-      src: slurmdbd.conf
-      dest: /etc/slurm/slurmdbd.conf
-      owner: slurm
-      group: root
-      mode: 0600
-    notify:
-      - slurmdbd
-      - slurmctld
 
   - name: Generate random JWT Secret
     command:
