@@ -8,18 +8,6 @@
     state: latest
 
 
-- name: SLURM configuration
-  template:
-    src: slurm.conf
-    dest: /etc/slurm/slurm.conf
-    owner: slurm
-    group: root
-    mode: 0444
-  notify:
-    - slurmctld
-    - slurmd
-
-
 - block:
   - name: Install Slurm database and RestAPI packages
     apt:
