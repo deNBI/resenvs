@@ -1,0 +1,25 @@
+- debug:
+    msg: "[SCALING] slurm packages"
+- import_tasks: 011-apt.yml
+  tags: ["apt"]
+
+- debug:
+    msg: "[SCALING] virtualenv"
+- import_tasks: 015-virtualenv.yml
+  tags: ["virtualenv"]
+
+- debug:
+    msg: "[SCALING] worker dummy setup"
+- import_tasks: 111-hosts_dummy.yml
+  tags: ["dummy_worker"]
+
+- debug:
+    msg: "[SCALING] pyslurm in virtualenv"
+- import_tasks: 121-pyslurm.yml
+  tags: ["pyslurm"]
+
+- debug:
+    msg: "[SCALING] autoscaling conf"
+- import_tasks: 122-autoscaling.yml
+  tags: ["autoscaling"]
+
