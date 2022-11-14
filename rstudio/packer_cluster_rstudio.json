@@ -7,7 +7,7 @@
   "builders": [
     {
       "type": "openstack",
-      "image_name": "RStudio-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
+      "image_name": "RStudio-{{user `os_distro`}}{{user `os_version`}} de.NBI (C) Master ({{isotime `2006-01-02`}})",
       "source_image_filter": {
         "filters": {
           "tags": [
