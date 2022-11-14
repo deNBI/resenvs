@@ -3,8 +3,8 @@
   vars_files:
   - vars/common_configuration.yml
   roles:
-  - common
   - geerlingguy.docker
+  - common
   - master
   - role: slurm
     tags:
