@@ -10,7 +10,7 @@
     - slurm
     - scale-up
     - scale-down
-  - additional/autoscaling
+  - autoscaling
 - hosts: workers
   become: 'yes'
   vars_files:

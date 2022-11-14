@@ -13,3 +13,6 @@ roles:
     version: v2.1.7
   - name: geerlingguy.docker
     version: 6.0.0
+
+  - name: autoscaling
+    git: https://github.com/patricS4/autoscaling-config-ansible
