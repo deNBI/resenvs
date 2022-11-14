@@ -1,4 +1,6 @@
 ---
+- name: Setting up virtual machine with cluster
+  import_playbook: ../cluster/site.yml
 - name: Setting up pre-build cluster master
   hosts: all
   become: true
@@ -53,10 +55,6 @@
         autoremove: true
         autoclean: true
 
-  tasks:
-
-    - name: Setting up virtual machine with cluster {{cluster_type}}
-      import_playbook: ../cluster/site.yml
 
   post_tasks:
 

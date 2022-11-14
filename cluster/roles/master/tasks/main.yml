@@ -1,9 +1,4 @@
 - debug:
-    msg: "[BIBIGRID] Mount disk"
-- include: 005-disk.yml
-  tags: ["master-disk","disk"]
-
-- debug:
     msg: "[BIBIGRID] Configure database"
 - include: 006-database.yml
   tags: ["database","slurm","master-slurm"]
