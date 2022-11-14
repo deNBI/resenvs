@@ -1,9 +1,3 @@
-- name: Install Docker Community Edition
-  apt:
-    name: docker-ce
-    state: present
-  tags: install
-
 - name: Configure Docker
   copy:
     content: |-
