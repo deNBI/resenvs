@@ -1,0 +1,13 @@
+- hosts: master
+  become: 'yes'
+  vars_files:
+  - ../vars/common_configuration.yml
+  roles:
+  - common
+  - master
+  - role: slurm
+    tags:
+    - slurm
+    - scale-up
+    - scale-down
+    - autoscaling

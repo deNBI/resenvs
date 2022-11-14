@@ -1,6 +1,6 @@
 ---
 - name: Setting up pre-build cluster master
-  hosts: {{cluster_type}}
+  hosts: all
   become: true
   gather_facts: true
 
@@ -56,7 +56,14 @@
   tasks:
 
     - name: Setting up virtual machine with cluster {{cluster_type}}
-      include_tasks: ../cluster/site.yml
+      ansible.builtin.include_role:
+        name: slurm
+        apply:
+          tags:
+            - slurm
+            - scale-up
+            - scale-down
+            - autoscaling
 
   post_tasks:
 
