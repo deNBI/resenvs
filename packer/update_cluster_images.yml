@@ -7,6 +7,8 @@
     upload_environment: staging
   vars_files:
     - networks.json
+    - tags.json
+
 
   tasks:
     - name: Set Update Fact to false
