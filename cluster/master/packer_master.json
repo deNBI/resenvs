@@ -30,7 +30,7 @@
   "provisioners":
   [{
     "type": "ansible",
-    "playbook_file": "./packer_resenvs.yml",
+    "playbook_file": "./packer_cluster.yml",
     "extra_arguments": ["-v","--extra-vars", "cluster_type=master"]
   }]
 }

@@ -1,5 +1,5 @@
 ---
-- name: Update ResEnv image
+- name: Update Cluster image
   hosts: localhost
   vars:
     cluster_type: master
@@ -45,7 +45,7 @@
             (cluster_images | last).created_at > (cluster_images | last).created_at) or (cluster_images | length > 0
             and (cluster_images | last).github_hash|default ('undefined')  != github_hash.stdout)
 
-    - name: Build new {{ cluster_type }} image - {{ os_distro }} {{ os_version }}
+    - name: Build new  Cluster [{{ cluster_type }}] image - {{ os_distro }} {{ os_version }}
       ansible.builtin.command:
         packer build -var-file=tags.json -var 'os_distro={{ os_distro }}'
         -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}' -var
