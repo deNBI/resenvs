@@ -1,10 +1,10 @@
-- hosts: localhost
+- hosts: all
   become: 'yes'
   vars_files:
   - vars/common_configuration.yml
   roles:
-  - geerlingguy.docker
   - common
+  - geerlingguy.docker
   - worker
   - role: slurm
     tags:
