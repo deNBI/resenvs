@@ -37,7 +37,9 @@
       "type": "ansible",
       "playbook_file": "../cluster/master.site.yml",
       "extra_arguments": [
-        "-v"
+        "-v",
+        "--extra-vars",
+        "mode=openstack"
       ]
     }
   ]
