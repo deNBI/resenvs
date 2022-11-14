@@ -13,9 +13,3 @@
   with_items:
       - "{{ nfs_mounts }}"
 
-- name: Restart NFS server (on config change)
-  systemd:
-    name: nfs-kernel-server
-    state: restarted
-  when:
-    - nfs_exports is changed
