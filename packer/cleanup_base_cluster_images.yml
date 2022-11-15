@@ -16,34 +16,34 @@
       register: images
 
     - set_fact:
-        ubuntu18_master_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | selectattr('tags', 'search', 'master')  | selectattr('tags', 'search', "cluster") | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu18_master_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | selectattr('tags', 'search', 'master')  | selectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='1804']"
 
     - set_fact:
-        ubuntu20_master_images: "{{ images.image | selectattr('tags', 'search', base_image_tag)| selectattr('tags', 'search', 'master')  | selectattr('tags', 'search', "cluster") | | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu20_master_images: "{{ images.image | selectattr('tags', 'search', base_image_tag)| selectattr('tags', 'search', 'master')  | selectattr('tags', 'search','cluster') | | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
 
 
     - set_fact:
-        ubuntu22_master_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) || selectattr('tags', 'search', 'master')  | selectattr('tags', 'search', "cluster") | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu22_master_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) || selectattr('tags', 'search', 'master')  | selectattr('tags', 'search','cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2204']"
 
     - set_fact:
-        ubuntu18_worker_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | selectattr('tags', 'search', 'worker)  | selectattr('tags', 'search', "cluster") | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu18_worker_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | selectattr('tags', 'search', 'worker)  | selectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='1804']"
 
     - set_fact:
-        ubuntu20_worker_images: "{{ images.image | selectattr('tags', 'search', base_image_tag)| selectattr('tags', 'search', 'worker)  | selectattr('tags', 'search', "cluster") | | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu20_worker_images: "{{ images.image | selectattr('tags', 'search', base_image_tag)| selectattr('tags', 'search', 'worker)  | selectattr('tags', 'search', 'cluster') | | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
 
 
     - set_fact:
-        ubuntu22_worker_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) || selectattr('tags', 'search', 'worker')  | selectattr('tags', 'search', "cluster") | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu22_worker_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) || selectattr('tags', 'search', 'worker')  | selectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2204']"
 
