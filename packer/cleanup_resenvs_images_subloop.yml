@@ -9,7 +9,7 @@
   vars:
     resenv_list: "{{ images.image | \
     selectattr('tags', 'search', vars[resenv + '_tag']) \
-    | selectattr('image_type', '==', 'image') |rejectattr('tags','search',"cluster")  | sort(attribute='created_at')\
+    | selectattr('image_type', '==', 'image') | rejectattr('tags','search','cluster')  | sort(attribute='created_at')\
       \ }}"
   when:
     - resenv_list | length > limit | int
