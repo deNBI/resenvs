@@ -38,7 +38,7 @@
 
     - name: Set Base Images
       ansible.builtin.set_fact:
-        cluster_base_images: "{{ images.image | selectattr('tags', 'search', "cluster")| selectattr('tags', 'search', 'master') | json_query(filter) | sort(attribute='created_at') }}"
+        cluster_base_images: "{{ images.image | selectattr('tags', 'search', 'cluster')| selectattr('tags', 'search', 'master') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
 
