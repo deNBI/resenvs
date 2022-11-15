@@ -25,7 +25,8 @@
       "ssh_username": "ubuntu",
       "image_tags": [
         "cluster",
-        "master"
+        "master",
+        "base"
       ],
       "metadata": {
         "github_hash": "{{user `github_hash`}}"
