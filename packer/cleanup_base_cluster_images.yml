@@ -17,42 +17,42 @@
 
     - name: Set Ubuntu 18 Master Images
       ansible.builtin.set_fact:
-        ubuntu18_master_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | selectattr('tags', 'search', 'master')  | selectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu18_master_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag) | selectattr('tags', 'search', 'master')  | selectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='1804']"
 
 
     - name: Set Ubuntu 20 Master Images
       ansible.builtin.set_fact:
-        ubuntu20_master_images: "{{ images.image | selectattr('tags', 'search', base_image_tag)| selectattr('tags', 'search', 'master')  | selectattr('tags', 'search','cluster')  | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu20_master_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag)| selectattr('tags', 'search', 'master')  | selectattr('tags', 'search','cluster')  | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
 
     - name: Set Ubuntu 22 Master Images
       ansible.builtin.set_fact:
-        ubuntu22_master_images: "{{ images.image | selectattr('tags', 'search', base_image_tag)| selectattr('tags', 'search', 'master')  | selectattr('tags', 'search','cluster')  | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu22_master_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag)| selectattr('tags', 'search', 'master')  | selectattr('tags', 'search','cluster')  | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2204']"
 
     - name: Set Ubuntu 18 Worker Images
       ansible.builtin.set_fact:
-        ubuntu18_worker_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | selectattr('tags', 'search', 'worker')  | selectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu18_worker_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag) | selectattr('tags', 'search', 'worker')  | selectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='1804']"
 
     - name: Set Ubuntu 20 Worker Images
       ansible.builtin.set_fact:
-        ubuntu20_worker_images: "{{ images.image | selectattr('tags', 'search', base_image_tag)| selectattr('tags', 'search', 'worker')  | selectattr('tags', 'search', 'cluster')  | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu20_worker_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag)| selectattr('tags', 'search', 'worker')  | selectattr('tags', 'search', 'cluster')  | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
 
     - name: Set Ubuntu 22 Worker Images
       ansible.builtin.set_fact:
-        ubuntu22_worker_images: "{{ images.image | selectattr('tags', 'search', base_image_tag)| selectattr('tags', 'search', 'worker')  | selectattr('tags', 'search', 'cluster')  | json_query(filter) | sort(attribute='created_at') }}"
+        ubuntu22_worker_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag)| selectattr('tags', 'search', 'worker')  | selectattr('tags', 'search', 'cluster')  | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2204']"
 
-    - name: Clean up old Ubuntu 18.04 images
+    - name: Clean up old Ubuntu 18.04 Master images
       openstack.cloud.image:
         name: "{{ item.id }}"
         state: absent
@@ -63,7 +63,7 @@
         - ubuntu18_master_images | length > limit | int
         - index < ubuntu18_master_images | length - limit | int
 
-    - name: Clean up old Ubuntu 20.04 images
+    - name: Clean up old Ubuntu 20.04 Master images
       openstack.cloud.image:
         name: "{{ item.id }}"
         state: absent
@@ -74,7 +74,7 @@
         - ubuntu20_master_images | length > limit | int
         - index < ubuntu20_master_images | length - limit | int
 
-    - name: Clean up old Ubuntu 22.04 images
+    - name: Clean up old Ubuntu 22.04  Master images
       openstack.cloud.image:
         name: "{{ item.id }}"
         state: absent
@@ -86,7 +86,7 @@
         - index < ubuntu22_master_images | length - limit | int
 
 
-    - name: Clean up old Ubuntu 18.04 images
+    - name: Clean up old Ubuntu 18.04 Worker images
       openstack.cloud.image:
         name: "{{ item.id }}"
         state: absent
@@ -97,7 +97,7 @@
         - ubuntu18_worker_images | length > limit | int
         - index < ubuntu18_worker_images | length - limit | int
 
-    - name: Clean up old Ubuntu 20.04 images
+    - name: Clean up old Ubuntu 20.04 Worker images
       openstack.cloud.image:
         name: "{{ item.id }}"
         state: absent
@@ -108,7 +108,7 @@
         - ubuntu20_worker_images | length > limit | int
         - index < ubuntu20_worker_images | length - limit | int
 
-    - name: Clean up old Ubuntu 22.04 images
+    - name: Clean up old Ubuntu 22.04 Worker images
       openstack.cloud.image:
         name: "{{ item.id }}"
         state: absent

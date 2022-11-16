@@ -26,7 +26,7 @@
       "image_tags": [
         "cluster",
         "worker",
-        "base"
+        "{{user `base_cluster_tag`}}"
       ],
       "metadata": {
         "github_hash": "{{user `github_hash`}}"
