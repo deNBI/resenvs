@@ -1,0 +1,3 @@
+autoscaling_user: "ubuntu"
+autoscaling_home: "/home/{{autoscaling_user}}/autoscaling"
+autoscaling_env: virtualenv

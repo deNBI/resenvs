@@ -9,7 +9,23 @@
   vars:
     resenv_list: "{{ images.image | \
     selectattr('tags', 'search', vars[resenv + '_tag']) \
-    | selectattr('image_type', '==', 'image') | sort(attribute='created_at')\
+    | selectattr('image_type', '==', 'image') | rejectattr('tags','search','cluster')  | sort(attribute='created_at')\
+      \ }}"
+  when:
+    - resenv_list | length > limit | int
+    - index < resenv_list | length - limit | int
+
+- name: Clean up old cluster {{ resenv }} images
+  openstack.cloud.image:
+    name: "{{ item.id }}"
+    state: absent
+  loop: "{{ resenv_list }}"
+  loop_control:
+    index_var: index
+  vars:
+    resenv_list: "{{ images.image | \
+    selectattr('tags', 'search', vars[resenv + '_tag']) |  selectattr('tags', 'search', 'cluster') |  selectattr('tags', 'search', 'master')  \
+    | selectattr('image_type', '==', 'image')  | sort(attribute='created_at')\
       \ }}"
   when:
     - resenv_list | length > limit | int

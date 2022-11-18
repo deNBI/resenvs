@@ -4,8 +4,8 @@
   vars:
     name: Dummy
     date: "2000-01-01"
-    distro: ubuntu
-    version: "2004"
+    os_distro: ubuntu
+    os_version: "2004"
   vars_files:
     - tags.json
 
@@ -26,7 +26,7 @@
       ansible.builtin.set_fact:
         base_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?properties.os_distro=='{{ distro }}' && properties.os_version=='{{ version }}']"
+        filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
 
     - name: Set Update  Fact
       ansible.builtin.set_fact:
@@ -56,7 +56,7 @@
           - "{{ base_image_tag }}"
           - deNBI
         properties:
-          os_distro: "{{ distro }}"
-          os_version: "{{ version }}"
+          os_distro: "{{ os_distro }}"
+          os_version: "{{ os_version }}"
           description: Ubuntu is a free and open source operating system and Linux distribution based on Debian.
       when: update
