@@ -1,0 +1,13 @@
+- hosts: all
+  become: 'yes'
+  vars_files:
+  - vars/common_configuration.yml
+  roles:
+  - common
+  - geerlingguy.docker
+  - worker
+  - role: slurm
+    tags:
+    - slurm
+    - scale-up
+    - scale-down

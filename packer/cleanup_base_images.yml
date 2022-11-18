@@ -25,6 +25,12 @@
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
 
+
+    - set_fact:
+        ubuntu22_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
+      vars:
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2204']"
+
     - name: Clean up old Ubuntu 18.04 images
       openstack.cloud.image:
         name: "{{ item.id }}"
@@ -46,3 +52,14 @@
       when:
         - ubuntu20_images | length > limit | int
         - index < ubuntu20_images | length - limit | int
+
+    - name: Clean up old Ubuntu 22.04 images
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ ubuntu22_images }}"
+      loop_control:
+        index_var: index
+      when:
+        - ubuntu22_images | length > limit | int
+        - index < ubuntu22_images | length - limit | int
