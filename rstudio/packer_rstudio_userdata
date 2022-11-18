@@ -1,0 +1,6 @@
+#cloud-config
+users:
+    - name: ubuntu
+        password: simplevm
+        chpasswd: {expire: False}
+        shell: /bin/bash
