@@ -1,6 +1,10 @@
 #cloud-config
-system_info:
-  default_user:
-    name: ubuntu
-    plain_text_passwd: 'simplevm'
-    lock_passwd: false
+users:
+    - default
+    - name: denbi
+      lock_passwd: false
+      plain_text_passwd: 'denbi'
+      groups: [adm, audio, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, sudo, video]
+      sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+      shell: /bin/bash
+
