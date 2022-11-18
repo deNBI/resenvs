@@ -1,9 +1,9 @@
 ---
-- name: Setup password for default user
-  ansible.builtin.user:
-    name: "{{ rstudio_vars.default_user }}"
-    password: "{{ rstudio_vars.default_password | password_hash('sha512') }}"
-  when:  rstudio_vars.create_only_backend
+#- name: Setup password for default user
+ # ansible.builtin.user:
+  #  name: "{{ rstudio_vars.default_user }}"
+   # password: "{{ rstudio_vars.default_password | password_hash('sha512') }}"
+  #when:  rstudio_vars.create_only_backend
 
 
 - name: Install R role
