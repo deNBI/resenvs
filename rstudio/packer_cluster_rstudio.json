@@ -21,7 +21,7 @@
         },
         "most_recent": true
       },
-      "user_data_file": "../packer_userdata",
+      "user_data_file": "../packer_rstudio_userdata",
       "networks": "{{user `network`}}",
       "flavor": "de.NBI tiny",
       "ssh_username": "ubuntu",
