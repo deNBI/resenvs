@@ -1,8 +1,15 @@
 ---
+
+- name: Get ubuntu user id
+  ansible.builtin.shell: id -u ubuntu
+  become: true
+  register: ubuntu_id
+
 - name: Setup password for default user
   ansible.builtin.user:
     name: "{{ rstudio_vars.default_user }}"
     password: "{{ rstudio_vars.default_password | password_hash('sha512') }}"
+    uuid: ubuntu_id.stdout
 
 - name: Install R role
   include_role:
