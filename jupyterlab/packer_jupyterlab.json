@@ -54,7 +54,7 @@
       "extra_arguments": [
         "-v",
         "--extra-vars",
-        "resenv=jupyterlab jupyterlab_vars.conda_env_environment_yml=../jupyterlab/jupyterlab_env.yml=../jupyterlab/jupyterlab_env.yml"
+        "{'resenv':'jupyterlab','jupyterlab_vars',{'conda_env_environment_yml':'../jupyterlab/jupyterlab_env'}}"
       ]
     }
   ]
