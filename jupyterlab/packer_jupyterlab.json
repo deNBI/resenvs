@@ -54,7 +54,7 @@
       "extra_arguments": [
         "-v",
         "--extra-vars",
-        "@packer_jupyterlab_extra_vars.json"
+        "@../jupyterlab/packer_jupyterlab_extra_vars.json"
       ]
     }
   ]
