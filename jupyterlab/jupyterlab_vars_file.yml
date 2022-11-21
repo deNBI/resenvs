@@ -6,12 +6,6 @@ jupyterlab_vars:
   default_user: ubuntu
   DEFAULT_TOKEN: simplevm
   CONDA_DIR: /home/ubuntu/miniconda3
+  conda_env_environment_yml: ./jupyterlab_env
   ENV_NAME: denbi
   TIMEOUT_LENGTH: 5m
-  PACKAGES:
-    - p: notebook=6.5.2
-    - p: jupyter_contrib_nbextensions=0.5.1
-    - p: ipykernel=6.15.2
-    - p: widgetsnbextension=4.0.3
-    - p: ipyparallel=6.3.0
-    - p: jupyterlab=3.5.0
