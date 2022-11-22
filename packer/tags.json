@@ -4,5 +4,6 @@
   "guacamole_tag": "guacamole",
   "rstudio_tag": "rstudio",
   "theiaide_tag": "theiaide",
-  "vscode_tag": "vscode"
+  "vscode_tag": "vscode",
+  "jupyterlab_tag": "jupyterlab"
 }

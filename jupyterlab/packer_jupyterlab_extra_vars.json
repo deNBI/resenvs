@@ -1,0 +1,13 @@
+{
+  "resenv": "jupyterlab",
+  "jupyterlab_vars": {
+    "conda_env_environment_yml": "../jupyterlab/jupyterlab_env.yml",
+    "create_only_backend": false,
+    "base_url": "dummy",
+    "default_user": "ubuntu",
+    "DEFAULT_TOKEN": "simplevm",
+    "CONDA_DIR": "/home/ubuntu/miniconda3",
+    "ENV_NAME": "denbi",
+    "TIMEOUT_LENGTH": "5m"
+  }
+}
