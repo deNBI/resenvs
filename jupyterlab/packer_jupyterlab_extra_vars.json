@@ -6,7 +6,7 @@
     "base_url": "dummy",
     "default_user": "ubuntu",
     "DEFAULT_TOKEN": "simplevm",
-    "CONDA_DIR": ",/home/ubuntu/miniconda3",
+    "CONDA_DIR": "/home/ubuntu/miniconda3",
     "ENV_NAME": "denbi",
     "TIMEOUT_LENGTH": "5m"
   }
