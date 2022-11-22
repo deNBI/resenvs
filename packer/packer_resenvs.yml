@@ -6,7 +6,13 @@
 
   vars:
     bielefeld_mirror_service_exist: false
+    swap_file_size_mb: '2024'
     resenv:
+  roles:
+    - role: geerlingguy.swap
+      when: resenv == 'jupyterlab'
+
+
   pre_tasks:
     - name: PRE_TASK Wait for cloud-init / user-data to finish
       ansible.builtin.command: cloud-init status --wait
