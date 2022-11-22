@@ -15,7 +15,6 @@
     conda_env_name: "{{ jupyterlab_vars.ENV_NAME| quote }}"
     conda_env_environment: "{{ jupyterlab_vars.conda_env_environment_yml}}"
     conda_env_activate_for_login_shell: true
-    conda_env_addl_pkgs: "{{ jupyterlab_vars.PACKAGES }}"
 
 
   when: not jupyterlab_vars.create_only_backend
