@@ -6,6 +6,12 @@
 
   vars:
     bielefeld_mirror_service_exist: false
+    swap_file_size_mb: '2024'
+
+  roles:
+    - geerlingguy.swap
+      when: resenv =="jupyterlab"
+
     resenv:
   pre_tasks:
     - name: PRE_TASK Wait for cloud-init / user-data to finish
