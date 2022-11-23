@@ -21,5 +21,6 @@
         - rstudio
         - theiaide
         - vscode
+        - jupyterlab
       loop_control:
         loop_var: resenv
