@@ -81,5 +81,5 @@
 - name: Start  JupyterLab Service
   ansible.builtin.systemd:
     name: jupyter-lab
-    state: reloaded
+    state: restarted
     enabled: true
