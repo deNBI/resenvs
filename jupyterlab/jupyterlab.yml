@@ -1,4 +1,11 @@
 ---
+- name: Install geerlingguy.swap role
+  ansible.builtin.include_role:
+    name:  geerlingguy.swap
+  vars:
+      swap_file_size_mb: '2024'
+
+
 - name: Install miniconda role
   include_role:
     name: andrewrothstein.miniconda

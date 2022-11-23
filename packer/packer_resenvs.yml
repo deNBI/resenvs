@@ -6,11 +6,8 @@
 
   vars:
     bielefeld_mirror_service_exist: false
-    swap_file_size_mb: '2024'
     resenv:
-  roles:
-    - role: geerlingguy.swap
-      when: resenv == 'jupyterlab'
+
 
 
   pre_tasks:
