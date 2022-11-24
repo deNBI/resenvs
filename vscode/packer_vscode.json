@@ -47,6 +47,6 @@
   [{
     "type": "ansible",
     "playbook_file": "./packer_resenvs.yml",
-    "extra_arguments": ["-v","--extra-vars", "resenv=vscode"]
+    "extra_arguments": ["-vv","--extra-vars", "resenv=vscode"]
   }]
 }

@@ -55,7 +55,7 @@
       "type": "ansible",
       "playbook_file": "./packer_resenvs.yml",
       "extra_arguments": [
-        "-v",
+        "-vv",
         "--extra-vars",
         "resenv=theiaide"
       ]

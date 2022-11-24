@@ -42,7 +42,7 @@
       vars:
         filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
 
-    - name: Set Resens Cluster Images
+    - name: Set Resens Base Cluster Images
       ansible.builtin.set_fact:
         cluster_resenv_images: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag'])|  selectattr('tags', 'search', 'cluster') | selectattr('tags', 'search', 'master') |  json_query(filter) | sort(attribute='created_at') }}"
       vars:
