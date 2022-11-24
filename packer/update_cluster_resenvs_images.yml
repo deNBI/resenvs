@@ -36,7 +36,7 @@
       args:
         executable: python3
 
-    - name: Set Base Images
+    - name: Set Cluster Base Images
       ansible.builtin.set_fact:
         cluster_base_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag)| selectattr('tags', 'search', 'cluster')| selectattr('tags', 'search', 'master')| json_query(filter) | sort(attribute='created_at') }}"
       vars:
