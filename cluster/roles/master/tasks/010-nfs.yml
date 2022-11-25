@@ -3,13 +3,4 @@
     name: "nfs-kernel-server"
     state: "latest"
 
-- name: Create export directories
-  file:
-    path: "{{ item.src }}"
-    state: directory
-    owner: root
-    group: root
-    mode: 0777
-  with_items:
-      - "{{ nfs_mounts }}"
 
