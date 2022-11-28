@@ -44,7 +44,7 @@
 
     - name: Set Resens Images
       ansible.builtin.set_fact:
-        resenv_images: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag'])| json_query(filter) | sort(attribute='created_at') }}"
+        resenv_images: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag'])| rejectattr('tags','search','cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
 
