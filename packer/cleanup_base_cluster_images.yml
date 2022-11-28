@@ -19,26 +19,26 @@
       ansible.builtin.set_fact:
         ubuntu18_master_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag) | selectattr('tags', 'search', 'master')  | selectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='1804']"
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='18.04']"
 
 
     - name: Set Ubuntu 20 Master Images
       ansible.builtin.set_fact:
         ubuntu20_master_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag)| selectattr('tags', 'search', 'master')  | selectattr('tags', 'search','cluster')  | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='20.04']"
 
     - name: Set Ubuntu 22 Master Images
       ansible.builtin.set_fact:
         ubuntu22_master_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag)| selectattr('tags', 'search', 'master')  | selectattr('tags', 'search','cluster')  | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2204']"
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='22.04']"
 
     - name: Set Ubuntu 18 Worker Images
       ansible.builtin.set_fact:
         ubuntu18_worker_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag) | selectattr('tags', 'search', 'worker')  | selectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='1804']"
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='18.04']"
 
     - name: Set Ubuntu 20 Worker Images
       ansible.builtin.set_fact:
@@ -50,7 +50,7 @@
       ansible.builtin.set_fact:
         ubuntu22_worker_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag)| selectattr('tags', 'search', 'worker')  | selectattr('tags', 'search', 'cluster')  | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2204']"
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='22.04']"
 
     - name: Clean up old Ubuntu 18.04 Master images
       openstack.cloud.image:
