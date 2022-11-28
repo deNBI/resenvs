@@ -44,7 +44,7 @@
       ansible.builtin.set_fact:
         ubuntu20_worker_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag)| selectattr('tags', 'search', 'worker')  | selectattr('tags', 'search', 'cluster')  | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='2004']"
+        filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='20.04']"
 
     - name: Set Ubuntu 22 Worker Images
       ansible.builtin.set_fact:
