@@ -14,7 +14,7 @@ securitygroup_ssh: false
 title: Visual Studio Code
 description: Visual Studio Code combines the simplicity of a code editor with what developers need for their core edit-build-debug cycle.
 
-logo_url: https://cloud.denbi.de/static/images/vscode.png
+logo_url: ""
 info_url: ""
 information_for_display:
   version: "4.8.3"

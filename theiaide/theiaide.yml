@@ -71,5 +71,5 @@
       systemd:
         name: theia-ide.service
         enabled: true
-        state: started
+        state: restarted
   when: not theiaide_vars.create_only_backend
