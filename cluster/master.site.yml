@@ -4,6 +4,7 @@
   - vars/common_configuration.yml
   roles:
   - common
+  - autoscaling
   - geerlingguy.docker
   - master
   - role: slurm
