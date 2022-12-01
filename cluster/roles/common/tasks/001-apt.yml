@@ -72,13 +72,6 @@
     link: /usr/bin/python
     state: auto
 
-- name: Install Python 3.9 and reset selection to auto
-  community.general.alternatives:
-    name: python3
-    path: /usr/bin/python3.9
-    link: /usr/bin/python3
-    state: auto
-
 
 - name: Install common packages
   apt:
