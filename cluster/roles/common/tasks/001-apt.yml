@@ -74,7 +74,7 @@
 
 - name: Install common packages
   apt:
-    name: ["apt-transport-https","ca-certificates","curl","libffi-dev", "libssl-dev","software-properties-common","python3-pip","python3-setuptools","python3-is-python"]
+    name: ["apt-transport-https","ca-certificates","curl","libffi-dev", "libssl-dev","software-properties-common","python3-pip","python3-setuptools","python-is-python3"]
     state: "present"
 
 - name: Install OpenStack object store client
