@@ -1,6 +1,0 @@
-- name: add dummy worker at master
-  lineinfile:
-    path: "/etc/hosts"
-    line: "0.0.0.4 bibigrid-worker-autoscaling_dummy"
-    state: present
-    backup: yes

@@ -72,9 +72,17 @@
     link: /usr/bin/python
     state: auto
 
+- name: Install Python 3.9 and reset selection to auto
+  community.general.alternatives:
+    name: python3
+    path: /usr/bin/python3.9
+    link: /usr/bin/python3
+    state: auto
+
+
 - name: Install common packages
   apt:
-    name: ["apt-transport-https","ca-certificates","curl","libffi-dev", "libssl-dev","software-properties-common","python3-pip","python3-setuptools"]
+    name: ["apt-transport-https","ca-certificates","curl","libffi-dev", "libssl-dev","software-properties-common","python3.9-dev python3.9-venv","python3-pip","python3-setuptools"]
     state: "present"
 
 - name: Install OpenStack object store client

@@ -1,2 +1,0 @@
-- name: autoscaling
-  src: https://github.com/patricS4/autoscaling-config-ansible

@@ -1,4 +1,0 @@
-- name: Install Slurm packages
-  apt:
-    name: ["libslurm-dev"]
-    state: latest

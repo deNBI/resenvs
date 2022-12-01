@@ -1,5 +1,0 @@
-scaling_config:
-  source_link: ""
-  config_link: ""
-scaling_files:
-  cluster_pw: "{{ autoscaling_home }}/cluster_pw.json"
