@@ -22,6 +22,9 @@
       ansible.builtin.command: git rev-parse --short --verify origin/master
       register: github_hash
 
+    - name: Get md5 Hash from resenv folder
+      ansible.builtin.command: find  {{ resenv }} -type f -exec md5sum {} \; | md5sum
+      register: md5_hash
     - name: Include {{ resenv }} metadata
       ansible.builtin.command: cat ../{{ resenv }}/{{ resenv }}_metadata.yml
       register: resenv_metadata
@@ -55,11 +58,11 @@
         - base_images | length > 0
         - resenv_images | length == 0 or (resenv_images | length > 0 and
             (base_images | last).created_at > (resenv_images | last).created_at) or (resenv_images | length > 0
-            and (resenv_images | last).github_hash|default ('undefined')  != github_hash.stdout)
+            and (resenv_images | last).md5_hash|default ('undefined')  != md5_hash.stdout)
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}
       ansible.builtin.command:
         packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json -var 'os_distro={{ os_distro }}'
-        -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}' -var
+        -var 'md5_hash={{ md5_hash.stdout }}' -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}' -var
         'network={{ vars[location + '_' + upload_environment] }}' ../{{resenv}}/packer_{{ vars[resenv + '_tag'] }}.json
       when: update
