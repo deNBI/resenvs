@@ -4,49 +4,59 @@
     "os_distro": "",
     "os_version": ""
   },
-  "builders":
-  [{
-    "type": "openstack",
-    "image_name": "VSCode-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
-    "source_image_filter": {
-      "filters": {
-        "tags": ["{{user `base_image_tag`}}"],
-        "properties": {
-          "os_distro": "{{user `os_distro`}}",
-          "os_version": "{{user `os_version`}}"
-        }
+  "builders": [
+    {
+      "type": "openstack",
+      "image_name": "VSCode-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
+      "source_image_filter": {
+        "filters": {
+          "tags": [
+            "{{user `base_image_tag`}}"
+          ],
+          "properties": {
+            "os_distro": "{{user `os_distro`}}",
+            "os_version": "{{user `os_version`}}"
+          }
+        },
+        "most_recent": true
       },
-      "most_recent": true
-    },
-    "networks": "{{user `network`}}",
-    "flavor": "de.NBI tiny",
-    "ssh_username": "ubuntu",
-    "image_tags": ["{{user `vscode_tag`}}"],
-    "metadata": {
-      "template_name": "{{user `template_name`}}",
-      "is_maintained": "{{user `is_maintained`}}",
-      "port": "{{user `port`}}",
-      "needs_forc_support": "{{user `needs_forc_support`}}",
-      "forc_versions": "{{user `forc_versions`}}",
-      "incompatible_versions": "[]",
-      "direction": "{{user `direction`}}",
-      "protocol": "{{user `protocol`}}",
-      "securitygroup_name": "{{user `securitygroup_name`}}",
-      "securitygroup_description": "{{user `securitygroup_description`}}",
-      "securitygroup_ssh": "{{user `securitygroup_ssh`}}",
-      "title": "{{user `title`}}",
-      "description": "{{user `description`}}",
-      "logo_url": "{{user `logo_url`}}",
-      "info_url": "{{user `info_url`}}",
-      "information_for_display": "{{user `information_for_display`}}",
-      "github_hash": "{{user `github_hash`}}"
-
+      "networks": "{{user `network`}}",
+      "flavor": "de.NBI tiny",
+      "ssh_username": "ubuntu",
+      "image_tags": [
+        "{{user `vscode_tag`}}"
+      ],
+      "metadata": {
+        "template_name": "{{user `template_name`}}",
+        "is_maintained": "{{user `is_maintained`}}",
+        "port": "{{user `port`}}",
+        "needs_forc_support": "{{user `needs_forc_support`}}",
+        "forc_versions": "{{user `forc_versions`}}",
+        "incompatible_versions": "[]",
+        "direction": "{{user `direction`}}",
+        "protocol": "{{user `protocol`}}",
+        "securitygroup_name": "{{user `securitygroup_name`}}",
+        "securitygroup_description": "{{user `securitygroup_description`}}",
+        "securitygroup_ssh": "{{user `securitygroup_ssh`}}",
+        "title": "{{user `title`}}",
+        "description": "{{user `description`}}",
+        "logo_url": "{{user `logo_url`}}",
+        "info_url": "{{user `info_url`}}",
+        "information_for_display": "{{user `information_for_display`}}",
+        "github_hash": "{{user `github_hash`}}",
+        "md5_hash": "{{user `md5_hash`}}"
+      }
     }
-  }],
-  "provisioners":
-  [{
-    "type": "ansible",
-    "playbook_file": "./packer_resenvs.yml",
-    "extra_arguments": ["-vv","--extra-vars", "resenv=vscode"]
-  }]
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "./packer_resenvs.yml",
+      "extra_arguments": [
+        "-vv",
+        "--extra-vars",
+        "resenv=vscode"
+      ]
+    }
+  ]
 }
