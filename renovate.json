@@ -42,14 +42,6 @@
       "security"
     ]
   },
-  "datasource": {
-    "yamlFile": {
-      "files": [
-        "./dependencies.yml"
-      ],
-      "key": "dependencies"
-    }
-  },
   "baseBranches": [
     "dev"
   ],
