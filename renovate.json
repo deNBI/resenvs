@@ -8,45 +8,13 @@
    "packageRules":[
       {
          "updateTypes":[
-            "major"
-         ],
-         "addLabels":[
-            "major"
-         ],
-         "edits":[
-            {
-               "match":"VSCODE_VERSION: (.*)",
-               "replace":"VSCODE_VERSION: {{version}}"
-            },
-            {
-               "match":"RSTUDIO_VARS: (.*)",
-               "replace":"RSTUDIO_VARS: {{version}}"
-            }
-         ]
-      },
-      {
-         "updateTypes":[
-            "minor"
-         ],
-         "addLabels":[
-            "minor"
-         ],
-         "edits":[
-            {
-               "match":"VSCODE_VERSION: (.*)",
-               "replace":"VSCODE_VERSION: {{version}}"
-            },
-            {
-               "match":"RSTUDIO_VARS: (.*)",
-               "replace":"RSTUDIO_VARS: {{version}}"
-            }
-         ]
-      },
-      {
-         "updateTypes":[
+            "major",
+            "minor",
             "patch"
          ],
          "addLabels":[
+            "major",
+            "minor",
             "patch"
          ],
          "edits":[
@@ -58,14 +26,6 @@
                "match":"RSTUDIO_VARS: (.*)",
                "replace":"RSTUDIO_VARS: {{version}}"
             }
-         ]
-      },
-      {
-         "updateTypes":[
-            "pin"
-         ],
-         "addLabels":[
-            "pin"
          ]
       }
    ],
