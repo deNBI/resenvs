@@ -1,76 +1,94 @@
 {
-  "extends": [
-    "config:base",
-    ":automergePatch",
-    "github>coder/code-server",
-    "github>rstudio/rstudio"
-  ],
-  "packageRules": [
-    {
-      "updateTypes": [
-        "major"
-      ],
-      "addLabels": [
-        "major"
+   "extends":[
+      "config:base",
+      ":automergePatch",
+      "github>coder/code-server",
+      "github>rstudio/rstudio"
+   ],
+   "packageRules":[
+      {
+         "updateTypes":[
+            "major"
+         ],
+         "addLabels":[
+            "major"
+         ],
+         "edits":[
+            {
+               "match":"VSCODE_VERSION: (.*)",
+               "replace":"VSCODE_VERSION: {{version}}"
+            },
+            {
+               "match":"RSTUDIO_VARS: (.*)",
+               "replace":"RSTUDIO_VARS: {{version}}"
+            }
+         ]
+      },
+      {
+         "updateTypes":[
+            "minor"
+         ],
+         "addLabels":[
+            "minor"
+         ],
+         "edits":[
+            {
+               "match":"VSCODE_VERSION: (.*)",
+               "replace":"VSCODE_VERSION: {{version}}"
+            },
+            {
+               "match":"RSTUDIO_VARS: (.*)",
+               "replace":"RSTUDIO_VARS: {{version}}"
+            }
+         ]
+      },
+      {
+         "updateTypes":[
+            "patch"
+         ],
+         "addLabels":[
+            "patch"
+         ],
+         "edits":[
+            {
+               "match":"VSCODE_VERSION: (.*)",
+               "replace":"VSCODE_VERSION: {{version}}"
+            },
+            {
+               "match":"RSTUDIO_VARS: (.*)",
+               "replace":"RSTUDIO_VARS: {{version}}"
+            }
+         ]
+      },
+      {
+         "updateTypes":[
+            "pin"
+         ],
+         "addLabels":[
+            "pin"
+         ]
+      }
+   ],
+   "vulnerabilityAlerts":{
+      "labels":[
+         "security"
       ]
-    },
-    {
-      "updateTypes": [
-        "minor"
-      ],
-      "addLabels": [
-        "minor"
-      ]
-    },
-    {
-      "updateTypes": [
-        "patch"
-      ],
-      "addLabels": [
-        "patch"
-      ]
-    },
-    {
-      "updateTypes": [
-        "pin"
-      ],
-      "addLabels": [
-        "pin"
-      ]
-    }
-  ],
-  "vulnerabilityAlerts": {
-    "labels": [
-      "security"
-    ]
-  },
-  "baseBranches": [
-    "dev"
-  ],
-  "reviewers": [
-    "team:portal-dev"
-  ],
-  "labels": [
-    "dependencies"
-  ],
-  "assignees": [
-    "team:portal-dev"
-  ],
-  "branchPrefix": "deps/",
-  "bumpVersion": "minor",
-  "rebaseWhen": "behind-base-branch",
-  "commitBodyTable": "true",
-  "commitMessagePrefix": "feat(Dependencies):",
-  "files": ["vscode_vars.yml", "rstudio_vars.yml"],
-  "updateTypes": ["major","minor", "patch"],
-  "edits": [
-    {
-      "match": "VSCODE_VERSION: (.*)",
-      "replace": "VSCODE_VERSION: {{version}}"
-    },
-    {
-      "match": "RSTUDIO_VARS: (.*)",
-      "replace": "RSTUDIO_VARS: {{version}}"
-    }
-  ]
+   },
+   "baseBranches":[
+      "dev"
+   ],
+   "reviewers":[
+      "team:portal-dev"
+   ],
+   "labels":[
+      "dependencies"
+   ],
+   "assignees":[
+      "team:portal-dev"
+   ],
+   "branchPrefix":"deps/",
+   "bumpVersion":"minor",
+   "rebaseWhen":"behind-base-branch",
+   "commitBodyTable":"true",
+   "commitMessagePrefix":"feat(Dependencies):"
 }
