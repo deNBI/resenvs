@@ -5,25 +5,6 @@
       "github>coder/code-server",
       "github>rstudio/rstudio"
    ],
-   "files":[
-      "vscode_vars.yml",
-      "rstudio_vars.yml"
-   ],
-   "updateTypes":[
-      "major",
-      "minor",
-      "patch"
-   ],
-   "edits":[
-      {
-         "match":"VSCODE_VERSION: (.*)",
-         "replace":"VSCODE_VERSION: {{version}}"
-      },
-      {
-         "match":"RSTUDIO_VARS: (.*)",
-         "replace":"RSTUDIO_VARS: {{version}}"
-      }
-   ],
    "packageRules":[
       {
          "updateTypes":[
