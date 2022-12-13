@@ -1,7 +1,9 @@
 {
   "extends": [
     "config:base",
-    ":automergePatch"
+    ":automergePatch",
+    "github>coder/code-server",
+    "github>rstudio/rstudio"
   ],
   "packageRules": [
     {
@@ -59,7 +61,6 @@
   "rebaseWhen": "behind-base-branch",
   "commitBodyTable": "true",
   "commitMessagePrefix": "feat(Dependencies):",
-   "extends": ["github>coder/code-server", "github>rstudio/rstudio"],
   "files": ["vscode_vars.yml", "rstudio_vars.yml"],
   "updateTypes": ["major","minor", "patch"],
   "edits": [
