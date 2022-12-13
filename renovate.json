@@ -58,7 +58,7 @@
   "bumpVersion": "minor",
   "rebaseWhen": "behind-base-branch",
   "commitBodyTable": "true",
-  "commitMessagePrefix": "feat(Dependencies):".
+  "commitMessagePrefix": "feat(Dependencies):",
    "extends": ["github>coder/code-server", "github>rstudio/rstudio"],
   "files": ["vscode_vars.yml", "rstudio_vars.yml"],
   "updateTypes": ["major","minor", "patch"],
