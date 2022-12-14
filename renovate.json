@@ -7,7 +7,7 @@
    "regexManagers":[
       {
          "fileMatch":[
-            "rstudio/rstudio_vars_file\\.yml"
+            "rstudio_vars:\\sRSTUDIO_VERSION: '(?<currentValue>.*?)'\\s+"
          ],
          "matchStrings":[
             "RSTUDIO_VERSION: '(?<currentValue>.*?)'\\s+"
