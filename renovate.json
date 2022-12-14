@@ -14,7 +14,6 @@
          ],
          "depNameTemplate":"rstudio/rstudio",
          "datasourceTemplate":"github-tags",
-         "extractVersionTemplate":"^v(?<version>\\d+\\.\\d+)"
       },
       {
          "fileMatch":[
