@@ -53,7 +53,7 @@
             "minor",
             "patch"
          ],
-         "repository":"cdr/code-server",
+         "repository":"coder/code-server",
          "extends":[
             {
                "file":"vscode/vscode_vars_file.yml",
