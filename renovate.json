@@ -5,18 +5,6 @@
    ],
    "packageRules":[
       {
-         "updateTypes":[
-            "major",
-            "minor",
-            "patch"
-         ],
-         "addLabels":[
-            "major",
-            "minor",
-            "patch"
-         ]
-      },
-      {
          "packageNames":[
             "RSTUDIO_VERSION"
          ],
@@ -34,8 +22,8 @@
          "extends":[
             {
                "file":"rstudio/rstudio_vars_file.yml",
-                "versionKey": "RSTUDIO_VERSION",
-                "property": "rstudio_vars"
+               "versionKey":"RSTUDIO_VERSION",
+               "property":"rstudio_vars"
             }
          ]
       },
@@ -57,8 +45,8 @@
          "extends":[
             {
                "file":"vscode/vscode_vars_file.yml",
-                "versionKey": "VSCODE_VERSION",
-                "property": "vscode_vars"
+               "versionKey":"VSCODE_VERSION",
+               "property":"vscode_vars"
             }
          ]
       }
