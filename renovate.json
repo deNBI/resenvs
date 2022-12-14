@@ -13,7 +13,7 @@
             "RSTUDIO_VERSION: (?<currentValue>.*?)\\n"
          ],
          "depNameTemplate":"rstudio/rstudio",
-         "datasourceTemplate":"github-tags",
+         "datasourceTemplate":"github-tags"
       },
       {
          "fileMatch":[
