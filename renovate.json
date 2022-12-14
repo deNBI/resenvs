@@ -21,9 +21,14 @@
             "RSTUDIO_VERSION"
          ],
          "updateTypes":[
-            "pin",
-            "lockFile",
-            "range"
+            "major",
+            "minor",
+            "patch"
+         ],
+         "addLabels":[
+            "major",
+            "minor",
+            "patch"
          ],
          "repository":"rstudio/rstudio",
          "extends":[
@@ -38,9 +43,14 @@
             "VSCODE_VERSION"
          ],
          "updateTypes":[
-            "pin",
-            "lockFile",
-            "range"
+            "major",
+            "minor",
+            "patch"
+         ],
+         "addLabels":[
+            "major",
+            "minor",
+            "patch"
          ],
          "repository":"cdr/code-server",
          "extends":[
