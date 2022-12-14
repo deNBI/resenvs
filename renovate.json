@@ -12,6 +12,7 @@
          "matchStrings":[
             "RSTUDIO_VERSION=(?<currentDigest>.*?)\\n"
          ],
+         "currentValueTemplate": "master",
          "depNameTemplate":"https://github.com/rstudio/rstudio",
          "datasourceTemplate":"github-tags"
       }
