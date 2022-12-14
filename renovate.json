@@ -4,6 +4,18 @@
       ":automergePatch"
    ],
    "platform":"github",
+   "regexManagers":[
+      {
+         "fileMatch":[
+            "rstudio/rstudio_vars_file\\.yml"
+         ],
+         "matchStrings":[
+            "RSTUDIO_VERSION=(?<currentDigest>.*?)\\n"
+         ],
+         "depNameTemplate":"https://github.com/rstudio/rstudio",
+         "datasourceTemplate":"github-tags"
+      }
+   ],
    "packageRules":[
       {
          "matchPackageNames":[
