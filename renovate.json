@@ -12,7 +12,6 @@
          "matchStrings":[
             "RSTUDIO_VERSION: '(?<currentValue>.*?)'\\s+"
          ],
-         "currentValueTemplate":"master",
          "depNameTemplate":"rstudio/rstudio",
          "datasourceTemplate":"github-tags",
          "extractVersionTemplate":"^v(?<version>\\d+\\.\\d+)"
