@@ -14,7 +14,7 @@
          ],
          "depNameTemplate":"rstudio/rstudio",
          "datasourceTemplate":"github-tags",
-         "versioningTemplate":"regex:^(?<compatibility>.*)-(?<patch>20\\d\\d)-.*$"
+         "versioningTemplate":"regex:v<YYYY>.<MM>.<patch>+<build_number>$"
       },
       {
          "fileMatch":[
