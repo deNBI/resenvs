@@ -5,10 +5,10 @@
    ],
    "packageRules":[
       {
-         "packageNames":[
+         "matchPackageNames":[
             "RSTUDIO_VERSION"
          ],
-         "updateTypes":[
+         "matchUpdateTypes":[
             "major",
             "minor",
             "patch"
@@ -28,10 +28,10 @@
          ]
       },
       {
-         "packageNames":[
+         "matchPackageNames":[
             "VSCODE_VERSION"
          ],
-         "updateTypes":[
+         "matchUpdateTypes":[
             "major",
             "minor",
             "patch"
@@ -71,6 +71,6 @@
    "branchPrefix":"deps/",
    "bumpVersion":"minor",
    "rebaseWhen":"behind-base-branch",
-   "commitBodyTable":"true",
+   "commitBodyTable":true,
    "commitMessagePrefix":"feat(Dependencies):"
 }
