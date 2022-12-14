@@ -1,7 +1,7 @@
 {
    "extends":[
       "config:base",
-      ":automergePatch",
+      ":automergePatch"
    ],
    "packageRules":[
       {
@@ -14,6 +14,42 @@
             "major",
             "minor",
             "patch"
+         ]
+      },
+      {
+         "packageNames":[
+            "RSTUDIO_VERSION"
+         ],
+         "updateTypes":[
+            "pin",
+            "lockFile",
+            "range"
+         ],
+         "repository":"rstudio/rstudio",
+         "variables":[
+            {
+               "packageName":"RSTUDIO_VERSION",
+               "file":"rstudio_vars.yml",
+               "versionKey":"RSTUDIO_VERSION"
+            }
+         ]
+      },
+      {
+         "packageNames":[
+            "VSCODE_VERSION"
+         ],
+         "updateTypes":[
+            "pin",
+            "lockFile",
+            "range"
+         ],
+         "repository":"cdr/code-server",
+         "variables":[
+            {
+               "packageName":"VSCODE_VERSION",
+               "file":"vscode_vars.yml",
+               "versionKey":"VSCODE_VERSION"
+            }
          ]
       }
    ],
