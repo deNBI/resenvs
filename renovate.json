@@ -10,12 +10,12 @@
             "rstudio/rstudio_vars_file\\.yml"
          ],
          "matchStrings":[
-             "RSTUDIO_VERSION: (?<currentValue>.*?)\\n"
+            "RSTUDIO_VERSION: (?<currentValue>.*?)\\n"
          ],
          "depNameTemplate":"rstudio/rstudio",
          "datasourceTemplate":"github-tags",
          "extractVersionTemplate":"^v(?<version>\\d+\\.\\d+)",
-          "versioning": "my-custom-version-scheme-v(?<year>\\d{4}).(?<month>\\d{2}).(?<day>\\d{2})\\+(?<build>\\d+)",
+         "versioning":"my-custom-version-scheme-v(?<year>\\d{4}).(?<month>\\d{2}).(?<day>\\d{2})\\+(?<build>\\d+)"
       }
    ],
    "packageRules":[
