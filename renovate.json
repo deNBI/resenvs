@@ -10,18 +10,15 @@
             "rstudio/rstudio_vars_file\\.yml"
          ],
          "matchStrings":[
-            "RSTUDIO_VERSION=(?<currentDigest>.*?)\\n"
+            "RSTUDIO_VERSION: '(?<currentValue>.*?)'\\s+"
          ],
-         "currentValueTemplate": "master",
-         "depNameTemplate":"https://github.com/rstudio/rstudio",
+         "currentValueTemplate":"master",
+         "depNameTemplate":"rstudio/rstudio",
          "datasourceTemplate":"github-tags"
       }
    ],
    "packageRules":[
       {
-         "matchPackageNames":[
-            "RSTUDIO_VERSION"
-         ],
          "matchUpdateTypes":[
             "major",
             "minor",
@@ -31,37 +28,6 @@
             "major",
             "minor",
             "patch"
-         ],
-         "repository":"rstudio/rstudio",
-         "extends":[
-            {
-               "file":"rstudio/rstudio_vars_file.yml",
-               "versionKey":"RSTUDIO_VERSION",
-               "property":"rstudio_vars"
-            }
-         ]
-      },
-      {
-         "matchPackageNames":[
-            "VSCODE_VERSION"
-         ],
-         "matchUpdateTypes":[
-            "major",
-            "minor",
-            "patch"
-         ],
-         "addLabels":[
-            "major",
-            "minor",
-            "patch"
-         ],
-         "repository":"coder/code-server",
-         "extends":[
-            {
-               "file":"vscode/vscode_vars_file.yml",
-               "versionKey":"VSCODE_VERSION",
-               "property":"vscode_vars"
-            }
          ]
       }
    ],
