@@ -25,7 +25,6 @@
          ],
          "depNameTemplate":"coder/code-server",
          "datasourceTemplate":"github-tags",
-         "extractVersionTemplate":"^v(?<version>\\d+\\.\\d+)"
       }
    ],
    "packageRules":[
