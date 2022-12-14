@@ -7,10 +7,10 @@
    "regexManagers":[
       {
          "fileMatch":[
-            "rstudio_vars:\\sRSTUDIO_VERSION: '(?<currentValue>.*?)'\\s+"
+            "rstudio/rstudio_vars_file\\.yml"
          ],
          "matchStrings":[
-            "RSTUDIO_VERSION: '(?<currentValue>.*?)'\\s+"
+             "RSTUDIO_VERSION: (?<currentValue>.*?)\\n"
          ],
          "depNameTemplate":"rstudio/rstudio",
          "datasourceTemplate":"github-tags",
