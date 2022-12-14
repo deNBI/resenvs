@@ -2,8 +2,6 @@
    "extends":[
       "config:base",
       ":automergePatch",
-      "github>coder/code-server",
-      "github>rstudio/rstudio"
    ],
    "packageRules":[
       {
