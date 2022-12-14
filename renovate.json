@@ -34,7 +34,8 @@
          "extends":[
             {
                "file":"rstudio/rstudio_vars_file.yml",
-               "versionKey":"RSTUDIO_VERSION"
+                "versionKey": "RSTUDIO_VERSION",
+                "property": "rstudio_vars"
             }
          ]
       },
@@ -56,7 +57,8 @@
          "extends":[
             {
                "file":"vscode/vscode_vars_file.yml",
-               "versionKey":"VSCODE_VERSION"
+                "versionKey": "VSCODE_VERSION",
+                "property": "vscode_vars"
             }
          ]
       }
