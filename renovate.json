@@ -3,6 +3,7 @@
       "config:base",
       ":automergePatch"
    ],
+   "platform":"github",
    "packageRules":[
       {
          "matchPackageNames":[
