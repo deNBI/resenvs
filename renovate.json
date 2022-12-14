@@ -15,7 +15,7 @@
          "currentValueTemplate":"master",
          "depNameTemplate":"rstudio/rstudio",
          "datasourceTemplate":"github-tags",
-         "extractVersionTemplate": "^v(?<version>\\d+\\.\\d+)",
+         "extractVersionTemplate":"^v(?<version>\\d+\\.\\d+)"
       }
    ],
    "packageRules":[
