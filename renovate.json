@@ -24,7 +24,7 @@
             "VSCODE_VERSION: (?<currentValue>.*?)\\n"
          ],
          "depNameTemplate":"coder/code-server",
-         "datasourceTemplate":"github-tags",
+         "datasourceTemplate":"github-tags"
       }
    ],
    "packageRules":[
