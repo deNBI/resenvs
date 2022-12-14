@@ -33,7 +33,7 @@
          "repository":"rstudio/rstudio",
          "extends":[
             {
-               "file":"rstudio/rstudio_vars.yml",
+               "file":"rstudio/rstudio_vars_file.yml",
                "versionKey":"RSTUDIO_VERSION"
             }
          ]
@@ -55,7 +55,7 @@
          "repository":"cdr/code-server",
          "extends":[
             {
-               "file":"vscode/vscode_vars.yml",
+               "file":"vscode/vscode_vars_file.yml",
                "versionKey":"VSCODE_VERSION"
             }
          ]
