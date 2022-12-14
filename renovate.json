@@ -26,11 +26,12 @@
             "range"
          ],
          "repository":"rstudio/rstudio",
-         "extends": [
-           {
-             "file": "rstudio/rstudio_vars.yml",
-             "versionKey": "RSTUDIO_VERSION"
-           }
+         "extends":[
+            {
+               "file":"rstudio/rstudio_vars.yml",
+               "versionKey":"RSTUDIO_VERSION"
+            }
+         ]
       },
       {
          "packageNames":[
@@ -42,11 +43,12 @@
             "range"
          ],
          "repository":"cdr/code-server",
-         "extends": [
-           {
-             "file": "vscode/vscode_vars.yml",
-             "versionKey": "VSCODE_VERSION"
-           }
+         "extends":[
+            {
+               "file":"vscode/vscode_vars.yml",
+               "versionKey":"VSCODE_VERSION"
+            }
+         ]
       }
    ],
    "vulnerabilityAlerts":{
