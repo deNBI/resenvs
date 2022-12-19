@@ -1,5 +1,5 @@
 ---
-- name: Clean up old {{ resenv }} images
+- name: Clean up old {{ resenv }} images for Ubuntu 18
   openstack.cloud.image:
     name: "{{ item.id }}"
     state: absent
@@ -8,12 +8,14 @@
     index_var: index
   vars:
     resenv_list: "{{ images.image | \
-    selectattr('tags', 'search', vars[resenv + '_tag']) \
-    | selectattr('image_type', '==', 'image') | rejectattr('tags','search','cluster')  | sort(attribute='created_at')\
+    selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('image_type', '==', 'image')\
+    | selectattr('os_distro', '==', 'ubuntu') | selectattr('os_version', '==', '18.04')\
+    | rejectattr('tags','search','cluster')  | sort(attribute='created_at')\
       \ }}"
   when:
     - resenv_list | length > limit | int
     - index < resenv_list | length - limit | int
+
 
 - name: Clean up old cluster {{ resenv }} images
   openstack.cloud.image:
