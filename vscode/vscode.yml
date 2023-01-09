@@ -6,7 +6,7 @@
     mode: '0550'
 
 - name: Run the install script
-  ansible.builtin.shell: /etc/vscode-install.sh --version={{ vscode_vars.VSCODE_VERSION }}
+  ansible.builtin.shell: /etc/vscode-install.sh --version={{ vscode_vars.VSCODE_VERSION | replace('v', '')}}
 
 - name: Set facts for templates
   set_fact:
