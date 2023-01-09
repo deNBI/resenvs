@@ -23,7 +23,7 @@
       register: github_hash
 
     - name: Get md5 Hash from resenv folder
-      ansible.builtin.command: find  ../{{ resenv }} -type f -exec md5sum {} \; | md5sum
+      ansible.builtin.command: cd .. && tar  c {{ resenv }}  | md5sum
       register: md5_hash
     - name: Include {{ resenv }} metadata
       ansible.builtin.command: cat ../{{ resenv }}/{{ resenv }}_metadata.yml
