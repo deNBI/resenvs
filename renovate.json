@@ -1,36 +1,66 @@
 {
-  "extends": [
-    "config:base",
-    ":automergePatch"
-  ],
-  "packageRules": [
-    {
-      "updateTypes": ["major"],
-      "addLabels": ["major"]
-    },
-    {
-      "updateTypes": ["minor"],
-      "addLabels": ["minor"]
-    },
-     {
-      "updateTypes": ["patch"],
-      "addLabels": ["patch"]
-    },
-    {
-      "updateTypes": ["pin"],
-      "addLabels": ["pin"]
-    }
+   "extends":[
+      "config:base",
+      ":automergePatch"
    ],
-   "vulnerabilityAlerts": {
-    "labels": ["security"]
-  },
-  "baseBranches": ["dev"],
-  "reviewers": ["team:portal-dev"],
-  "labels": ["dependencies"],
-  "assignees": ["team:portal-dev"],
-  "branchPrefix": "deps/",
-  "bumpVersion": "minor",
-  "rebaseWhen": "behind-base-branch",
-  "commitBodyTable": "true",
-  "commitMessagePrefix": "feat(Dependencies):"
+   "platform":"github",
+   "regexManagers":[
+      {
+         "fileMatch":[
+            "rstudio/rstudio_vars_file\\.yml"
+         ],
+         "matchStrings":[
+            "RSTUDIO_VERSION: (?<currentValue>.*?)\\n"
+         ],
+         "depNameTemplate":"rstudio/rstudio",
+         "datasourceTemplate":"github-tags",
+         "versioningTemplate": "regex:v(?<major>20\\d\\d)\\.(?<minor>\\d\\d)\\.(?<patch>\\d)\\+\\d*"
+      },
+      {
+         "fileMatch":[
+            "vscode/vscode_vars_file\\.yml"
+         ],
+         "matchStrings":[
+            "VSCODE_VERSION: (?<currentValue>.*?)\\n"
+         ],
+         "depNameTemplate":"coder/code-server",
+         "datasourceTemplate":"github-tags"
+      }
+   ],
+   "packageRules":[
+      {
+         "matchUpdateTypes":[
+            "major",
+            "minor",
+            "patch"
+         ],
+         "addLabels":[
+            "major",
+            "minor",
+            "patch"
+         ]
+      }
+   ],
+   "vulnerabilityAlerts":{
+      "labels":[
+         "security"
+      ]
+   },
+   "baseBranches":[
+      "dev"
+   ],
+   "reviewers":[
+      "team:portal-dev"
+   ],
+   "labels":[
+      "dependencies"
+   ],
+   "assignees":[
+      "team:portal-dev"
+   ],
+   "branchPrefix":"deps/",
+   "bumpVersion":"minor",
+   "rebaseWhen":"behind-base-branch",
+   "commitBodyTable":true,
+   "commitMessagePrefix":"feat(Dependencies):"
 }

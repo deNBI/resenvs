@@ -12,7 +12,8 @@
         "filters": {
           "tags": [
             "cluster",
-            "master"
+            "master",
+            "{{user `base_cluster_tag`}}"
           ],
           "properties": {
             "os_distro": "{{user `os_distro`}}",
