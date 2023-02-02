@@ -2,5 +2,3 @@
   apt:
     name: "nfs-kernel-server"
     state: "latest"
-
-
