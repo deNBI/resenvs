@@ -1,25 +1,26 @@
+---
 - hosts: master
-  become: 'yes'
+  become: "yes"
   vars_files:
-  - vars/common_configuration.yml
+    - vars/common_configuration.yml
   roles:
-  - common
-  - master
-  - role: slurm
-    tags:
-    - slurm
-    - scale-up
-    - scale-down
-    - autoscaling
+    - common
+    - master
+    - role: slurm
+      tags:
+        - slurm
+        - scale-up
+        - scale-down
+        - autoscaling
 - hosts: workers
-  become: 'yes'
+  become: "yes"
   vars_files:
-  - vars/common_configuration.yml
+    - vars/common_configuration.yml
   roles:
-  - common
-  - worker
-  - role: slurm
-    tags:
-    - slurm
-    - scale-up
-    - scale-down
+    - common
+    - worker
+    - role: slurm
+      tags:
+        - slurm
+        - scale-up
+        - scale-down

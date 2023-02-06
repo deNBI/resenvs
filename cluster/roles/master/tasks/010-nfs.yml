@@ -1,6 +1,5 @@
+---
 - name: Install NFS server package
   apt:
-    name: "nfs-kernel-server"
-    state: "latest"
-
-
+    name: nfs-kernel-server
+    state: latest

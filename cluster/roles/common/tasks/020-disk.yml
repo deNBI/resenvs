@@ -1,9 +1,8 @@
+---
 - name: Generate directory structure available on all hosts
   file:
     path: /etc/bibigrid
     state: directory
     owner: root
-    group: '{{ ansible_distribution | lower }}'
+    group: "{{ ansible_distribution | lower }}"
     mode: 0775
-
-

@@ -7,20 +7,17 @@
     state: restarted
     enabled: true
 
-
 - name: Restart guacd
   ansible.builtin.systemd:
     name: guacd
     state: restarted
     enabled: true
 
-
 - name: Restart Tomcat
   ansible.builtin.systemd:
     name: tomcat9
     state: restarted
     enabled: true
-
 
 - name: Reload systemd
   ansible.builtin.systemd:

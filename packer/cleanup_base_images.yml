@@ -25,7 +25,6 @@
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='20.04']"
 
-
     - set_fact:
         ubuntu22_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:

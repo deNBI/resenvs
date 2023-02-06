@@ -9,7 +9,6 @@
     - networks.json
     - tags.json
 
-
   tasks:
     - name: Set Update Fact to false
       ansible.builtin.set_fact:
@@ -22,7 +21,6 @@
     - name: Get Latest Master Branch Commit
       ansible.builtin.command: git rev-parse --short --verify origin/master
       register: github_hash
-
 
     - name: Set Base Images
       ansible.builtin.set_fact:
@@ -41,15 +39,10 @@
         update: true
       when:
         - base_images | length > 0
-        - cluster_images | length == 0 or (cluster_images | length > 0 and
-            (cluster_images | last).created_at > (cluster_images | last).created_at) or (cluster_images | length > 0
-            and (cluster_images | last).github_hash|default ('undefined')  != github_hash.stdout)
+        - cluster_images | length == 0 or (cluster_images | length > 0 and (cluster_images | last).created_at > (cluster_images | last).created_at) or (cluster_images
+          | length > 0 and (cluster_images | last).github_hash|default ('undefined')  != github_hash.stdout)
 
     - name: Build new  Cluster [{{ cluster_type }}] image - {{ os_distro }} {{ os_version }}
-      ansible.builtin.command:
-        packer build -var-file=tags.json -var 'os_distro={{ os_distro }}'
-        -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}' -var
-        'network={{ vars[location + '_' + upload_environment] }}' ../cluster/packer_{{cluster_type}}.json
+      ansible.builtin.command: packer build -var-file=tags.json -var 'os_distro={{ os_distro }}' -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version
+        }}' -var 'network={{ vars[location + '_' + upload_environment] }}' ../cluster/packer_{{cluster_type}}.json
       when: update
-
-

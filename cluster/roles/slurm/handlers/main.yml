@@ -1,3 +1,4 @@
+---
 - name: slurmdbd
   systemd:
     name: slurmdbd
@@ -7,7 +8,7 @@
   systemd:
     name: slurmrestd
     state: restarted
-    daemon_reload: yes
+    daemon_reload: true
 
 - name: slurmctld
   systemd:

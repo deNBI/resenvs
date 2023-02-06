@@ -1,3 +1,4 @@
+---
 - name: Install zabbix python-api
   pip:
     name: zabbix-api
@@ -6,13 +7,13 @@
   apt:
     name: zabbix-agent
     state: latest
-  when: "ansible_distribution_file_variety == 'Debian'"
+  when: ansible_distribution_file_variety == 'Debian'
 
 - name: Install zabbix agent
   dnf:
     name: zabbix-agent
     state: latest
-  when: "ansible_distribution_file_variety == 'RedHat'"
+  when: ansible_distribution_file_variety == 'RedHat'
 
 - name: Create zabbix_agent dropin directory
   file:
@@ -26,7 +27,7 @@
     state: directory
     owner: zabbix
     group: zabbix
-    mode : 0755
+    mode: 0755
 
 - name: Adjust zabbix agent configuration
   template:
@@ -37,4 +38,4 @@
   systemd:
     name: zabbix-agent
     state: restarted
-    enabled: yes
+    enabled: true

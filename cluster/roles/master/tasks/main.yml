@@ -1,8 +1,8 @@
+---
 - debug:
     msg: "[BIBIGRID] Configure database"
 - include: 006-database.yml
-  tags: ["database","slurm","master-slurm"]
-
+  tags: [database, slurm, master-slurm]
 - debug:
     msg: "[BIBIGRID] Setup NFS"
   when:
@@ -10,4 +10,4 @@
 - include: 010-nfs.yml
   when:
     - enable_nfs == 'yes'
-  tags: ["master-nfs","nfs"]
+  tags: [master-nfs, nfs]

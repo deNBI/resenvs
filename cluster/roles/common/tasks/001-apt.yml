@@ -1,3 +1,4 @@
+---
 - name: Debian based system
   debug:
     msg: Using apt to install packages
@@ -8,7 +9,6 @@
 
 - name: Populate service facts
   ansible.builtin.service_facts:
-
 - name: Wait till Apt_Mirror de.NBI Bielefeld Service is done
   ansible.builtin.service_facts:
   until: services['de.NBI_Bielefeld_environment.service'].state == 'stopped'
@@ -16,23 +16,22 @@
   delay: 10
   when: services['de.NBI_Bielefeld_environment.service'] is defined
 
-
 - name: PRE_TASK Disable unattended upgrades
   lineinfile:
-        path: /etc/apt/apt.conf.d/10periodic
-        regexp: "^APT::Periodic::Unattended-Upgrade"
-        line: 'APT::Periodic::Unattended-Upgrade "0";'
-        create: true
+    path: /etc/apt/apt.conf.d/10periodic
+    regexp: ^APT::Periodic::Unattended-Upgrade
+    line: APT::Periodic::Unattended-Upgrade "0";
+    create: true
 - name: PRE_TASK Stop apt-daily.* systemd services
   service:
-        name: "{{ item }}"
-        state: stopped
+    name: "{{ item }}"
+    state: stopped
   with_items:
-        - unattended-upgrades
-        - apt-daily
-        - apt-daily.timer
-        - apt-daily-upgrade
-        - apt-daily-upgrade.timer
+    - unattended-upgrades
+    - apt-daily
+    - apt-daily.timer
+    - apt-daily-upgrade
+    - apt-daily-upgrade.timer
 
 - name: PRE_TASK   Wait for automatic system updates 1
   shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
@@ -43,11 +42,10 @@
 - name: PRE_TASK   Update apt cache
   become: true
   apt:
-        upgrade: true
-        update_cache: true
-        autoremove: true
-        autoclean: true
-
+    upgrade: true
+    update_cache: true
+    autoremove: true
+    autoclean: true
 
 - name: Update
   apt:
@@ -56,14 +54,14 @@
 
 - name: Import deadsnake PPA for python3.8
   ansible.builtin.apt_repository:
-        repo: ppa:deadsnakes/ppa
-        update_cache: yes
+    repo: ppa:deadsnakes/ppa
+    update_cache: true
   tags: always
 
 - name: Install python3.8
   apt:
-        state: latest
-        name: python3.8
+    state: latest
+    name: python3.8
 
 - name: Install Python 3.8 and reset selection to auto
   community.general.alternatives:
@@ -72,29 +70,38 @@
     link: /usr/bin/python
     state: auto
 
-
 - name: Install common packages
   apt:
-    name: ["apt-transport-https","ca-certificates","curl","libffi-dev", "libssl-dev","software-properties-common","python3.8-dev","python3.8-venv","python3-pip","python3-setuptools"]
-    state: "present"
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - libffi-dev
+      - libssl-dev
+      - software-properties-common
+      - python3.8-dev
+      - python3.8-venv
+      - python3-pip
+      - python3-setuptools
+    state: present
 
 - name: Install OpenStack object store client
   apt:
-    name: "swift"
-    state: "present"
+    name: swift
+    state: present
   when: mode == "openstack"
 
 - name: Add apt.bi.denbi.de repository key
   apt_key:
-    url: 'https://apt.bi.denbi.de/repo_key.key'
+    url: https://apt.bi.denbi.de/repo_key.key
     state: present
 
 - name: Add apt.bi.denbi.de repository
   apt_repository:
-    repo: 'deb https://apt.bi.denbi.de/repos/apt/{{ ansible_distribution_release | lower }} {{ ansible_distribution_release | lower }} main'
+    repo: deb https://apt.bi.denbi.de/repos/apt/{{ ansible_distribution_release | lower }} {{ ansible_distribution_release | lower }} main
 
 - name: Update apt cache
   apt:
-    upgrade: 'yes'
-    update_cache: 'yes'
+    upgrade: "yes"
+    update_cache: "yes"
     cache_valid_time: 86400 #One day

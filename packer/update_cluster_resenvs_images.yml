@@ -23,7 +23,7 @@
       register: github_hash
 
     - name: Get md5 Hash from resenv folder
-      ansible.builtin.shell:  find ../{{ resenv }} -type f -exec md5sum {} \; | md5sum
+      ansible.builtin.shell: find ../{{ resenv }} -type f -exec md5sum {} \; | md5sum
       register: md5_hash
 
     - name: Include {{ resenv }} metadata
@@ -42,13 +42,15 @@
 
     - name: Set Cluster Base Images
       ansible.builtin.set_fact:
-        cluster_base_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag)| selectattr('tags', 'search', 'cluster')| selectattr('tags', 'search', 'master')| json_query(filter) | sort(attribute='created_at') }}"
+        cluster_base_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag)| selectattr('tags', 'search', 'cluster')| selectattr('tags', 'search',\
+          \ 'master')| json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
 
     - name: Set Resens Base Cluster Images
       ansible.builtin.set_fact:
-        cluster_resenv_images: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag'])|  selectattr('tags', 'search', 'cluster') | selectattr('tags', 'search', 'master') |  json_query(filter) | sort(attribute='created_at') }}"
+        cluster_resenv_images: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag'])|  selectattr('tags', 'search', 'cluster') | selectattr('tags',\
+          \ 'search', 'master') |  json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
 
@@ -57,13 +59,11 @@
         update: true
       when:
         - cluster_base_images| length > 0
-        - cluster_resenv_images  | length == 0 or (cluster_resenv_images  | length > 0 and
-            (cluster_base_images| last).created_at > (cluster_resenv_images  | last).created_at) or (cluster_resenv_images  | length > 0
-            and (cluster_resenv_images  | last).md5_hash|default ('undefined')  != md5_hash.stdout)
+        - cluster_resenv_images  | length == 0 or (cluster_resenv_images  | length > 0 and (cluster_base_images| last).created_at > (cluster_resenv_images  | last).created_at)
+          or (cluster_resenv_images  | length > 0 and (cluster_resenv_images  | last).md5_hash|default ('undefined')  != md5_hash.stdout)
 
     - name: Build new {{ resenv }} cluster master image - {{ os_distro }} {{ os_version }}
-      ansible.builtin.command:
-        packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json -var 'os_distro={{ os_distro }}'
-        -var 'github_hash={{ github_hash.stdout }}' -var 'md5_hash={{ md5_hash.stdout }}' -var 'os_version={{ os_version }}' -var
-        'network={{ vars[location + '_' + upload_environment] }}' ../{{resenv}}/packer_cluster_{{ vars[resenv + '_tag'] }}.json
+      ansible.builtin.command: packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json -var 'os_distro={{ os_distro }}' -var 'github_hash={{ github_hash.stdout
+        }}' -var 'md5_hash={{ md5_hash.stdout }}' -var 'os_version={{ os_version }}' -var 'network={{ vars[location + '_' + upload_environment] }}' ../{{resenv}}/packer_cluster_{{
+        vars[resenv + '_tag'] }}.json
       when: update
