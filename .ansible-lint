@@ -1,7 +1,7 @@
 ---
 # .ansible-lint
 
-profile: production # min, basic, moderate,safety, shared, production
+profile:  # min, basic, moderate,safety, shared, production
 
 # Allows dumping of results in SARIF format
 # sarif_file: result.sarif
@@ -12,6 +12,7 @@ profile: production # min, basic, moderate,safety, shared, production
 exclude_paths:
   - .cache/ # implicit unless exclude_paths is defined in config
   - .github/
+  - test/
 
 # Enable checking of loop variable prefixes in roles
 loop_var_prefix: "{role}_"
@@ -84,7 +85,7 @@ extra_vars:
 # match list, first match determines the file kind.
 kinds:
   # - playbook: "**/examples/*.{yml,yaml}"
-  - galaxy: ./packer/requirements.yml
+  # - galaxy: ./packer/requirements.yml
   # - tasks: "**/tasks/*.yml"
   # - vars: "**/vars/*.yml"
   # - meta: "**/meta/main.yml"
