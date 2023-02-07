@@ -1,5 +1,5 @@
 ---
 - name: Install NFS server package
-  apt:
+  ansible.builtin.apt:
     name: nfs-kernel-server
     state: latest

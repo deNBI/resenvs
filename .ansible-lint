@@ -1,7 +1,7 @@
 ---
 # .ansible-lint
 
-profile:  # min, basic, moderate,safety, shared, production
+profile: # min, basic, moderate,safety, shared, production
 
 # Allows dumping of results in SARIF format
 # sarif_file: result.sarif
@@ -12,7 +12,7 @@ profile:  # min, basic, moderate,safety, shared, production
 exclude_paths:
   - .cache/ # implicit unless exclude_paths is defined in config
   - .github/
-  - test/
+  - guacamole/roles/guacamole/tests/test.yml/
 
 # Enable checking of loop variable prefixes in roles
 loop_var_prefix: "{role}_"
@@ -30,6 +30,11 @@ use_default_rules: true
 # Ansible-lint completely ignores rules or tags listed below
 skip_list:
   - skip_this_tag
+  - package-latest
+  - name[prefix]
+  - name[missing]
+  - name[template]
+  - command-instead-of-module
 
 # Ansible-lint does not automatically load rules that have the 'opt-in' tag.
 # You must enable opt-in rules by listing each rule 'id' below.

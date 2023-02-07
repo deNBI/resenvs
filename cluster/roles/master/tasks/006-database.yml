@@ -1,8 +1,8 @@
 ---
 - name: Install maria-db-server
-  apt:
+  ansible.builtin.apt:
     name: mariadb-server
 
 - name: Install PyMySQL via pip
-  pip:
+  ansible.builtin.pip:
     name: pymysql

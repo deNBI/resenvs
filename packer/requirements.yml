@@ -18,3 +18,8 @@ roles:
     src: https://github.com/deNBI/autoscaling-config-ansible
 
   - name: geerlingguy.swap
+
+collections:
+  - name: openstack.cloud
+
+  - name: community.general

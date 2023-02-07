@@ -19,7 +19,7 @@
       register: images
 
     - name: Show images
-      debug:
+      ansible.builtin.debug:
         msg: "{{ images }}"
 
     - name: Set Base Image Fact
@@ -39,7 +39,7 @@
       when: update
 
     - name: Echo Timestamp
-      ansible.builtin.command: echo "The Timestamp is  ${{ date_time  }}"
+      ansible.builtin.command: echo "The Timestamp is  ${{ date_time }}"
       when: update
 
     - name: Download new base image

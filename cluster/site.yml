@@ -1,5 +1,6 @@
 ---
 - hosts: master
+  name: Cluster Master Setup
   become: "yes"
   vars_files:
     - vars/common_configuration.yml
@@ -13,6 +14,7 @@
         - scale-down
         - autoscaling
 - hosts: workers
+  name: Cluster Worker Setup
   become: "yes"
   vars_files:
     - vars/common_configuration.yml

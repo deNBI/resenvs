@@ -1,6 +1,6 @@
 ---
 - name: Debian based system
-  debug:
+  ansible.builtin.debug:
     msg: Using apt to install packages
 
 - name: PRE_TASK Wait for cloud-init / user-data to finish
@@ -17,14 +17,14 @@
   when: services['de.NBI_Bielefeld_environment.service'] is defined
 
 - name: PRE_TASK Disable unattended upgrades
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/apt/apt.conf.d/10periodic
     regexp: ^APT::Periodic::Unattended-Upgrade
     line: APT::Periodic::Unattended-Upgrade "0";
     create: true
 - name: PRE_TASK Stop apt-daily.* systemd services
-  service:
-    name: "{{ item }}"
+  ansible.builtin.service:
+    name: "{{ common_apt_service }}"
     state: stopped
   with_items:
     - unattended-upgrades
@@ -32,23 +32,28 @@
     - apt-daily.timer
     - apt-daily-upgrade
     - apt-daily-upgrade.timer
+  loop_control:
+    loop_var: common_apt_service
+
 
 - name: PRE_TASK   Wait for automatic system updates 1
-  shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+  ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+  changed_when: false
 
 - name: PRE_TASK  Wait for automatic system updates 2
-  shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
+  ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
+  changed_when: false
 
 - name: PRE_TASK   Update apt cache
   become: true
-  apt:
+  ansible.builtin.apt:
     upgrade: true
     update_cache: true
     autoremove: true
     autoclean: true
 
 - name: Update
-  apt:
+  ansible.builtin.apt:
     update_cache: "yes"
     upgrade: "yes"
 
@@ -59,8 +64,8 @@
   tags: always
 
 - name: Install python3.8
-  apt:
-    state: latest
+  ansible.builtin.apt:
+    state: present
     name: python3.8
 
 - name: Install Python 3.8 and reset selection to auto
@@ -71,7 +76,7 @@
     state: auto
 
 - name: Install common packages
-  apt:
+  ansible.builtin.apt:
     name:
       - apt-transport-https
       - ca-certificates
@@ -86,22 +91,22 @@
     state: present
 
 - name: Install OpenStack object store client
-  apt:
+  ansible.builtin.apt:
     name: swift
     state: present
   when: mode == "openstack"
 
 - name: Add apt.bi.denbi.de repository key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://apt.bi.denbi.de/repo_key.key
     state: present
 
 - name: Add apt.bi.denbi.de repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb https://apt.bi.denbi.de/repos/apt/{{ ansible_distribution_release | lower }} {{ ansible_distribution_release | lower }} main
 
 - name: Update apt cache
-  apt:
+  ansible.builtin.apt:
     upgrade: "yes"
     update_cache: "yes"
-    cache_valid_time: 86400 #One day
+    cache_valid_time: 86400 # One day

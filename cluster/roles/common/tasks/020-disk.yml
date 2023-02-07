@@ -1,6 +1,6 @@
 ---
 - name: Generate directory structure available on all hosts
-  file:
+  ansible.builtin.file:
     path: /etc/bibigrid
     state: directory
     owner: root

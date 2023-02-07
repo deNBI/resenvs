@@ -65,7 +65,7 @@
   when: not jupyterlab_vars.create_only_backend
 
 - name: Set facts for templates
-  set_fact:
+  ansible.builtin.set_fact:
     jupyterlab_conda_dir: "{{jupyterlab_vars.CONDA_DIR}}"
     jupyterlab_env_name: "{{ jupyterlab_vars.ENV_NAME}}"
     jupyterlab_default_user: "{{ jupyterlab_vars.default_user  }}"

@@ -1,4 +1,4 @@
 ---
 - name: RHEL based system
-  debug:
+  ansible.builtin.debug:
     msg: Using yum to install packages
