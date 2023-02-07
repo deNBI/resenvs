@@ -1,20 +1,21 @@
-- name: slurmdbd
-  systemd:
+---
+- name: Slurmdbd
+  ansible.builtin.systemd:
     name: slurmdbd
     state: restarted
 
-- name: slurmrestd
-  systemd:
-    name: slurmrestd
+- name: Slurmrestd
+  ansible.builtin.systemd:
+    name: Slurmrestd
     state: restarted
-    daemon_reload: yes
+    daemon_reload: true
 
-- name: slurmctld
-  systemd:
+- name: Slurmctld
+  ansible.builtin.systemd:
     name: slurmctld
     state: restarted
 
-- name: slurmd
-  systemd:
+- name: Slurmd
+  ansible.builtin.systemd:
     name: slurmd
     state: restarted

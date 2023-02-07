@@ -1,13 +1,15 @@
+---
 - hosts: all
-  become: 'yes'
+  name: Cluster Worker Setup
+  become: "yes"
   vars_files:
-  - vars/common_configuration.yml
+    - vars/common_configuration.yml
   roles:
-  - common
-  - geerlingguy.docker
-  - worker
-  - role: slurm
-    tags:
-    - slurm
-    - scale-up
-    - scale-down
+    - common
+    - geerlingguy.docker
+    - worker
+    - role: slurm
+      tags:
+        - slurm
+        - scale-up
+        - scale-down

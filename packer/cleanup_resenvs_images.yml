@@ -7,7 +7,7 @@
     - tags.json
 
   tasks:
-    - set_fact:
+    - ansible.builtin.set_fact:
         limit: "{{ keep | int }}"
       when: keep is defined and keep | int > 0
 
@@ -15,7 +15,7 @@
       openstack.cloud.image_info:
       register: images
 
-    - include_tasks: cleanup_resenvs_images_subloop.yml
+    - ansible.builtin.include_tasks: cleanup_resenvs_images_subloop.yml
       loop:
         - guacamole
         - rstudio

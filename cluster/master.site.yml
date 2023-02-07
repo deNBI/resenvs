@@ -1,15 +1,17 @@
+---
 - hosts: all
-  become: 'yes'
+  become: "yes"
+  name: Cluster Master Setup
   vars_files:
-  - vars/common_configuration.yml
+    - vars/common_configuration.yml
   roles:
-  - common
-  - autoscaling
-  - geerlingguy.docker
-  - master
-  - role: slurm
-    tags:
-    - slurm
-    - scale-up
-    - scale-down
+    - common
     - autoscaling
+    - geerlingguy.docker
+    - master
+    - role: slurm
+      tags:
+        - slurm
+        - scale-up
+        - scale-down
+        - autoscaling

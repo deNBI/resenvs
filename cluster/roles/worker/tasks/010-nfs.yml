@@ -1,4 +1,5 @@
+---
 - name: Install NFS common package
-  apt:
-    name: "nfs-common"
-    state: "latest"
+  ansible.builtin.apt:
+    name: nfs-common
+    state: latest
