@@ -14,8 +14,12 @@ roles:
   - name: geerlingguy.docker
     version: 6.0.4
 
-
   - name: autoscaling
     src: https://github.com/deNBI/autoscaling-config-ansible
 
   - name: geerlingguy.swap
+
+collections:
+  - name: openstack.cloud
+
+  - name: community.general

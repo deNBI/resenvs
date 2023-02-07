@@ -1,10 +1,9 @@
 ---
 - name: Install geerlingguy.swap role
   ansible.builtin.include_role:
-    name:  geerlingguy.swap
+    name: geerlingguy.swap
   vars:
-      swap_file_size_mb: '2024'
-
+    swap_file_size_mb: "2024"
 
 - name: Install miniconda role
   include_role:
@@ -23,7 +22,6 @@
     conda_env_environment: "{{ jupyterlab_vars.conda_env_environment_yml}}"
     conda_env_activate_for_login_shell: true
 
-
   when: not jupyterlab_vars.create_only_backend
 
 - name: Adjust miniconda folder rights
@@ -31,14 +29,12 @@
   shell: chown -R {{jupyterlab_vars.default_user}}:{{jupyterlab_vars.default_user}} {{jupyterlab_vars.CONDA_DIR}}/
   when: not jupyterlab_vars.create_only_backend
 
-
 - name: Add bioconda channel
   become_user: "{{   jupyterlab_vars.default_user  }}"
   shell: timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'
   args:
     executable: /bin/bash
   when: not jupyterlab_vars.create_only_backend
-
 
 - name: Add conda-forge channel
   become_user: "{{   jupyterlab_vars.default_user  }}"
@@ -69,7 +65,7 @@
   when: not jupyterlab_vars.create_only_backend
 
 - name: Set facts for templates
-  set_fact:
+  ansible.builtin.set_fact:
     jupyterlab_conda_dir: "{{jupyterlab_vars.CONDA_DIR}}"
     jupyterlab_env_name: "{{ jupyterlab_vars.ENV_NAME}}"
     jupyterlab_default_user: "{{ jupyterlab_vars.default_user  }}"

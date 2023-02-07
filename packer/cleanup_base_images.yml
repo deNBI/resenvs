@@ -7,7 +7,7 @@
     - tags.json
 
   tasks:
-    - set_fact:
+    - ansible.builtin.set_fact:
         limit: "{{ keep | int }}"
       when: keep is defined and keep | int > 0
 
@@ -15,18 +15,17 @@
       openstack.cloud.image_info:
       register: images
 
-    - set_fact:
+    - ansible.builtin.set_fact:
         ubuntu18_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='18.04']"
 
-    - set_fact:
+    - ansible.builtin.set_fact:
         ubuntu20_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='20.04']"
 
-
-    - set_fact:
+    - ansible.builtin.set_fact:
         ubuntu22_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='ubuntu' && properties.os_version=='22.04']"

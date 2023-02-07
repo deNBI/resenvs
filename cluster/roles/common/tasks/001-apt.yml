@@ -1,5 +1,6 @@
+---
 - name: Debian based system
-  debug:
+  ansible.builtin.debug:
     msg: Using apt to install packages
 
 - name: PRE_TASK Wait for cloud-init / user-data to finish
@@ -8,7 +9,6 @@
 
 - name: Populate service facts
   ansible.builtin.service_facts:
-
 - name: Wait till Apt_Mirror de.NBI Bielefeld Service is done
   ansible.builtin.service_facts:
   until: services['de.NBI_Bielefeld_environment.service'].state == 'stopped'
@@ -16,54 +16,57 @@
   delay: 10
   when: services['de.NBI_Bielefeld_environment.service'] is defined
 
-
 - name: PRE_TASK Disable unattended upgrades
-  lineinfile:
-        path: /etc/apt/apt.conf.d/10periodic
-        regexp: "^APT::Periodic::Unattended-Upgrade"
-        line: 'APT::Periodic::Unattended-Upgrade "0";'
-        create: true
+  ansible.builtin.lineinfile:
+    path: /etc/apt/apt.conf.d/10periodic
+    regexp: ^APT::Periodic::Unattended-Upgrade
+    line: APT::Periodic::Unattended-Upgrade "0";
+    create: true
 - name: PRE_TASK Stop apt-daily.* systemd services
-  service:
-        name: "{{ item }}"
-        state: stopped
+  ansible.builtin.service:
+    name: "{{ common_apt_service }}"
+    state: stopped
   with_items:
-        - unattended-upgrades
-        - apt-daily
-        - apt-daily.timer
-        - apt-daily-upgrade
-        - apt-daily-upgrade.timer
+    - unattended-upgrades
+    - apt-daily
+    - apt-daily.timer
+    - apt-daily-upgrade
+    - apt-daily-upgrade.timer
+  loop_control:
+    loop_var: common_apt_service
+
 
 - name: PRE_TASK   Wait for automatic system updates 1
-  shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+  ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+  changed_when: false
 
 - name: PRE_TASK  Wait for automatic system updates 2
-  shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
+  ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
+  changed_when: false
 
 - name: PRE_TASK   Update apt cache
   become: true
-  apt:
-        upgrade: true
-        update_cache: true
-        autoremove: true
-        autoclean: true
-
+  ansible.builtin.apt:
+    upgrade: true
+    update_cache: true
+    autoremove: true
+    autoclean: true
 
 - name: Update
-  apt:
+  ansible.builtin.apt:
     update_cache: "yes"
     upgrade: "yes"
 
 - name: Import deadsnake PPA for python3.8
   ansible.builtin.apt_repository:
-        repo: ppa:deadsnakes/ppa
-        update_cache: yes
+    repo: ppa:deadsnakes/ppa
+    update_cache: true
   tags: always
 
 - name: Install python3.8
-  apt:
-        state: latest
-        name: python3.8
+  ansible.builtin.apt:
+    state: present
+    name: python3.8
 
 - name: Install Python 3.8 and reset selection to auto
   community.general.alternatives:
@@ -72,29 +75,38 @@
     link: /usr/bin/python
     state: auto
 
-
 - name: Install common packages
-  apt:
-    name: ["apt-transport-https","ca-certificates","curl","libffi-dev", "libssl-dev","software-properties-common","python3.8-dev","python3.8-venv","python3-pip","python3-setuptools"]
-    state: "present"
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - libffi-dev
+      - libssl-dev
+      - software-properties-common
+      - python3.8-dev
+      - python3.8-venv
+      - python3-pip
+      - python3-setuptools
+    state: present
 
 - name: Install OpenStack object store client
-  apt:
-    name: "swift"
-    state: "present"
+  ansible.builtin.apt:
+    name: swift
+    state: present
   when: mode == "openstack"
 
 - name: Add apt.bi.denbi.de repository key
-  apt_key:
-    url: 'https://apt.bi.denbi.de/repo_key.key'
+  ansible.builtin.apt_key:
+    url: https://apt.bi.denbi.de/repo_key.key
     state: present
 
 - name: Add apt.bi.denbi.de repository
-  apt_repository:
-    repo: 'deb https://apt.bi.denbi.de/repos/apt/{{ ansible_distribution_release | lower }} {{ ansible_distribution_release | lower }} main'
+  ansible.builtin.apt_repository:
+    repo: deb https://apt.bi.denbi.de/repos/apt/{{ ansible_distribution_release | lower }} {{ ansible_distribution_release | lower }} main
 
 - name: Update apt cache
-  apt:
-    upgrade: 'yes'
-    update_cache: 'yes'
-    cache_valid_time: 86400 #One day
+  ansible.builtin.apt:
+    upgrade: "yes"
+    update_cache: "yes"
+    cache_valid_time: 86400 # One day
