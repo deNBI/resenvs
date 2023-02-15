@@ -75,11 +75,11 @@
     firstmatch: true
 
 - name: Compile guacamole
-  make:
+  community.general.system.make:
     chdir: /usr/share/guacamole/guacamole-server-1.4.0/
 
 - name: Make install
-  make:
+  community.general.system.make:
     chdir: /usr/share/guacamole/guacamole-server-1.4.0/
     target: install
 

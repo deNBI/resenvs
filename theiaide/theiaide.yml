@@ -18,12 +18,12 @@
         mode: 0755
 
     - name: Set fact 'theia_ide_user' when not defined
-      set_fact:
+      ansible.builtin.set_fact:
         theia_ide_user: "{{ ansible_env.SUDO_USER }}"
       when: theia_ide_user is not defined
 
     - name: Set fact 'theia_ide_workspace' to '${HOME}'
-      set_fact:
+      ansible.builtin.set_fact:
         theia_ide_workspace: ${HOME}
 
     - name: Install nvm
@@ -49,7 +49,7 @@
         creates: "{{ theiaide_vars.THEIA_INSTALL_DIR }}"
 
     - name: Set facts for templates
-      set_fact:
+      ansible.builtin.set_fact:
         theia_ide_install_dir: "{{ theiaide_vars.THEIA_INSTALL_DIR }}"
         theia_ide_bind_address: "{{ theiaide_vars.THEIA_BIND_ADDRESS }}"
         theia_ide_bind_port: "{{ theiaide_vars.THEIA_BIND_PORT }}"
@@ -68,7 +68,7 @@
         mode: 0644
 
     - name: Enable and Start service
-      systemd:
+      ansible.builtin.systemd:
         name: theia-ide.service
         enabled: true
         state: restarted
