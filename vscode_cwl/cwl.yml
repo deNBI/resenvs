@@ -1,7 +1,7 @@
 ---
 - name: Install required system packages
   apt: name={{ item }} state=latest update_cache=yes
-  loop: ['graphviz','wget','git','git-lfs','nodejs']
+  loop: ['graphviz', 'wget', 'git', 'git-lfs', 'nodejs']
 
 - name: Install CWLtool
   pip:
