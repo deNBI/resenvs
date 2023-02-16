@@ -11,10 +11,10 @@ protocol: tcp
 securitygroup_name: _vscode
 securitygroup_description: VsCode
 securitygroup_ssh: false
-title: Visual Studio Code
-description: Visual Studio Code combines the simplicity of a code editor with what developers need for their core edit-build-debug cycle.
+title: Visual Studio Code - CWL
+description: Visual Studio Code with Common Workflow Language development tools preinstalled.
 
 logo_url: ""
 info_url: ""
 information_for_display:
-  version: v4.10.0
+  version: "4.8.3"
