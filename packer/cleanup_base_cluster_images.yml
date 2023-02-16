@@ -17,7 +17,7 @@
 
     - name: Set Ubuntu 18 Master Images
       ansible.builtin.set_fact:
-        ubuntu18_master_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag) | \
+        ubuntu18_master_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
          selectattr('tags', 'search', 'master') | selectattr('tags', 'search',\
           \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
@@ -25,7 +25,7 @@
 
     - name: Set Ubuntu 20 Master Images
       ansible.builtin.set_fact:
-        ubuntu20_master_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag) | \
+        ubuntu20_master_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
          selectattr('tags', 'search', 'master') | selectattr('tags', 'search', 'cluster') | \
           json_query(filter) | sort(attribute='created_at') }}"
       vars:
@@ -33,7 +33,7 @@
 
     - name: Set Ubuntu 22 Master Images
       ansible.builtin.set_fact:
-        ubuntu22_master_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag) | \
+        ubuntu22_master_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
          selectattr('tags', 'search', 'master') | selectattr('tags', 'search', 'cluster') | \
           json_query(filter) | sort(attribute='created_at') }}"
       vars:
@@ -41,7 +41,7 @@
 
     - name: Set Ubuntu 18 Worker Images
       ansible.builtin.set_fact:
-        ubuntu18_worker_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag) | \
+        ubuntu18_worker_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
          selectattr('tags', 'search', 'worker') | selectattr('tags', 'search',\
           \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
@@ -49,7 +49,7 @@
 
     - name: Set Ubuntu 20 Worker Images
       ansible.builtin.set_fact:
-        ubuntu20_worker_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag) | \
+        ubuntu20_worker_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
          selectattr('tags', 'search', 'worker') | selectattr('tags', 'search',\
           \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
@@ -57,7 +57,7 @@
 
     - name: Set Ubuntu 22 Worker Images
       ansible.builtin.set_fact:
-        ubuntu22_worker_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag) | \
+        ubuntu22_worker_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
          selectattr('tags', 'search', 'worker') | selectattr('tags', 'search',\
           \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
