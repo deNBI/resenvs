@@ -27,6 +27,8 @@
     - name: Get md5 Hash from resenv folder
       ansible.builtin.shell: set -o pipefail && find ../{{ resenv }} -type f -exec md5sum {} \; | md5sum
       register: md5_hash
+      args:
+        executable: /bin/bash
       changed_when: false
 
 
@@ -48,14 +50,14 @@
 
     - name: Set Cluster Base Images
       ansible.builtin.set_fact:
-        cluster_base_images: "{{ images.image | selectattr('tags', 'search', base_cluster_tag) | \
+        cluster_base_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
          selectattr('tags', 'search', 'cluster') | selectattr('tags', 'search', 'master') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
 
     - name: Set Resens Base Cluster Images
       ansible.builtin.set_fact:
-        cluster_resenv_images: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag']) | \
+        cluster_resenv_images: "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag']) | \
          selectattr('tags', 'search', 'cluster') | selectattr('tags', 'search', 'master') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"

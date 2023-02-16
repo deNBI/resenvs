@@ -18,6 +18,11 @@
       openstack.cloud.image_info:
       register: images
 
+    - name: Debug
+      ansible.builtin.debug:
+        msg:
+        - "{{ images }}"
+
     - name: Get Latest Master Branch Commit
       ansible.builtin.command: git rev-parse --short --verify origin/master
       register: github_hash
@@ -26,6 +31,8 @@
     - name: Get md5 Hash from resenv folder
       ansible.builtin.shell: set -o pipefail &&  find ../{{ resenv }} -type f -exec md5sum {} \; | md5sum
       register: md5_hash
+      args:
+        executable: /bin/bash
       changed_when: false
 
     - name: Include {{ resenv }} metadata
@@ -45,13 +52,13 @@
 
     - name: Set Base Images
       ansible.builtin.set_fact:
-        base_images: "{{ images.image | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
+        base_images: "{{ images.images | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
 
     - name: Set Resens Images
       ansible.builtin.set_fact:
-        resenv_images: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag']) | \
+        resenv_images: "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag']) | \
          rejectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at')\
           \ }}"
       vars:
