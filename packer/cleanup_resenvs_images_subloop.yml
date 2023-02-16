@@ -11,7 +11,7 @@
                   | selectattr('os_distro', '==', 'ubuntu')
                   | selectattr('os_version', '==', '18.04')
                   | map(attribute='properties')
-                  | sum (start[])
+                  | sum (start=[])
                   | selectattr('image_type', '==', 'image')
                   | sort(attribute='created_at') }}"
   when:
@@ -31,7 +31,7 @@
                   | selectattr('os_version', '==', '20.04')
                   | rejectattr('tags', 'search', 'cluster')
                   | map(attribute='properties')
-                  | sum (start[])
+                  | sum (start=[])
                   | selectattr('image_type', '==', 'image')
                   | sort(attribute='created_at') }}"
   when:
@@ -50,7 +50,7 @@
                   | selectattr('os_distro', '==', 'ubuntu')
                   | selectattr('os_version', '==', '22.04')
                   | map(attribute='properties')
-                  | sum (start[])
+                  | sum (start=[])
                   | selectattr('image_type', '==', 'image')
                   | rejectattr('tags', 'search', 'cluster')
                   | sort(attribute='created_at') }}"
@@ -72,7 +72,7 @@
                  | selectattr('os_distro', '==', 'ubuntu')
                  | selectattr('os_version', '==', '18.04')
                  | map(attribute='properties')
-                 | sum (start[])
+                 | sum (start=[])
                  | selectattr('image_type', '==', 'image')
                  | sort(attribute='created_at') }}"
   when:
@@ -93,7 +93,7 @@
                  | selectattr('os_distro', '==', 'ubuntu')
                  | selectattr('os_version', '==', '20.04')
                  | map(attribute='properties')
-                 | sum (start[])
+                 | sum (start=[])
                  | selectattr('image_type', '==', 'image')
                  | sort(attribute='created_at') }}"
   when:
@@ -114,7 +114,7 @@
                   | selectattr('os_distro', '==', 'ubuntu')
                   | selectattr('os_version', '==', '22.04')
                   | map(attribute='properties')
-                  | sum (start[])
+                  | sum (start=[])
                   | selectattr('image_type', '==', 'image')
                   | sort(attribute='created_at') }}"
   when:
