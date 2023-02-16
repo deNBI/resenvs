@@ -7,9 +7,8 @@
   loop_control:
     index_var: index
   vars:
-    resenv_list: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('image_type', '==', 'image') | \
-     selectattr('os_distro', '==', 'ubuntu') | selectattr('os_version', '==', '18.04') | rejectattr('tags', 'search', 'cluster') | \
-      sort(attribute='created_at') }}"
+    resenv_list: "{{ images.images| selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('image_type', '==', 'image') | selectattr('os_distro', '==',\
+      \ 'ubuntu') | selectattr('os_version', '==', '18.04') | rejectattr('tags', 'search', 'cluster') | sort(attribute='created_at') }}"
   when:
     - resenv_list | length > limit | int
     - index < resenv_list | length - limit | int
@@ -22,9 +21,8 @@
   loop_control:
     index_var: index
   vars:
-    resenv_list: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('image_type', '==', 'image') | \
-     selectattr('os_distro', '==', 'ubuntu') | selectattr('os_version', '==', '20.04') | \
-      rejectattr('tags', 'search', 'cluster') | sort(attribute='created_at') }}"
+    resenv_list: "{{ images.images| selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('image_type', '==', 'image') | selectattr('os_distro', '==',\
+      \ 'ubuntu') | selectattr('os_version', '==', '20.04') | rejectattr('tags', 'search', 'cluster') | sort(attribute='created_at') }}"
   when:
     - resenv_list | length > limit | int
     - index < resenv_list | length - limit | int
@@ -37,9 +35,8 @@
   loop_control:
     index_var: index
   vars:
-    resenv_list: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('image_type', '==', 'image') | \
-     selectattr('os_distro', '==', 'ubuntu') | selectattr('os_version', '==', '22.04') | \
-      rejectattr('tags', 'search', 'cluster') | sort(attribute='created_at') }}"
+    resenv_list: "{{ images.images| selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('image_type', '==', 'image') | selectattr('os_distro', '==',\
+      \ 'ubuntu') | selectattr('os_version', '==', '22.04') | rejectattr('tags', 'search', 'cluster') | sort(attribute='created_at') }}"
   when:
     - resenv_list | length > limit | int
     - index < resenv_list | length - limit | int
@@ -52,9 +49,9 @@
   loop_control:
     index_var: index
   vars:
-    resenv_list: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('tags', 'search', 'cluster') | \
-     selectattr('tags', 'search', 'master') | selectattr('os_distro', '==', 'ubuntu') | \
-      selectattr('os_version', '==', '18.04') | selectattr('image_type', '==', 'image') | sort(attribute='created_at') }}"
+    resenv_list: "{{ images.images| selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('tags', 'search', 'cluster') | selectattr('tags', 'search', 'master')\
+      \ | selectattr('os_distro', '==', 'ubuntu') | selectattr('os_version', '==', '18.04') | selectattr('image_type', '==', 'image') | sort(attribute='created_at')\
+      \ }}"
   when:
     - resenv_list | length > limit | int
     - index < resenv_list | length - limit | int
@@ -67,9 +64,9 @@
   loop_control:
     index_var: index
   vars:
-    resenv_list: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('tags', 'search', 'cluster') | \
-     selectattr('tags', 'search', 'master') | selectattr('os_distro', '==', 'ubuntu') | \
-      selectattr('os_version', '==', '20.04') | selectattr('image_type', '==', 'image') | sort(attribute='created_at') }}"
+    resenv_list: "{{ images.images| selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('tags', 'search', 'cluster') | selectattr('tags', 'search', 'master')\
+      \ | selectattr('os_distro', '==', 'ubuntu') | selectattr('os_version', '==', '20.04') | selectattr('image_type', '==', 'image') | sort(attribute='created_at')\
+      \ }}"
   when:
     - resenv_list | length > limit | int
     - index < resenv_list | length - limit | int
@@ -82,9 +79,9 @@
   loop_control:
     index_var: index
   vars:
-    resenv_list: "{{ images.image | selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('tags', 'search', 'cluster') | \
-     selectattr('tags', 'search', 'master') | selectattr('os_distro', '==', 'ubuntu') | \
-      selectattr('os_version', '==', '22.04') | selectattr('image_type', '==', 'image') | sort(attribute='created_at') }}"
+    resenv_list: "{{ images.images| selectattr('tags', 'search', vars[resenv + '_tag']) | selectattr('tags', 'search', 'cluster') | selectattr('tags', 'search', 'master')\
+      \ | selectattr('os_distro', '==', 'ubuntu') | selectattr('os_version', '==', '22.04') | selectattr('image_type', '==', 'image') | sort(attribute='created_at')\
+      \ }}"
   when:
     - resenv_list | length > limit | int
     - index < resenv_list | length - limit | int
