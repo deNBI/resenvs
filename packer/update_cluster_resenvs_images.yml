@@ -47,23 +47,21 @@
 
     - name: Set Cluster Base Images
       ansible.builtin.set_fact:
-        cluster_base_images: >-
-          "{{ images.images | selectattr('tags', 'search', base_cluster_tag)
-          | selectattr('tags', 'search', 'cluster')
-          | selectattr('tags', 'search', 'master')
-          | selectattr('os_distro', '==', os_distro)
-          | selectattr('os_version', '==', os_version)
-          | sort(attribute='created_at') }}"
+        cluster_base_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag)
+                              | selectattr('tags', 'search', 'cluster')
+                              | selectattr('tags', 'search', 'master')
+                              | selectattr('os_distro', '==', os_distro)
+                              | selectattr('os_version', '==', os_version)
+                              | sort(attribute='created_at') }}"
 
     - name: Set Resens Base Cluster Images
       ansible.builtin.set_fact:
-        cluster_resenv_images: >-
-          "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag'])
-          | selectattr('tags', 'search', 'cluster')
-          | selectattr('tags', 'search', 'master')
-          | selectattr('os_distro', '==', os_distro)
-          | selectattr('os_version', '==', os_version)
-          | sort(attribute='created_at') }}"
+        cluster_resenv_images: "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag'])
+                                | selectattr('tags', 'search', 'cluster')
+                                | selectattr('tags', 'search', 'master')
+                                | selectattr('os_distro', '==', os_distro)
+                                | selectattr('os_version', '==', os_version)
+                                | sort(attribute='created_at') }}"
 
 
     - name: Set Update facts
@@ -78,10 +76,9 @@
           and (cluster_resenv_images  | last).md5_hash|default ('undefined')  != md5_hash.stdout)
 
     - name: Build new {{ resenv }} cluster master image - {{ os_distro }} {{ os_version }}
-      ansible.builtin.command: >-
-          packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json
-          -var 'os_distro={{ os_distro }}' -var 'github_hash={{ github_hash.stdout }}'
-          -var 'md5_hash={{ md5_hash.stdout }}' -var 'os_version={{ os_version }}'
-          -var 'network={{ vars[location + '_' + upload_environment] }}'
-          ../{{ resenv }}/packer_cluster_{{ vars[resenv + '_tag'] }}.json
+      ansible.builtin.command: packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json
+                               -var 'os_distro={{ os_distro }}' -var 'github_hash={{ github_hash.stdout }}'
+                               -var 'md5_hash={{ md5_hash.stdout }}' -var 'os_version={{ os_version }}'
+                               -var 'network={{ vars[location + '_' + upload_environment] }}'
+                                ../{{ resenv }}/packer_cluster_{{ vars[resenv + '_tag'] }}.json
       when: update
