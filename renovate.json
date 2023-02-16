@@ -7,10 +7,12 @@
    "regexManagers":[
       {
          "fileMatch":[
-            "rstudio/rstudio_vars_file\\.yml"
+            "rstudio/rstudio_vars_file\\.yml",
+            "resenvs/rstudio/rstudio_metadata\\.yml"
          ],
          "matchStrings":[
-            "RSTUDIO_VERSION: (?<currentValue>.*?)\\n"
+            "RSTUDIO_VERSION: (?<currentValue>.*?)\\n",
+            "version: (?<currentValue>.*?)\\n"
          ],
          "depNameTemplate":"rstudio/rstudio",
          "datasourceTemplate":"github-tags",
@@ -18,10 +20,12 @@
       },
       {
          "fileMatch":[
-            "vscode/vscode_vars_file\\.yml"
+            "vscode/vscode_vars_file\\.yml",
+            "resenvs/vscode/vscode_metadata\\.yml"
          ],
          "matchStrings":[
             "VSCODE_VERSION: (?<currentValue>.*?)\\n"
+            "version: (?<currentValue>.*?)\\n"
          ],
          "depNameTemplate":"coder/code-server",
          "datasourceTemplate":"github-tags"
