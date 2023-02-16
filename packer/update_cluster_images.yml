@@ -29,13 +29,12 @@
           {{
             images.images
             | selectattr('tags', 'search', base_image_tag)
-            | json_query(filter)
+            | selectattr('os_distro', '==', os_distro)
+            | selectattr('os_version', '==', os_version)
             | sort(attribute='created_at')
           }}
 
-      vars:
-        filter: >-
-          "[os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
+
 
     - name: Set Cluster {{ cluster_type }} Images
       ansible.builtin.set_fact:
@@ -43,13 +42,11 @@
           {{
             images.images
             | selectattr('tags', 'search', '{{ cluster_type }}')
-            | json_query(filter)
+            | selectattr('os_distro', '==', os_distro)
+            | selectattr('os_version', '==', os_version)
             | sort(attribute='created_at')
           }}
 
-      vars:
-        filter: >-
-          "[os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
     - name: Set Update facts
       ansible.builtin.set_fact:

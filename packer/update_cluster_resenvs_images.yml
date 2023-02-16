@@ -48,22 +48,23 @@
     - name: Set Cluster Base Images
       ansible.builtin.set_fact:
         cluster_base_images: >-
-          "{{ images.images | selectattr('tags', 'search', base_cluster_tag) |
-          selectattr('tags', 'search', 'cluster') |
-          selectattr('tags', 'search', 'master') |
-          json_query(filter) | sort(attribute='created_at') }}"
-      vars:
-        filter: "[os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
+          "{{ images.images | selectattr('tags', 'search', base_cluster_tag)
+          | selectattr('tags', 'search', 'cluster')
+          | selectattr('tags', 'search', 'master')
+          | selectattr('os_distro', '==', os_distro)
+          | selectattr('os_version', '==', os_version)
+          | sort(attribute='created_at') }}"
 
     - name: Set Resens Base Cluster Images
       ansible.builtin.set_fact:
         cluster_resenv_images: >-
-          "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag']) |
-          selectattr('tags', 'search', 'cluster') |
-          selectattr('tags', 'search', 'master') |
-          json_query(filter) | sort(attribute='created_at') }}"
-      vars:
-        filter: "[os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
+          "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag'])
+          | selectattr('tags', 'search', 'cluster')
+          | selectattr('tags', 'search', 'master')
+          | selectattr('os_distro', '==', os_distro)
+          | selectattr('os_version', '==', os_version)
+          | sort(attribute='created_at') }}"
+
 
     - name: Set Update facts
       ansible.builtin.set_fact:
