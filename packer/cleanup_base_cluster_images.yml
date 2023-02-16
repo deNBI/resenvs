@@ -25,12 +25,12 @@
              json_query(item.3) |
              sort(attribute='created_at') }}
       loop:
-        - [ubuntu, "18.04", master, "[?os_distro=='ubuntu' && ?os_version=='18.04']"]
-        - [ubuntu, "20.04", master, "[?os_distro=='ubuntu' && ?os_version=='20.04']"]
-        - [ubuntu, "22.04", master, "[?os_distro=='ubuntu' && ?os_version=='22.04']"]
-        - [ubuntu, "18.04", worker, "[?os_distro=='ubuntu' && ?os_version=='18.04']"]
-        - [ubuntu, "20.04", worker, "[?os_distro=='ubuntu' && ?os_version=='20.04']"]
-        - [ubuntu, "22.04", worker, "[?os_distro=='ubuntu' && ?os_version=='22.04']"]
+        - [ubuntu, "18.04", master, "[os_distro=='ubuntu' && os_version=='18.04']"]
+        - [ubuntu, "20.04", master, "[os_distro=='ubuntu' && os_version=='20.04']"]
+        - [ubuntu, "22.04", master, "[os_distro=='ubuntu' && os_version=='22.04']"]
+        - [ubuntu, "18.04", worker, "[os_distro=='ubuntu' && os_version=='18.04']"]
+        - [ubuntu, "20.04", worker, "[os_distro=='ubuntu' && os_version=='20.04']"]
+        - [ubuntu, "22.04", worker, "[os_distro=='ubuntu' && os_version=='22.04']"]
       vars:
         cluster_tag: "{{ item.1 }}_{{ item.2 }}"
 

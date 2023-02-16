@@ -50,7 +50,7 @@
       ansible.builtin.set_fact:
         base_images: "{{ images.images | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
+        filter: "[os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
     - name: Set Resens Images
       ansible.builtin.set_fact:
@@ -58,7 +58,7 @@
          rejectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at')\
           \ }}"
       vars:
-        filter: "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
+        filter: "[os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
     - name: Set Update facts
       ansible.builtin.set_fact:

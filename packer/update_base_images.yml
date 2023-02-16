@@ -26,7 +26,7 @@
       ansible.builtin.set_fact:
         base_images: "{{ images.images | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
+        filter: "[os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
     - name: Set Update  Fact
       ansible.builtin.set_fact:

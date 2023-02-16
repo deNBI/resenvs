@@ -35,7 +35,7 @@
 
       vars:
         filter: >-
-          "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
+          "[os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
     - name: Set Cluster {{ cluster_type }} Images
       ansible.builtin.set_fact:
@@ -49,7 +49,7 @@
 
       vars:
         filter: >-
-          "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
+          "[os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
     - name: Set Update facts
       ansible.builtin.set_fact:
