@@ -53,17 +53,39 @@
         update_cache: true
         autoremove: true
         autoclean: true
-    - name: Install Python3-Pip
+
+    # quickfix for base images
+    - name: Del pip
+      ansible.builtin.apt:
+        name: python3-pip
+        state: absent
+    - name: Pip
       ansible.builtin.apt:
         name: python3-pip
         state: latest
+
+    - name: Update pip
+      ansible.builtin.pip:
+        name: pip
+        state: latest
     - name: Install additional docker python libraries
       ansible.builtin.pip:
-        name: "{{ item }}"
-        state: latest
-      loop:
-        - cryptography
-        - pyOpenssl
+        name:
+          - cryptography>=39.0
+          - pyOpenssl>=22.0
+
+    - name: Install additional docker python libraries
+      ansible.builtin.pip:
+        name:
+          - cryptography>=39.0
+          - pyOpenssl>=22.0
+
+    - name: Install additional docker python libraries
+      ansible.builtin.pip:
+        name:
+          - cryptography>=39.0
+          - pyOpenssl>=22.0
+
 
   tasks:
     - name: Include {{ resenv }} variables

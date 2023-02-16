@@ -1,5 +1,5 @@
 ---
-template_name: vscode_cwl
+template_name: vscode
 needs_forc_support: true
 is_maintained: true
 port: 3000
@@ -8,8 +8,8 @@ forc_versions:
 incompatible_versions: []
 direction: ingress
 protocol: tcp
-securitygroup_name: _vscode_cwl
-securitygroup_description: VsCode-CWL
+securitygroup_name: _vscode
+securitygroup_description: VsCode
 securitygroup_ssh: false
 title: Visual Studio Code - CWL
 description: Visual Studio Code with Common Workflow Language development tools preinstalled.
