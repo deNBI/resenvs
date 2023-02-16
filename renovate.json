@@ -22,7 +22,7 @@
          "fileMatch":[
             "vscode/vscode_vars_file\\.yml",
             "vscode/vscode_metadata\\.yml",
-            "vscode/vscode_cwl_metadata\\.yml"
+            "vscode_cwl/vscode_cwl_metadata\\.yml"
          ],
          "matchStrings":[
             "VSCODE_VERSION: (?<currentValue>.*?)\\n",
