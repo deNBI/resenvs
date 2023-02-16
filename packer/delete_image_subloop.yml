@@ -1,9 +1,13 @@
 ---
+- name: Debug images variable
+  debug:
+    var: filtered_images
+
 - name: Cleanup Images
   openstack.cloud.image:
     name: "{{item.id}}"
     state: absent
-  loop: "{{images}}"
+  loop: "{{filtered_images}}"
   loop_control:
     index_var: index
   when:
