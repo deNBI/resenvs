@@ -18,6 +18,11 @@
       openstack.cloud.image_info:
       register: images
 
+    - name: Debug
+      ansible.builtin.debug:
+        msg:
+        - "{{ images }}"
+
     - name: Get Latest Master Branch Commit
       ansible.builtin.command: git rev-parse --short --verify origin/master
       register: github_hash
