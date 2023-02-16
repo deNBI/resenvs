@@ -18,17 +18,17 @@
     - ansible.builtin.set_fact:
         ubuntu18_images: "{{ images.images | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?os_distro=='ubuntu' && os_version=='18.04']"
+        filter: "[os_version=='ubuntu' && os_version=='18.04']"
 
     - ansible.builtin.set_fact:
         ubuntu20_images: "{{ images.images | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?os_distro=='ubuntu' && os_version=='20.04']"
+        filter: "[os_version=='ubuntu' && os_version=='20.04']"
 
     - ansible.builtin.set_fact:
         ubuntu22_images: "{{ images.images | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?os_distro=='ubuntu' && os_version=='22.04']"
+        filter: "[os_version=='ubuntu' && os_version=='22.04']"
 
     - name: Clean up old Ubuntu 18.04 images
       openstack.cloud.image:

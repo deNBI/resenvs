@@ -21,7 +21,7 @@
          selectattr('tags', 'search', 'master') | selectattr('tags', 'search',\
           \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?os_distro=='ubuntu' && os_version=='18.04']"
+        filter: "[os_version=='ubuntu' && os_version=='18.04']"
 
     - name: Set Ubuntu 20 Master Images
       ansible.builtin.set_fact:
@@ -29,7 +29,7 @@
          selectattr('tags', 'search', 'master') | selectattr('tags', 'search', 'cluster') | \
           json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?os_distro=='ubuntu' && os_version=='20.04']"
+        filter: "[os_version=='ubuntu' && os_version=='20.04']"
 
     - name: Set Ubuntu 22 Master Images
       ansible.builtin.set_fact:
@@ -37,7 +37,7 @@
          selectattr('tags', 'search', 'master') | selectattr('tags', 'search', 'cluster') | \
           json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?os_distro=='ubuntu' && os_version=='22.04']"
+        filter: "[os_version=='ubuntu' && os_version=='22.04']"
 
     - name: Set Ubuntu 18 Worker Images
       ansible.builtin.set_fact:
@@ -45,7 +45,7 @@
          selectattr('tags', 'search', 'worker') | selectattr('tags', 'search',\
           \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?os_distro=='ubuntu' && os_version=='18.04']"
+        filter: "[os_version=='ubuntu' && os_version=='18.04']"
 
     - name: Set Ubuntu 20 Worker Images
       ansible.builtin.set_fact:
@@ -53,7 +53,7 @@
          selectattr('tags', 'search', 'worker') | selectattr('tags', 'search',\
           \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?os_distro=='ubuntu' && os_version=='20.04']"
+        filter: "[os_version=='ubuntu' && os_version=='20.04']"
 
     - name: Set Ubuntu 22 Worker Images
       ansible.builtin.set_fact:
@@ -61,7 +61,7 @@
          selectattr('tags', 'search', 'worker') | selectattr('tags', 'search',\
           \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?os_distro=='ubuntu' && os_version=='22.04']"
+        filter: "[os_version=='ubuntu' && os_version=='22.04']"
 
     - name: Clean up old Ubuntu 18.04 Master images
       openstack.cloud.image:
