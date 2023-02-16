@@ -17,14 +17,13 @@
 
     - name: Set images by OS distro and version
       ansible.builtin.set_fact:
-        "{{ item.0 }}_{{ item.1.replace('.', '_')  }}_{{ item.2 }}images": >-
+        "{{ item.0 }}_{{ item.1.replace('.', '_')  }}_{{ item.2 }}_images": >-
           {{ images.images
            | selectattr('tags', 'search', base_cluster_tag)
            | selectattr('os_distro', '==', item.0)
            | selectattr('os_version', '==', item.1)
            | selectattr('tags', 'search', item.2)
            | selectattr('tags', 'search', 'cluster')
-
            | sort(attribute='created_at') }}
       loop:
         - [ubuntu, "18.04", master]
@@ -36,11 +35,70 @@
       vars:
         filter: "[?properties.image_type=='image']"
 
-    - include: delete_image_subloop.yml
-      with_items:
-        - ubuntu_18_04_worker_images
-        - ubuntu_20_04_worker_images
-        - ubuntu_22_04_worker_images
-        - ubuntu_18_04_master_images
-        - ubuntu_20_04_master_images
-        - ubuntu_22_04_master_images
+    - name: Clean up old Ubuntu 18 Worker images
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ ubuntu_18_04_worker_images }}"
+      loop_control:
+        index_var: index
+      when:
+        - ubuntu_18_04_worker_images | length > limit | int
+        - index < ubuntu_18_04_worker_images | length - limit | int
+
+    - name: Clean up old Ubuntu 20 Worker images
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ ubuntu_20_04_worker_images }}"
+      loop_control:
+        index_var: index
+      when:
+        - ubuntu_20_04_worker_images | length > limit | int
+        - index < ubuntu_20_04_worker_images | length - limit | int
+
+    - name: Clean up old Ubuntu 22 Worker images
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ ubuntu_22_04_worker_images }}"
+      loop_control:
+        index_var: index
+      when:
+        - ubuntu_22_04_worker_images | length > limit | int
+        - index < ubuntu_22_04_worker_images | length - limit | int
+
+
+    - name: Clean up old Ubuntu 18 master images
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ ubuntu_18_04_master_images }}"
+      loop_control:
+        index_var: index
+      when:
+        - ubuntu_18_04_master_images | length > limit | int
+        - index < ubuntu_18_04_master_images | length - limit | int
+
+    - name: Clean up old Ubuntu 20 Worker images
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ ubuntu_20_04_master_images }}"
+      loop_control:
+        index_var: index
+      when:
+        - ubuntu_20_04_master_images | length > limit | int
+        - index < ubuntu_20_04_master_images | length - limit | int
+
+    - name: Clean up old Ubuntu 22 Worker images
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ ubuntu_22_04_master_images }}"
+      loop_control:
+        index_var: index
+      when:
+        - ubuntu_22_04_master_images | length > limit | int
+        - index < ubuntu_22_04_master _images | length - limit | int
+
