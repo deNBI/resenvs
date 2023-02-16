@@ -17,32 +17,30 @@
 
     - name: Set images by OS distro and version
       ansible.builtin.set_fact:
-        "{{ item.0 }}_{{ item.1 }}_images": >-
-          {{ images.images |
-             selectattr('tags', 'search', base_cluster_tag) |
-             selectattr('tags', 'search', item.2) |
-             selectattr('tags', 'search', 'cluster') |
-             json_query(item.3) |
-             sort(attribute='created_at') }}
-      loop:
-        - [ubuntu, "18.04", master, "[os_distro=='ubuntu' && os_version=='18.04']"]
-        - [ubuntu, "20.04", master, "[os_distro=='ubuntu' && os_version=='20.04']"]
-        - [ubuntu, "22.04", master, "[os_distro=='ubuntu' && os_version=='22.04']"]
-        - [ubuntu, "18.04", worker, "[os_distro=='ubuntu' && os_version=='18.04']"]
-        - [ubuntu, "20.04", worker, "[os_distro=='ubuntu' && os_version=='20.04']"]
-        - [ubuntu, "22.04", worker, "[os_distro=='ubuntu' && os_version=='22.04']"]
-      vars:
-        cluster_tag: "{{ item.1 }}_{{ item.2 }}"
+        "{{ item.0 }}_{{ item.1.replace('.', '_')  }}_{{ item.2 }}images": >-
+          {{ images.images
+           | selectattr('tags', 'search', base_cluster_tag)
+           | selectattr('os_distro', '==', item.0)
+           | selectattr('os_version', '==', item.1)
+           | selectattr('tags', 'search', item.2)
+           | selectattr('tags', 'search', 'cluster')
 
-    - name: Clean up old images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ query('dict', images) | dict2items | json_query(query) }}"
-      loop_control:
-        index_var: index
-      when:
-        - query('dict', images) | dict2items | json_query(query) | length > limit | int
-        - index < query('dict', images) | dict2items | json_query(query) | length - limit | int
+           | sort(attribute='created_at') }}
+      loop:
+        - [ubuntu, "18.04", master]
+        - [ubuntu, "20.04", master]
+        - [ubuntu, "22.04", master]
+        - [ubuntu, "18.04", worker]
+        - [ubuntu, "20.04", worker]
+        - [ubuntu, "22.04", worker]
       vars:
-        query: keys(@) | select(@ contains '{{ item.1 }}_{{ item.2 }}_images') | @[]
+        filter: "[?properties.image_type=='image']"
+
+    - include: delete_image_subloop.yml
+      with_items:
+        - ubuntu_18_04_worker_images
+        - ubuntu_20_04_worker_images
+        - ubuntu_22_04_worker_images
+        - ubuntu_18_04_master_images
+        - ubuntu_20_04_master_images
+        - ubuntu_22_04_master_images

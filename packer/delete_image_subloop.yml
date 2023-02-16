@@ -1,0 +1,11 @@
+---
+- name: Cleanup Images
+  openstack.cloud.image:
+    name: "{{item.id}}"
+    state: absent
+  loop: "{{images}}"
+  loop_control:
+    index_var: index
+  when:
+    - images | length > limit | int
+    - index < images | length - limit | int
