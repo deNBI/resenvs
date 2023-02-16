@@ -23,34 +23,48 @@
       register: github_hash
       changed_when: false
 
-
     - name: Set Base Images
       ansible.builtin.set_fact:
-        base_images: "{{ images.images | selectattr('tags', 'search', base_image_tag) | json_query(filter) | \
-         sort(attribute='created_at') }}"
-
+        base_images: >-
+          {{
+            images.images
+            | selectattr('tags', 'search', base_image_tag)
+            | json_query(filter)
+            | sort(attribute='created_at')
+          }}
 
       vars:
-        filter: "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
+        filter: >-
+          "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
     - name: Set Cluster {{ cluster_type }} Images
       ansible.builtin.set_fact:
-        cluster_images: "{{ images.images | selectattr('tags', 'search', '{{ cluster_type }}') | json_query(filter) | \
-         sort(attribute='created_at') }}"
+        cluster_images: >-
+          {{
+            images.images
+            | selectattr('tags', 'search', '{{ cluster_type }}')
+            | json_query(filter)
+            | sort(attribute='created_at')
+          }}
+
       vars:
-        filter: "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
+        filter: >-
+          "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
     - name: Set Update facts
       ansible.builtin.set_fact:
         update: true
       when:
         - base_images | length > 0
-        - cluster_images | length == 0 or (cluster_images | length > 0 \
-         and (cluster_images | last).created_at > (cluster_images | last).created_at) or cluster_images
-          | length > 0 and (cluster_images | last).github_hash|default ('undefined')  != github_hash.stdout)
+        - cluster_images | length == 0 or (cluster_images | length > 0
+          and (cluster_images | last).created_at > (cluster_images | last).created_at)
+          or cluster_images | length > 0 and
+          (cluster_images | last).github_hash | default('undefined') != github_hash.stdout
 
-    - name: Build new  Cluster [{{ cluster_type }}] image - {{ os_distro }} {{ os_version }}
-      ansible.builtin.command: packer build -var-file=tags.json -var 'os_distro={{ os_distro }}' -var \
-       'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version
-        }}' -var 'network={{ vars[location + '_' + upload_environment] }}' ../cluster/packer_{{ cluster_type }}.json
+    - name: Build new Cluster [{{ cluster_type }}] image - {{ os_distro }} {{ os_version }}
+      ansible.builtin.command: >-
+        packer build -var-file=tags.json -var 'os_distro={{ os_distro }}'
+        -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}'
+        -var 'network={{ vars[location + '_' + upload_environment] }}'
+        ../cluster/packer_{{ cluster_type }}.json
       when: update

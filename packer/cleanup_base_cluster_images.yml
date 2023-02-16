@@ -15,116 +15,34 @@
       openstack.cloud.image_info:
       register: images
 
-    - name: Set Ubuntu 18 Master Images
+    - name: Set images by OS distro and version
       ansible.builtin.set_fact:
-        ubuntu18_master_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
-         selectattr('tags', 'search', 'master') | selectattr('tags', 'search',\
-          \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
+        "{{ item.0 }}_{{ item.1 }}_images": >-
+          {{ images.images |
+             selectattr('tags', 'search', base_cluster_tag) |
+             selectattr('tags', 'search', item.2) |
+             selectattr('tags', 'search', 'cluster') |
+             json_query(item.3) |
+             sort(attribute='created_at') }}
+      loop:
+        - [ubuntu, "18.04", master, "[?os_distro=='ubuntu' && ?os_version=='18.04']"]
+        - [ubuntu, "20.04", master, "[?os_distro=='ubuntu' && ?os_version=='20.04']"]
+        - [ubuntu, "22.04", master, "[?os_distro=='ubuntu' && ?os_version=='22.04']"]
+        - [ubuntu, "18.04", worker, "[?os_distro=='ubuntu' && ?os_version=='18.04']"]
+        - [ubuntu, "20.04", worker, "[?os_distro=='ubuntu' && ?os_version=='20.04']"]
+        - [ubuntu, "22.04", worker, "[?os_distro=='ubuntu' && ?os_version=='22.04']"]
       vars:
-        filter: "[?os_distro=='ubuntu' && ?os_version=='18.04']"
+        cluster_tag: "{{ item.1 }}_{{ item.2 }}"
 
-    - name: Set Ubuntu 20 Master Images
-      ansible.builtin.set_fact:
-        ubuntu20_master_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
-         selectattr('tags', 'search', 'master') | selectattr('tags', 'search', 'cluster') | \
-          json_query(filter) | sort(attribute='created_at') }}"
-      vars:
-        filter: "[?os_distro=='ubuntu' && ?os_version=='20.04']"
-
-    - name: Set Ubuntu 22 Master Images
-      ansible.builtin.set_fact:
-        ubuntu22_master_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
-         selectattr('tags', 'search', 'master') | selectattr('tags', 'search', 'cluster') | \
-          json_query(filter) | sort(attribute='created_at') }}"
-      vars:
-        filter: "[?os_distro=='ubuntu' && ?os_version=='22.04']"
-
-    - name: Set Ubuntu 18 Worker Images
-      ansible.builtin.set_fact:
-        ubuntu18_worker_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
-         selectattr('tags', 'search', 'worker') | selectattr('tags', 'search',\
-          \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
-      vars:
-        filter: "[?os_distro=='ubuntu' && ?os_version=='18.04']"
-
-    - name: Set Ubuntu 20 Worker Images
-      ansible.builtin.set_fact:
-        ubuntu20_worker_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
-         selectattr('tags', 'search', 'worker') | selectattr('tags', 'search',\
-          \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
-      vars:
-        filter: "[?os_distro=='ubuntu' && ?os_version=='20.04']"
-
-    - name: Set Ubuntu 22 Worker Images
-      ansible.builtin.set_fact:
-        ubuntu22_worker_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
-         selectattr('tags', 'search', 'worker') | selectattr('tags', 'search',\
-          \ 'cluster') | json_query(filter) | sort(attribute='created_at') }}"
-      vars:
-        filter: "[?os_distro=='ubuntu' && ?os_version=='22.04']"
-
-    - name: Clean up old Ubuntu 18.04 Master images
+    - name: Clean up old images
       openstack.cloud.image:
         name: "{{ item.id }}"
         state: absent
-      loop: "{{ ubuntu18_master_images }}"
+      loop: "{{ query('dict', images) | dict2items | json_query(query) }}"
       loop_control:
         index_var: index
       when:
-        - ubuntu18_master_images | length > limit | int
-        - index < ubuntu18_master_images | length - limit | int
-
-    - name: Clean up old Ubuntu 20.04 Master images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ ubuntu20_master_images }}"
-      loop_control:
-        index_var: index
-      when:
-        - ubuntu20_master_images | length > limit | int
-        - index < ubuntu20_master_images | length - limit | int
-
-    - name: Clean up old Ubuntu 22.04  Master images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ ubuntu22_master_images }}"
-      loop_control:
-        index_var: index
-      when:
-        - ubuntu22_master_images | length > limit | int
-        - index < ubuntu22_master_images | length - limit | int
-
-    - name: Clean up old Ubuntu 18.04 Worker images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ ubuntu18_worker_images }}"
-      loop_control:
-        index_var: index
-      when:
-        - ubuntu18_worker_images | length > limit | int
-        - index < ubuntu18_worker_images | length - limit | int
-
-    - name: Clean up old Ubuntu 20.04 Worker images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ ubuntu20_worker_images }}"
-      loop_control:
-        index_var: index
-      when:
-        - ubuntu20_worker_images | length > limit | int
-        - index < ubuntu20_worker_images | length - limit | int
-
-    - name: Clean up old Ubuntu 22.04 Worker images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ ubuntu22_worker_images }}"
-      loop_control:
-        index_var: index
-      when:
-        - ubuntu22_worker_images | length > limit | int
-        - index < ubuntu22_worker_images | length - limit | int
+        - query('dict', images) | dict2items | json_query(query) | length > limit | int
+        - index < query('dict', images) | dict2items | json_query(query) | length - limit | int
+      vars:
+        query: keys(@) | select(@ contains '{{ item.1 }}_{{ item.2 }}_images') | @[]

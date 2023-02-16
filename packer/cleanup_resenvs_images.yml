@@ -22,5 +22,6 @@
         - theiaide
         - vscode
         - jupyterlab
+        - vscode_cwl
       loop_control:
         loop_var: resenv

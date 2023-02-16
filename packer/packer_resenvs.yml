@@ -86,7 +86,6 @@
           - cryptography>=39.0
           - pyOpenssl>=22.0
 
-
   tasks:
     - name: Include {{ resenv }} variables
       ansible.builtin.include_vars:

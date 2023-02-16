@@ -23,7 +23,6 @@
       register: github_hash
       changed_when: false
 
-
     - name: Get md5 Hash from resenv folder
       ansible.builtin.shell: set -o pipefail && find ../{{ resenv }} -type f -exec md5sum {} \; | md5sum
       register: md5_hash
@@ -31,34 +30,38 @@
         executable: /bin/bash
       changed_when: false
 
-
     - name: Include {{ resenv }} metadata
       ansible.builtin.command: cat ../{{ resenv }}/{{ resenv }}_metadata.yml
       register: resenv_metadata
       changed_when: false
 
-
-    - name: Generate JSON from  {{ resenv }} metadata
+    - name: Generate JSON from {{ resenv }} metadata
       ansible.builtin.copy:
         content: "{{ resenv_metadata.stdout | from_yaml | to_json }}"
         dest: ./{{ resenv }}_metadata.json
 
     - name: Convert non string json_metadata values to string
-      ansible.builtin.script: ../packer/convert_json_values_to_string.py --file ./{{ resenv }}_metadata.json
+      ansible.builtin.script: ../packer/convert_json_values_to_string.py --file "./{{ resenv }}_metadata.json"
       args:
         executable: python3
 
     - name: Set Cluster Base Images
       ansible.builtin.set_fact:
-        cluster_base_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag) | \
-         selectattr('tags', 'search', 'cluster') | selectattr('tags', 'search', 'master') | json_query(filter) | sort(attribute='created_at') }}"
+        cluster_base_images: >-
+          "{{ images.images | selectattr('tags', 'search', base_cluster_tag) |
+          selectattr('tags', 'search', 'cluster') |
+          selectattr('tags', 'search', 'master') |
+          json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
     - name: Set Resens Base Cluster Images
       ansible.builtin.set_fact:
-        cluster_resenv_images: "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag']) | \
-         selectattr('tags', 'search', 'cluster') | selectattr('tags', 'search', 'master') | json_query(filter) | sort(attribute='created_at') }}"
+        cluster_resenv_images: >-
+          "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag']) |
+          selectattr('tags', 'search', 'cluster') |
+          selectattr('tags', 'search', 'master') |
+          json_query(filter) | sort(attribute='created_at') }}"
       vars:
         filter: "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
@@ -67,13 +70,17 @@
         update: true
       when:
         - cluster_base_images| length > 0
-        - cluster_resenv_images  | length == 0 or (cluster_resenv_images  | \
-         length > 0 and (cluster_base_images| last).created_at > (cluster_resenv_images  | last).created_at)
-          or (cluster_resenv_images  | length > 0 and (cluster_resenv_images  | last).md5_hash|default ('undefined')  != md5_hash.stdout)
+        - cluster_resenv_images  | length == 0
+          or (cluster_resenv_images  | length > 0
+          and (cluster_base_images| last).created_at > (cluster_resenv_images  | last).created_at)
+          or (cluster_resenv_images  | length > 0
+          and (cluster_resenv_images  | last).md5_hash|default ('undefined')  != md5_hash.stdout)
 
     - name: Build new {{ resenv }} cluster master image - {{ os_distro }} {{ os_version }}
-      ansible.builtin.command: packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json \
-       -var 'os_distro={{ os_distro }}' -var 'github_hash={{ github_hash.stdout }}' \
-        -var 'md5_hash={{ md5_hash.stdout }}' -var 'os_version={{ os_version }}' \
-         -var 'network={{ vars[location + '_' + upload_environment] }}' ../{{ resenv }}/packer_cluster_{{ vars[resenv + '_tag'] }}.json
+      ansible.builtin.command: >-
+          packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json
+          -var 'os_distro={{ os_distro }}' -var 'github_hash={{ github_hash.stdout }}'
+          -var 'md5_hash={{ md5_hash.stdout }}' -var 'os_version={{ os_version }}'
+          -var 'network={{ vars[location + '_' + upload_environment] }}'
+          ../{{ resenv }}/packer_cluster_{{ vars[resenv + '_tag'] }}.json
       when: update
