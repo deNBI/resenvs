@@ -24,7 +24,7 @@
             "resenvs/vscode/vscode_metadata\\.yml"
          ],
          "matchStrings":[
-            "VSCODE_VERSION: (?<currentValue>.*?)\\n"
+            "VSCODE_VERSION: (?<currentValue>.*?)\\n",
             "version: (?<currentValue>.*?)\\n"
          ],
          "depNameTemplate":"coder/code-server",
