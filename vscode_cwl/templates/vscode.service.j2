@@ -1,0 +1,12 @@
+[Unit]
+  Description=VSCode Service
+[Service]
+          Type=simple
+          Restart=always
+          PIDFile=/var/run/vscode.pid
+          ExecStart= /usr/bin/code-server --auth none --disable-telemetry --bind-addr 0.0.0.0:{{vscode_port}}
+          User={{   vscode_default_user  }}
+          Group={{   vscode_default_user  }}
+          WorkingDirectory=/home/{{   vscode_default_user  }}
+[Install]
+  WantedBy=multi-user.target

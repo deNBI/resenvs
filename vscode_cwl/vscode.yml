@@ -1,0 +1,26 @@
+---
+- name: Download Code Server Install Script
+  ansible.builtin.get_url:
+    url: "{{ vscode_vars.INSTALL_SCRIPT_URL }}"
+    dest: /etc/vscode-install.sh
+    mode: '0550'
+
+- name: Run the install script
+  ansible.builtin.shell: /etc/vscode-install.sh --version={{ vscode_vars.VSCODE_VERSION | replace('v', '')}}
+
+- name: Set facts for templates
+  ansible.builtin.set_fact:
+    vscode_default_user: "{{ vscode_vars.DEFAULT_USER  }}"
+    vscode_port: "{{ vscode_vars.PORT  }}"
+
+- name: Generate systemd service
+  template:
+    src: ./templates/vscode.service.j2
+    dest: /lib/systemd/system/vscode.service
+    mode: 0644
+
+- name: Start  VSCode Service
+  ansible.builtin.systemd:
+    name: vscode
+    state: started
+    enabled: true

@@ -18,10 +18,6 @@
       openstack.cloud.image_info:
       register: images
 
-    - name: Debug
-      ansible.builtin.debug:
-        msg:
-        - "{{ images }}"
 
     - name: Get Latest Master Branch Commit
       ansible.builtin.command: git rev-parse --short --verify origin/master
@@ -54,7 +50,7 @@
       ansible.builtin.set_fact:
         base_images: "{{ images.images | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
       vars:
-        filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
+        filter: "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
     - name: Set Resens Images
       ansible.builtin.set_fact:
@@ -62,14 +58,14 @@
          rejectattr('tags', 'search', 'cluster') | json_query(filter) | sort(attribute='created_at')\
           \ }}"
       vars:
-        filter: "[?properties.os_distro=='{{ os_distro }}' && properties.os_version=='{{ os_version }}']"
+        filter: "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
 
     - name: Set Update facts
       ansible.builtin.set_fact:
         update: true
       when:
         - base_images | length > 0
-        - resenv_images | length == 0 or (resenv_images | length > 0 and (base_images | last).created_at > (resenv_images | last).created_at) \
+        - resenv_images | length == 0 or (resenv_images | length > 0 and (base_images | last).created_at > (resenv_images | last).created_at)
          or (resenv_images| length > 0 and (resenv_images | last).md5_hash|default ('undefined')  != md5_hash.stdout)
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}
