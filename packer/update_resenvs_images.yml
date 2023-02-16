@@ -65,8 +65,15 @@
         update: true
       when:
         - base_images | length > 0
-        - resenv_images | length == 0 or (resenv_images | length > 0 and (base_images | last).created_at > (resenv_images | last).created_at) \
-         or (resenv_images| length > 0 and (resenv_images | last).md5_hash|default ('undefined')  != md5_hash.stdout)
+        - (
+            resenv_images | length == 0 or 
+            (resenv_images | length > 0 and (base_images | last).created_at > (resenv_images | last).created_at)
+          )
+        - (
+            resenv_images | length > 0 and 
+            (resenv_images | last).md5_hash | default('undefined') != md5_hash.stdout
+          )
+
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}
       ansible.builtin.command: packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json \
