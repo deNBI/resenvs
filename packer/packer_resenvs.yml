@@ -53,6 +53,13 @@
         update_cache: true
         autoremove: true
         autoclean: true
+    - name: Install additional docker python libraries
+      ansible.builtin.pip:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - cryptography
+        - pyOpenssl
 
   tasks:
     - name: Include {{ resenv }} variables

@@ -1,6 +1,6 @@
 ---
 - name: Include vscode tasks
-  ansible.builtin.import_tasks: vscode.yml
+  ansible.builtin.import_tasks: ../vscode/vscode.yml
 - name: Include docker tasks
   ansible.builtin.import_tasks: docker.yml
 - name: Include cwl tasks

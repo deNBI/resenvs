@@ -9,7 +9,7 @@
   ansible.builtin.shell: /etc/vscode-install.sh --version={{ vscode_vars.VSCODE_VERSION | replace('v', '')}}
 
 - name: Set facts for templates
-  set_fact:
+  ansible.builtin.set_fact:
     vscode_default_user: "{{ vscode_vars.DEFAULT_USER  }}"
     vscode_port: "{{ vscode_vars.PORT  }}"
 
@@ -20,7 +20,7 @@
     mode: 0644
 
 - name: Start  VSCode Service
-  systemd:
+  ansible.builtin.systemd:
     name: vscode
     state: started
     enabled: true
