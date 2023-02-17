@@ -22,7 +22,7 @@
                           | json_query(filter)
                           | sort(attribute='created_at') }}"
       vars:
-           filter: "[?properties.image_type=='image']"
+        filter: "[?properties.image_type=='image']"
 
 
     - ansible.builtin.set_fact:
@@ -32,7 +32,7 @@
                           | json_query(filter)
                           | sort(attribute='created_at') }}"
       vars:
-           filter: "[?properties.image_type=='image']"
+        filter: "[?properties.image_type=='image']"
 
     - ansible.builtin.set_fact:
         ubuntu22_images: "{{ images.images | selectattr('tags', 'search', base_image_tag)
@@ -41,7 +41,7 @@
                           | json_query(filter)
                           | sort(attribute='created_at') }}"
       vars:
-           filter: "[?properties.image_type=='image']"
+        filter: "[?properties.image_type=='image']"
 
     - name: Clean up old Ubuntu 18.04 images
       openstack.cloud.image:

@@ -35,7 +35,6 @@
           }}
 
 
-
     - name: Set Cluster {{ cluster_type }} Images
       ansible.builtin.set_fact:
         cluster_images: " {{ images.images | selectattr('tags', 'search', '{{ cluster_type }}')
