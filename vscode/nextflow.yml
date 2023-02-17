@@ -1,0 +1,8 @@
+---
+- name: Install Nextflow
+  pip:
+    name: "{{ item }}"
+  loop:
+    - nextflow
+  remote_user: ubuntu
+  become: false

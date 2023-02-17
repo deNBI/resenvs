@@ -1,0 +1,8 @@
+---
+- name: Install Snakemake
+  pip:
+    name: "{{ item }}"
+  loop:
+    - snakemake
+  remote_user: ubuntu
+  become: false
