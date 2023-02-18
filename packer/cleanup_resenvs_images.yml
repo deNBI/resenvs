@@ -2,7 +2,7 @@
 - name: Cleanup ResEnvs images
   hosts: localhost
   vars:
-    limit: 2
+    limit: 1
   vars_files:
     - tags.json
 
@@ -22,5 +22,6 @@
         - theiaide
         - vscode
         - jupyterlab
+        - vscode_cwl
       loop_control:
         loop_var: resenv

@@ -24,14 +24,18 @@
 
     - name: Set Base Image Fact
       ansible.builtin.set_fact:
-        base_images: "{{ images.images | selectattr('tags', 'search', base_image_tag) | json_query(filter) | sort(attribute='created_at') }}"
-      vars:
-        filter: "[?os_distro=='{{ os_distro }}' && os_version=='{{ os_version }}']"
+        base_images: "{{ images.images | selectattr('tags', 'search', base_image_tag)
+                      | selectattr('os_distro', '==', os_distro)
+                      | selectattr('os_version', '==', os_version)
+                      | sort(attribute='created_at') }}"
 
-    - name: Set Update  Fact
+    - name: Set Update Fact
       ansible.builtin.set_fact:
         update: true
-      when: base_images | length == 0 or ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) < (date | to_datetime('%Y-%m-%dT%H:%M:%SZ'))
+      when:
+        - base_images | length == 0
+        - (base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ') < date | to_datetime('%Y-%m-%dT%H:%M:%SZ')
+
 
     - name: Set Date Fact
       ansible.builtin.set_fact:
