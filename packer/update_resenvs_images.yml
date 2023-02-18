@@ -62,7 +62,7 @@
                         | selectattr('os_distro', '==', os_distro)
                         | selectattr('os_version', '==', os_version)
                         | rejectattr('tags', 'search', 'cluster')
-                        | sort(attribute='created_at')}}"
+                        | sort(attribute='created_at') }}"
 
 
     - name: Set Update facts

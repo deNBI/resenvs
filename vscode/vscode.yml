@@ -24,3 +24,15 @@
     name: vscode
     state: started
     enabled: true
+
+- name: Include docker tasks
+  ansible.builtin.import_tasks: docker.yml
+
+- name: Include cwl tasks
+  ansible.builtin.import_tasks: cwl.yml
+
+- name: Include snakemake tasks
+  ansible.builtin.import_tasks: snakemake.yml
+
+- name: Include nextflow tasks
+  ansible.builtin.import_tasks: nextflow.yml
