@@ -12,7 +12,7 @@ securitygroup_name: _vscode
 securitygroup_description: VsCode
 securitygroup_ssh: false
 title: Visual Studio Code
-description: Visual Studio Code combines the simplicity of a code editor with what developers need for their core edit-build-debug cycle.
+description: Visual Studio Code with Common Workflow Language development tools preinstalled.
 
 logo_url: ""
 info_url: ""

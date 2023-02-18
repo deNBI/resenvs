@@ -101,4 +101,3 @@
       when:
         - ubuntu_22_04_master_images | length > limit | int
         - index < ubuntu_22_04_master _images | length - limit | int
-
