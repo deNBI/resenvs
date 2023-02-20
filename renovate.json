@@ -5,6 +5,16 @@
    ],
    "platform":"github",
    "regexManagers":[
+       {
+         "fileMatch":[
+            "guacamole/roles/guacamole/tasks/vars/main\\.yml",
+         ],
+         "matchStrings":[
+            "guacamole_version: (?<currentValue>.*?)\\n",
+         ],
+         "depNameTemplate":"apache/guacamole-server",
+         "datasourceTemplate":"github-tags",
+      },
       {
          "fileMatch":[
             "rstudio/rstudio_vars_file\\.yml",
