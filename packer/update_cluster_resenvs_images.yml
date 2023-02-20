@@ -68,12 +68,10 @@
       ansible.builtin.set_fact:
         update: true
       when:
-        - cluster_base_images| length > 0
-        - cluster_resenv_images  | length == 0
-          or (cluster_resenv_images  | length > 0
-          and (cluster_base_images| last).created_at > (cluster_resenv_images  | last).created_at)
-          or (cluster_resenv_images  | length > 0
-          and (cluster_resenv_images  | last).md5_hash|default ('undefined')  != md5_hash.stdout)
+        - cluster_base_images | length > 0
+        - cluster_resenv_images | length == 0 or (cluster_base_images | last).created_at > (cluster_resenv_images | last).created_at
+          or (cluster_resenv_images | last).md5_hash | default('undefined') != md5_hash.stdout
+
 
     - name: Build new {{ resenv }} cluster master image - {{ os_distro }} {{ os_version }}
       ansible.builtin.command: packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json
