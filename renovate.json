@@ -7,7 +7,7 @@
    "regexManagers":[
        {
          "fileMatch":[
-            "guacamole/roles/guacamole/tasks/vars/main\\.yml",
+            "guacamole/roles/guacamole/vars/main\\.yml",
          ],
          "matchStrings":[
             "guacamole_version: (?<currentValue>.*?)\\n",
