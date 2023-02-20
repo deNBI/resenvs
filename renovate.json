@@ -8,9 +8,11 @@
        {
          "fileMatch":[
             "guacamole/roles/guacamole/vars/main\\.yml",
+            "guacamole/guacamole_metadata\\.yml"
          ],
          "matchStrings":[
             "guacamole_version: (?<currentValue>.*?)\\n",
+            "version: (?<currentValue>.*?)\\n",
          ],
          "depNameTemplate":"apache/guacamole-server",
          "datasourceTemplate":"github-tags",
