@@ -7,4 +7,4 @@ default_password: ogvkyf
 default_password_hashed: $6$iRrIJogrR0N2ZVdb$oL5XzFqcTC.O3g4DS945a5K7nRvO0LqY.ugyjDINUA347qRYXe1YXag8cRlLf9PVwmNrRYU3LTNGyCIPbFvz4/
 guac_user: denbi
 guac_password: denbi
-guacamole_version: 1.4.0
+guacamole_version: 1.5.0
