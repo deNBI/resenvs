@@ -1,6 +1,11 @@
 ---
+- name: Install java
+  ansible.builtin.apt:
+    state: latest
+    name: default-jre
+
 - name: Install Nextflow
-  pip:
+  ansible.builtin.pip:
     name: "{{ item }}"
   loop:
     - nextflow
