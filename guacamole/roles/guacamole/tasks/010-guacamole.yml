@@ -36,13 +36,13 @@
 
 - name: Download guacamole src
   ansible.builtin.get_url:
-    url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/{{guacamole_version}}/source/guacamole-server-{{guacamole_version}}.tar.gz
+    url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/{{ guacamole_version }}/source/guacamole-server-{{ guacamole_version }}.tar.gz
     dest: /usr/share/guacamole.tar.gz
     mode: 0777
 
 - name: Download guacamole war file
   ansible.builtin.get_url:
-    url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/{{guacamole_version}}/binary/guacamole-{{guacamole_version}}.war
+    url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/{{ guacamole_version }}/binary/guacamole-{{ guacamole_version }}.war
     dest: /usr/share/guacamole.war
     mode: 0777
 
@@ -63,12 +63,12 @@
   ansible.builtin.command: ./configure --with-systemd-dir=/etc/systemd/system
   become: true
   args:
-    chdir: /usr/share/guacamole/guacamole-server-{{guacamole_version}}/
-    creates: /usr/share/guacamole/guacamole-server-{{guacamole_version}}/Makefile
+    chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
+    creates: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/Makefile
 
 - name: Ignore depcreated warnings Ubuntu 22
   ansible.builtin.lineinfile:
-    path: /usr/share/guacamole/guacamole-server-{{guacamole_version}}/src/common-ssh/Makefile
+    path: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/src/common-ssh/Makefile
     search_string: CFLAGS = -g -O2
     line: CFLAGS = -g -O2 -Wno-error=deprecated-declarations
     state: present
@@ -76,17 +76,17 @@
 
 - name: Compile guacamole
   community.general.system.make:
-    chdir: /usr/share/guacamole/guacamole-server-{{guacamole_version}}/
+    chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
 
 - name: Make install
   community.general.system.make:
-    chdir: /usr/share/guacamole/guacamole-server-{{guacamole_version}}/
+    chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
     target: install
 
 - name: Link libraries
   ansible.builtin.command: ldconfig
   args:
-    chdir: /usr/share/guacamole/guacamole-server-{{guacamole_version}}/
+    chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
   changed_when: false
 
 - name: Enable guacamole daemon
