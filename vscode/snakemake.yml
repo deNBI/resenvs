@@ -6,3 +6,8 @@
     - snakemake
   remote_user: ubuntu
   become: false
+
+- name: Install VSCode Snakemake Lanquage Support Plugin
+  ansible.builtin.shell: code-server --install-extension snakemake.snakemake-lang
+  args:
+    executable: /bin/bash
