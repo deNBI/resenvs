@@ -10,3 +10,8 @@
     - cwltool
   remote_user: ubuntu
   become: false
+
+- name: Install VSCode CWL Lanquage Support Plugin
+  ansible.builtin.shell: code-server --install-extension sbg-rabix.benten-cwl
+  args:
+    executable: /bin/bash
