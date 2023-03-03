@@ -18,4 +18,4 @@ slurmConf:
 ansible_galaxy_roles:
   - name: autoscaling
     hosts: master
-    git: https://github.com/patricS4/autoscaling-config-ansible
+    git: https://github.com/deNBI/autoscaling-config-ansible
