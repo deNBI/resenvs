@@ -11,3 +11,8 @@
     - nextflow
   remote_user: ubuntu
   become: false
+  
+- name: Install VSCode Nextflow Lanquage Support Plugin
+  ansible.builtin.shell: code-server --install-extension nextflow.nextflow
+  args:
+    executable: /bin/bash
