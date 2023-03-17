@@ -1,7 +1,7 @@
 ---
 - hosts: master
   name: Cluster Master Setup
-  become: "yes"
+  become: true
   vars_files:
     - vars/common_configuration.yml
   roles:
@@ -15,7 +15,7 @@
         - autoscaling
 - hosts: workers
   name: Cluster Worker Setup
-  become: "yes"
+  become: true
   vars_files:
     - vars/common_configuration.yml
   roles:

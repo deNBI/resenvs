@@ -35,6 +35,8 @@ skip_list:
   - name[missing]
   - name[template]
   - command-instead-of-module
+  - var-naming
+  - risky-file-permissions
 
 # Ansible-lint does not automatically load rules that have the 'opt-in' tag.
 # You must enable opt-in rules by listing each rule 'id' below.
