@@ -8,7 +8,9 @@
       - slurm-wlm
     state: latest
 
-- block:
+- name: Install slurm for master
+  when: "'master' in group_names"
+  block:
     - name: Install Slurm database and RestAPI packages
       ansible.builtin.apt:
         name:
@@ -61,5 +63,3 @@
       ansible.builtin.systemd:
         name: slurmctld
         state: started
-
-  when: "'master' in group_names"
