@@ -37,6 +37,7 @@
     {
       "type": "ansible",
       "playbook_file": "../cluster/master.site.yml",
+      "use_proxy": false,
       "extra_arguments": [
         "-v",
         "--extra-vars",
