@@ -31,7 +31,6 @@
         curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | NVM_DIR={{ theiaide_vars.NVM_INSTALL_DIR }} /bin/bash
       args:
         creates: "{{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh"
-        warn: false
 
     - name: Install node 12 and yarn
       shell: |
