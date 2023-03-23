@@ -4,6 +4,20 @@
     name: "{{ rstudio_vars.default_user }}"
     password: "{{ rstudio_vars.default_password | password_hash('sha512') }}"
 
+- name: Add focal-security repository and install libssl1.1 package
+  apt_repository:
+    repo: "deb http://security.ubuntu.com/ubuntu focal-security main"
+    state: present
+    filename: focal-security
+  when: os_version == '22.04'
+
+- name: install libssl1.1
+  apt:
+    name: libssl1.1
+    state: present
+  when: os_version == '22.04'
+
+
 - name: Install R role
   include_role:
     name: oefenweb.latest_r
