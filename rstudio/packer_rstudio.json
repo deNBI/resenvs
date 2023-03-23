@@ -56,8 +56,7 @@
       "extra_arguments": [
         "-v",
         "--extra-vars",
-        "resenv=rstudio",
-        "os_version={{user `os_version`}}"
+        "resenv=rstudio os_version={{user `os_version`}}"
 
       ]
     }
