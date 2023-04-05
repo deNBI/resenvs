@@ -44,22 +44,22 @@
     executable: /bin/bash
 
 - name: Create alias for environment
-  become_user: "{{   conda_vars.default_user  }}"
-  shell: echo $ALIAS_VARIABLE > ~/.bash_aliases
-  environment:
-    ALIAS_VARIABLE: alias {{ conda_vars.ENV_NAME| quote }}="conda activate {{ conda_vars.ENV_NAME| quote }}"
+  become_user: "{{ conda_vars.default_user }}"
+  lineinfile:
+    path: ~/.bash_aliases
+    line: "alias {{ conda_vars.ENV_NAME|quote }}='conda activate {{ conda_vars.ENV_NAME|quote }}'"
+
 
 - name: Check for installed packages
-  become_user: "{{   conda_vars.default_user  }}"
-  shell: timeout 1m bash -c 'source {{ conda_vars.CONDA_DIR}}//bin/activate && conda activate \
-   {{ conda_vars.ENV_NAME| quote }} && conda list'
+  become_user: "{{ conda_vars.default_user }}"
+  shell: 'source {{ conda_vars.CONDA_DIR }}/bin/activate && conda activate {{ conda_vars.ENV_NAME|quote }} && conda list'
   register: added_packages
+
 
 - name: Install chosen packages
   become_user: "{{   conda_vars.default_user  }}"
-  shell: timeout {{ conda_vars.TIMEOUT_LENGTH }} bash -c 'source {{ conda_vars.CONDA_DIR}}/bin/activate && \
-   conda activate {{ conda_vars.ENV_NAME| quote }} && conda
-    install --yes {{ item.key }}={{ item.value.version }}'
+  shell: 'source {{ conda_vars.CONDA_DIR }}/bin/activate && conda activate {{ conda_vars.ENV_NAME|quote }}
+          && conda install --yes {{ item.key }}={{ item.value.version }}'
   args:
     executable: /bin/bash
   loop: "{{ q('dict', conda_vars.packages) }}"
