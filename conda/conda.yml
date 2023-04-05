@@ -54,6 +54,8 @@
   become_user: "{{ conda_vars.default_user }}"
   shell: 'source {{ conda_vars.CONDA_DIR }}/bin/activate && conda activate {{ conda_vars.ENV_NAME|quote }} && conda list'
   register: added_packages
+  args:
+    executable: /bin/bash
 
 
 - name: Install chosen packages
