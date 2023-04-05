@@ -46,7 +46,7 @@
 - name: Create alias for environment
   become_user: "{{ conda_vars.default_user }}"
   lineinfile:
-    path: ~/.bash_aliases
+    path: /home/{{ conda_vars.default_user }}/.bashrc
     line: "alias {{ conda_vars.ENV_NAME|quote }}='conda activate {{ conda_vars.ENV_NAME|quote }}'"
 
 
