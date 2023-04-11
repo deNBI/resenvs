@@ -24,7 +24,9 @@
       "flavor": "de.NBI tiny",
       "ssh_username": "ubuntu",
       "image_tags": [
-        "{{user `theiaide_tag`}}"
+        "{{user `theiaide_tag`}}",
+        "deNBI"
+
       ],
       "metadata": {
         "template_name": "{{user `template_name`}}",
