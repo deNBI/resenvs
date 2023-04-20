@@ -12,7 +12,7 @@ securitygroup_name: _vscode
 securitygroup_description: VsCode
 securitygroup_ssh: false
 title: Visual Studio Code
-description: Visual Studio Code with Common Workflow Language development tools preinstalled.
+description: Visual Studio Code with Common Workflow Language, Snakemake and Nextflow development tools preinstalled.
 
 logo_url: ""
 info_url: ""
