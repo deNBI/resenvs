@@ -88,16 +88,7 @@
     - slurmctld
     - slurmd
 
-- name: Create Slurm configuration
-  ansible.builtin.template:
-    src: ./files/slurm/slurm.conf
-    dest: /etc/slurm/slurm.conf
-    owner: slurm
-    group: root
-    mode: 0444
-  notify:
-    - slurmctld
-    - slurmd
+
 
 - name: Slurm cgroup configuration
   ansible.builtin.copy:
