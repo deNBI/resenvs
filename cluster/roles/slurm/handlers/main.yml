@@ -19,3 +19,8 @@
   ansible.builtin.systemd:
     name: slurmd
     state: restarted
+
+- name: munge
+  ansible.builtin.systemd:
+    name: munge
+    state: restarted

@@ -1,65 +1,7 @@
----
-- ansible.builtin.debug:
-    msg: "[BIBIGRID] Setup Slurm"
-
-- name: Install Slurm base packages and dependencies
-  ansible.builtin.apt:
-    name:
-      - slurm-wlm
-    state: latest
-
-- name: Install slurm for master
-  tags: master
+- name: Setup Slurm
   block:
-    - name: Install Slurm database and RestAPI packages
-      ansible.builtin.apt:
-        name:
-          - slurmdbd
-          - slurmrestd
-        state: latest
-
-    - name: Generate random JWT Secret
-      ansible.builtin.command:
-        cmd: dd if=/dev/random of=/etc/slurm/jwt-secret.key bs=32 count=1
-        creates: /etc/slurm/jwt-secret.key # only run the command when file is not present
-
-    - name: Change file Properties of JWT Secret file
-      ansible.builtin.file:
-        path: /etc/slurm/jwt-secret.key
-        owner: slurm
-        group: slurm
-        mode: 0600
-
-    - name: Copy env file for configuration of slurmrestd
-      ansible.builtin.copy:
-        src: slurmrestd_default
-        dest: /etc/default/slurmrestd
-        owner: root
-        group: root
-        mode: 0644
-      notify:
-        - slurmdbd
-        - slurmrestd
-
-    - name: Create Service Directory
-      ansible.builtin.file:
-        path: /etc/systemd/system/slurmrestd.service.d
-        group: root
-        owner: root
-        mode: 0755
-        state: directory
-
-    - name: Copy systemd Service override file
-      ansible.builtin.copy:
-        src: slurmrestd_override.conf
-        dest: /etc/systemd/system/slurmrestd.service.d/override.conf
-        mode: 0644
-        owner: root
-        group: root
-      notify:
-        - slurmrestd
-
-    - name: Start slurm explicity after all dependencies are configured
-      ansible.builtin.systemd:
-        name: slurmctld
-        state: started
+    - ansible.builtin.debug:
+        msg: "[BIBIGRID] Setup Slurm"
+    - ansible.builtin.import_tasks: 042-slurm.yml
+    - ansible.builtin.import_tasks: 042-slurm-server.yml
+      tags: master

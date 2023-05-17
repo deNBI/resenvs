@@ -1,0 +1,197 @@
+- name: Create slurm db
+  community.mysql.mysql_db:
+    name: "slurm"
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Create slurm db user
+  community.mysql.mysql_user:
+    name: "slurm"
+    password: "changeme"
+    priv: '*.*:ALL'
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Create slurmdb configuration file
+  ansible.builtin.template:
+    src: slurm/slurmdbd.conf
+    dest: /etc/slurm/slurmdbd.conf
+    owner: slurm
+    group: root
+    mode: "0600"
+  notify:
+    - slurmdbd
+    - slurmctld
+
+- name: Generate random JWT Secret
+  ansible.builtin.command:
+    cmd: "dd if=/dev/random of=/etc/slurm/jwt-secret.key bs=32 count=1"
+    creates: "/etc/slurm/jwt-secret.key" # only run the command when file is not present
+
+- name: Change file Properties of JWT Secret file
+  ansible.builtin.file:
+    path: /etc/slurm/jwt-secret.key
+    owner: slurm
+    group: slurm
+    mode: "0600"
+
+- name: Copy env file for configuration of slurmrestd
+  ansible.builtin.copy:
+    src: slurm/default/slurmrestd
+    dest: /etc/default/slurmrestd
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - slurmrestd
+
+- name: Create system overrides directories (slurmdbdm slurmrestd)
+  ansible.builtin.file:
+    path: "/etc/systemd/system/{{ item }}.service.d"
+    group: root
+    owner: root
+    mode: "0755"
+    state: directory
+  with_items:
+    - slurmdbd
+    - slurmrestd
+
+- name: Copy system overrides (slurmdbdm slurmrestd)
+  ansible.builtin.copy:
+    src: "slurm/systemd/{{ item }}.override"
+    dest: "/etc/systemd/system/{{ item }}.service.d/override.conf"
+    mode: "0644"
+    owner: root
+    group: root
+  with_items:
+    - slurmdbd
+    - slurmrestd
+  notify:
+    - slurmdbd
+    - slurmrestd
+
+- name: Enable slurmdbd and slurmrestd services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: true
+    masked: false
+    state: started
+    daemon_reload: true
+  with_items:
+    - slurmdbd
+    - slurmrestd
+
+- name: Start slurm explicit after all dependencies are configured
+  ansible.builtin.systemd:
+    name: slurmctld
+    state: started
+
+- name: Register Slurm users home dir
+  ansible.builtin.shell: "set -o pipefail &&  grep slurm /etc/passwd | cut -d ':' -f 6"
+  register: slurm_home
+  changed_when: false
+  args:
+    executable: bash
+
+- name: Change mode of /opt/slurm directory
+  ansible.builtin.file:
+    owner: slurm
+    group: ansible
+    path: /opt/slurm/
+    state: directory
+    mode: "0770"
+
+- name: Ensures /opt/slurm/.ssh/ dir exists
+  ansible.builtin.file:
+    path: /opt/slurm/.ssh/
+    group: slurm
+    owner: slurm
+    state: directory
+    mode: 0700
+
+- name: Copy private key (openstack keypair)
+  ansible.builtin.copy:
+    src: ~/.ssh/id_ecdsa
+    dest: /opt/slurm/.ssh/id_ecdsa
+    owner: slurm
+    group: slurm
+    mode: "0600"
+
+- name: Copy create program script (power)
+  ansible.builtin.copy:
+    src: slurm/create.sh
+    dest: /opt/slurm/create.sh
+    owner: slurm
+    group: ansible
+    mode: "0550"
+
+- name: Copy terminate program script (power)
+  ansible.builtin.copy:
+    src: slurm/terminate.sh
+    dest: /opt/slurm/terminate.sh
+    owner: slurm
+    group: ansible
+    mode: "0550"
+
+- name: Copy fail program script (power)
+  ansible.builtin.copy:
+    src: slurm/fail.sh
+    dest: /opt/slurm/fail.sh
+    owner: slurm
+    group: ansible
+    mode: "0550"
+
+- name: Copy "create_server.py" script
+ansible.builtin.copy:
+  src: slurm/create_server.py
+  dest: /usr/local/bin/create_server.py
+  owner: slurm
+  group: ansible
+  mode: "0750"
+
+
+- name: Install python dependencies
+  ansible.builtin.pip:
+    name:
+      - python-openstackclient==6.0.0
+      - os_client_config
+      - paramiko
+      - ansible-runner
+
+- name: 'Add default user to ansible group'
+  ansible.builtin.user:
+    name: '{{ ssh_user }}'
+    append: true
+    groups:
+      - ansible
+
+
+- when: slurm_home.stdout != '/opt/slurm'
+  block:
+    - name: Stop Slurm Services
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: stopped
+      with_items:
+        - slurmctld
+        - slurmd
+        - slurmdbd
+        - slurmrestd
+    - name: Add slurm user to ansible and give slurm user a home
+      ansible.builtin.user:
+        name: slurm
+        append: true
+        create_home: true
+        groups:
+          - ansible
+        home: /opt/slurm
+        shell: /bin/false
+    - name: Start Slurm Services
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - slurmctld
+        - slurmd
+        - slurmdbd
+        - slurmrestd
