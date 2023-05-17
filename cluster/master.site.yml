@@ -10,6 +10,7 @@
     - master
     - role: slurm
       tags:
+        - master
         - slurm
         - scale-up
         - scale-down
