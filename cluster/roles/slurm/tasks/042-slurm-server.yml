@@ -142,12 +142,12 @@
     mode: "0550"
 
 - name: Copy "create_server.py" script
-ansible.builtin.copy:
-  src: slurm/create_server.py
-  dest: /usr/local/bin/create_server.py
-  owner: slurm
-  group: ansible
-  mode: "0750"
+  ansible.builtin.copy:
+    src: slurm/create_server.py
+    dest: /usr/local/bin/create_server.py
+    owner: slurm
+    group: ansible
+    mode: "0750"
 
 
 - name: Install python dependencies
