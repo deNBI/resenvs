@@ -23,8 +23,10 @@
     name: shortuuid
 
 - name: Generate munge key
-  ansible.builtin.command: python -c "import shortuuid; print(shortuuid.ShortUUID().random(32))"
+  command: python -c "import uuid; print(str(uuid.uuid4()))"
   register: munge_key_output
+  changed_when: false
+
 
 
 - name: Create new secret (Munge)
@@ -88,7 +90,7 @@
 
 - name: Create Slurm configuration
   ansible.builtin.template:
-    src: slurm/slurm.conf
+    src: ./files/slurm/slurm.conf
     dest: /etc/slurm/slurm.conf
     owner: slurm
     group: root
