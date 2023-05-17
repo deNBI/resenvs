@@ -6,7 +6,7 @@
 
 - name: slurmrestd
   ansible.builtin.systemd:
-    name: Slurmrestd
+    name: slurmrestd
     state: restarted
     daemon_reload: true
 
