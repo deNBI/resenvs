@@ -5,7 +5,7 @@
 - name: Install Slurm base packages and dependencies
   ansible.builtin.apt:
     name:
-      - slurm-wlm
+      - slurm-full
     state: latest
 
 - name: Install slurm for master
@@ -59,7 +59,3 @@
       notify:
         - slurmrestd
 
-    - name: Start slurm explicity after all dependencies are configured
-      ansible.builtin.systemd:
-        name: slurmctld
-        state: started
