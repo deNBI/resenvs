@@ -9,7 +9,7 @@
     state: latest
 
 - name: Install slurm for master
-  when: "'master' in group_names"
+  tags: master
   block:
     - name: Install Slurm database and RestAPI packages
       ansible.builtin.apt:
