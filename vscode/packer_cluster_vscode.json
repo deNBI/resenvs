@@ -29,7 +29,9 @@
       "image_tags": [
         "{{user `vscode_tag`}}",
         "cluster",
-        "master"
+        "master",
+        "deNBI"
+
       ],
       "metadata": {
         "template_name": "{{user `template_name`}}",

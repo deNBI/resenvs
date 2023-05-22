@@ -24,7 +24,9 @@
       "flavor": "de.NBI tiny",
       "ssh_username": "ubuntu",
       "image_tags": [
-        "{{user `jupyterlab_tag`}}"
+        "{{user `jupyterlab_tag`}}",
+        "deNBI"
+
       ],
       "metadata": {
         "template_name": "{{user `template_name`}}",
