@@ -28,7 +28,9 @@
       "image_tags": [
         "{{user `rstudio_tag`}}",
         "cluster",
-        "master"
+        "master",
+        "deNBI"
+
       ],
       "metadata": {
         "template_name": "{{user `template_name`}}",
