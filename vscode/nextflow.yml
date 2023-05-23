@@ -16,3 +16,5 @@
   ansible.builtin.shell: code-server --install-extension nextflow.nextflow --user-data-dir=/home/"{{ vscode_vars.DEFAULT_USER  }}"/.local/share/code-server
   args:
     executable: /bin/bash
+  remote_user: ubuntu
+  become: false
