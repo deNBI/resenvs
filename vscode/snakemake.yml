@@ -11,3 +11,5 @@
   ansible.builtin.shell: code-server --install-extension snakemake.snakemake-lang --user-data-dir=/home/"{{ vscode_vars.DEFAULT_USER  }}"/.local/share/code-server # noqa: yaml[line-length]
   args:
     executable: /bin/bash
+  remote_user: ubuntu
+  become: false
