@@ -15,7 +15,7 @@
           ],
           "properties": {
             "os_distro": "{{user `os_distro`}}",
-            "os_version": "{{user `os_version`}}"
+            "os_version": "{{user `os_version`}}",
             "slurm_version":"22"
           }
         },
