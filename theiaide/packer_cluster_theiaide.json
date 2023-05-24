@@ -16,8 +16,7 @@
           ],
           "properties": {
             "os_distro": "{{user `os_distro`}}",
-            "os_version": "{{user `os_version`}}",
-
+            "os_version": "{{user `os_version`}}"
           }
         },
         "most_recent": true
@@ -30,7 +29,6 @@
         "cluster",
         "master",
         "deNBI"
-
       ],
       "metadata": {
         "template_name": "{{user `template_name`}}",
@@ -51,8 +49,7 @@
         "information_for_display": "{{user `information_for_display`}}",
         "github_hash": "{{user `github_hash`}}",
         "md5_hash": "{{user `md5_hash`}}",
-        "slurm_version":"22"
-
+        "slurm_version": "22"
       }
     }
   ],
