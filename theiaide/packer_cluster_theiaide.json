@@ -17,7 +17,6 @@
           "properties": {
             "os_distro": "{{user `os_distro`}}",
             "os_version": "{{user `os_version`}}",
-            "slurm_version":"22"
 
           }
         },
@@ -51,7 +50,9 @@
         "info_url": "{{user `info_url`}}",
         "information_for_display": "{{user `information_for_display`}}",
         "github_hash": "{{user `github_hash`}}",
-        "md5_hash": "{{user `md5_hash`}}"
+        "md5_hash": "{{user `md5_hash`}}",
+        "slurm_version":"22"
+
       }
     }
   ],
