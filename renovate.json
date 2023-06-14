@@ -5,17 +5,17 @@
    ],
    "platform":"github",
    "regexManagers":[
-       {
+      {
          "fileMatch":[
             "guacamole/roles/guacamole/vars/main\\.yml",
             "guacamole/guacamole_metadata\\.yml"
          ],
          "matchStrings":[
             "guacamole_version: (?<currentValue>.*?)\\n",
-            "version: (?<currentValue>.*?)\\n",
+            "version: (?<currentValue>.*?)\\n"
          ],
          "depNameTemplate":"apache/guacamole-server",
-         "datasourceTemplate":"github-tags",
+         "datasourceTemplate":"github-tags"
       },
       {
          "fileMatch":[
@@ -28,7 +28,7 @@
          ],
          "depNameTemplate":"rstudio/rstudio",
          "datasourceTemplate":"github-tags",
-         "versioningTemplate": "regex:v(?<major>20\\d\\d)\\.(?<minor>\\d\\d)\\.(?<patch>\\d)\\+\\d*"
+         "versioningTemplate":"regex:v(?<major>20\\d\\d)\\.(?<minor>\\d\\d)\\.(?<patch>\\d)\\+\\d*"
       },
       {
          "fileMatch":[
