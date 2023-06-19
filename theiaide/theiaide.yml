@@ -64,7 +64,7 @@
       template:
         src: "{{ theiaide_vars.templates_path }}theia-ide.service.j2"
         dest: /etc/systemd/system/theia-ide.service
-        mode: 0644
+        mode: "0644"
 
     - name: Enable and Start service
       ansible.builtin.systemd:

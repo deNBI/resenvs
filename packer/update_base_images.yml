@@ -44,6 +44,7 @@
 
     - name: Echo Timestamp
       ansible.builtin.command: echo "The Timestamp is  ${{ date_time }}"
+      changed_when: false
       when: update
 
     - name: Download new base image

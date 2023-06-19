@@ -61,3 +61,4 @@
                                -var 'network={{ vars[location + '_' + upload_environment] }}'
                                ../cluster/packer_{{ cluster_type }}.json
       when: update
+      changed_when: false
