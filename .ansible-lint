@@ -40,10 +40,12 @@ skip_list:
 
 mock_roles:
   - geerlingguy.docker
+  - autoscaling
 
 mock_modules:
   - community.general.alternatives
   - openstack.cloud.image_info
+  - openstack.cloud.image
 # Ansible-lint does not automatically load rules that have the 'opt-in' tag.
 # You must enable opt-in rules by listing each rule 'id' below.
 enable_list:
