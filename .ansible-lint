@@ -43,7 +43,7 @@ mock_roles:
 
 mock_modules:
   - community.general.alternatives
-  - openstack.cloud
+  - openstack.cloud.image_info
 # Ansible-lint does not automatically load rules that have the 'opt-in' tag.
 # You must enable opt-in rules by listing each rule 'id' below.
 enable_list:
