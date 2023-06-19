@@ -74,7 +74,7 @@
   ansible.builtin.template:
     src: ./templates/jupyterlab.service.j2
     dest: /lib/systemd/system/jupyter-lab.service
-    mode: 0644
+    mode: "0644"
     force: true
 
 - name: Reload systemd

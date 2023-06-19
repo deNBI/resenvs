@@ -5,4 +5,4 @@
     state: directory
     owner: root
     group: "{{ ansible_distribution | lower }}"
-    mode: 0775
+    mode: "0775"
