@@ -50,6 +50,8 @@
     - name: Download new base image
       ansible.builtin.command: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
       when: update
+      changed_when: false
+
 
     - name: Upload image to Openstack
       openstack.cloud.image:
