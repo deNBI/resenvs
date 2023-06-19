@@ -80,3 +80,4 @@
                                -var 'network={{ vars[location + '_' + upload_environment] }}'
                                 ../{{ resenv }}/packer_cluster_{{ vars[resenv + '_tag'] }}.json
       when: update
+      changed_when: false
