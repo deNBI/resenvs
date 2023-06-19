@@ -19,7 +19,7 @@
   ansible.builtin.file:
     path: /etc/zabbix/zabbix_agentd.d/
     state: directory
-    mode: 0755
+    mode: "0755"
 
 - name: Create zabbix_agent log directory
   ansible.builtin.file:
@@ -27,7 +27,7 @@
     state: directory
     owner: zabbix
     group: zabbix
-    mode: 0755
+    mode: "0755"
 
 - name: Adjust zabbix agent configuration
   ansible.builtin.template:

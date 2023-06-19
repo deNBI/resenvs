@@ -17,7 +17,7 @@
   template:
     src: ./templates/vscode.service.j2
     dest: /lib/systemd/system/vscode.service
-    mode: 0644
+    mode: "0644"
 
 - name: Start  VSCode Service
   ansible.builtin.systemd:

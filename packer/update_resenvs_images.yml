@@ -83,3 +83,4 @@
          -var 'os_version={{ os_version }}' -var 'network={{ vars[location + '_' + upload_environment] }}' ../{{
         resenv }}/packer_{{ vars[resenv + '_tag'] }}.json
       when: update
+      changed_when: false
