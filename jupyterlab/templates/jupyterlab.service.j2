@@ -5,7 +5,7 @@
           Restart=always
           PIDFile=/var/run/jupyter-lab.pid
           Environment="PATH={{jupyterlab_conda_dir}}/envs/{{jupyterlab_env_name}}/bin:{{jupyterlab_conda_dir}}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-          ExecStart={{jupyterlab_conda_dir}}/envs/{{jupyterlab_env_name}}/bin/jupyter-lab --no-browser --notebook-dir=/home/{{   jupyterlab_default_user  }} --NotebookApp.base_url='{{   jupyterlab_base_url  }}' --NotebookApp.token='{{   jupyterlab_vars.DEFAULT_TOKEN  }}' --ip=0.0.0.0 --port=8888
+          ExecStart={{jupyterlab_conda_dir}}/envs/{{jupyterlab_env_name}}/bin/jupyter-lab --no-browser --notebook-dir=/home/{{   jupyterlab_default_user  }} --ServerApp.base_url='{{   jupyterlab_base_url  }}' --IdentityProvider.token.='{{   jupyterlab_vars.DEFAULT_TOKEN  }}' --ip=0.0.0.0 --port=8888
           User={{   jupyterlab_default_user  }}
           Group={{   jupyterlab_default_user  }}
           WorkingDirectory=/home/{{   jupyterlab_default_user  }}
