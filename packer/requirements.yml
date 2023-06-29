@@ -16,7 +16,7 @@ roles:
 
   - name: autoscaling
     src: https://github.com/deNBI/autoscaling-ansible
-    version: 1.0.11
+    version: 1.0.12
 
   - name: geerlingguy.swap
 
