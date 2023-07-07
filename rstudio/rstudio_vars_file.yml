@@ -6,4 +6,4 @@ rstudio_vars:
   default_password_hashed: $6$rounds=656000$kDXfaoylNAAH4hiN$Se1C7um7OW7ETs.L19uy1xn9SJjtjHylbF.Xv/YhRWilSyzDcX7nSajMth8LgZNiRJmO3.wBxcYeJnsgW4CLL1
   default_password: simplevm
   RSESSION_FILE_PATH: /etc/rstudio/rsession.conf
-  RSTUDIO_VERSION: v2023.06.0+421
+  RSTUDIO_VERSION: v2023.06.1+524
