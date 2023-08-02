@@ -17,4 +17,4 @@ description: Visual Studio Code with Common Workflow Language, Snakemake and Nex
 logo_url: "https://cloud.denbi.de/static/images/vscode.png"
 info_url: ""
 information_for_display:
-  version: v4.15.0
+  version: v4.16.1
