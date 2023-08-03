@@ -20,6 +20,6 @@
     dest: "{{emgb_vars.repo_path}}"
     version: "{{emgb_vars.emgb_version}}"
 
-- name: Run docker-compose
-  ansible.builtin.command: cd {{emgb_vars.repo_path}} && docker-compose up -d
-
+- name: Run docker-compose EMGB
+  ansible.builtin.command:
+    cmd: "cd {{ emgb_vars.repo_path }} && docker-compose up -d"
