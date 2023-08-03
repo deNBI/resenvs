@@ -57,7 +57,9 @@
       "playbook_file": "./packer_resenvs.yml",
       "use_proxy": false,
       "extra_arguments": [
-        "-vv"
+        "-vv",
+        "--extra-vars",
+        "resenv=emgb"
       ]
     }
   ]
