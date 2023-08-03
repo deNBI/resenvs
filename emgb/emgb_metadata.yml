@@ -1,0 +1,19 @@
+---
+template_name: emgb
+is_maintained: true
+port: 80
+needs_forc_support: true
+forc_versions:
+  - v01
+incompatible_versions: []
+direction: ingress
+protocol: tcp
+securitygroup_name: _emgb
+securitygroup_description: Emgb Server
+securitygroup_ssh: false
+title: Emgb
+description: Emgb
+logo_url: ""
+info_url: ""
+information_for_display:
+  packages: Elastic MetaGenome Browser 2

@@ -1,0 +1,15 @@
+---
+- name: Install Docker role
+  include_role:
+    name: geerlingguy.docker
+
+
+- name: Clone EMGB Repo
+  git:
+    repo: "{{emgb_vars.repo_path}}"
+    dest: "{{emgb_vars.repo_path}}"
+    version: master
+
+- name: Run docker-compose
+  community.docker.docker_compose:
+    project_src: "{{emgb_vars.repo_path}}"
