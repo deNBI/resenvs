@@ -21,7 +21,5 @@
     version: "{{emgb_vars.emgb_version}}"
 
 - name: Run docker-compose
-  community.docker.docker_compose:
-    project_src: "{{emgb_vars.repo_path}}"
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
+  ansible.builtin.command: cd {{emgb_vars.repo_path}} && docker-compose up -d
+
