@@ -1,4 +1,11 @@
 ---
+
+- name: Ensure python-is-python3 is installed
+  become: yes
+  package:
+    name: python-is-python3
+    state: present
+    
 - name: Install Docker role
   include_role:
     name: geerlingguy.docker
