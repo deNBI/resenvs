@@ -10,7 +10,7 @@
   git:
     repo: "{{emgb_vars.emgb_repo}}"
     dest: "{{emgb_vars.repo_path}}"
-    version: master
+    version: "{{emgb_vars.emgb_version}}"
 
 - name: Run docker-compose
   community.docker.docker_compose:

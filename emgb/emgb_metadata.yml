@@ -17,4 +17,5 @@ logo_url: ""
 info_url: ""
 min_ram: 32
 information_for_display:
+  version: 1.6.0
 
