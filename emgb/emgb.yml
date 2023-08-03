@@ -2,8 +2,9 @@
 - name: Install Docker role
   include_role:
     name: geerlingguy.docker
+  vars:
     docker_users:
-      - ubunutu
+      - ubuntu
 
 
 - name: Clone EMGB Repo
