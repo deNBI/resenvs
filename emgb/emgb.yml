@@ -6,7 +6,7 @@
 
 - name: Clone EMGB Repo
   git:
-    repo: "{{emgb_vars.repo_path}}"
+    repo: "{{emgb_vars.emgb_repo}}"
     dest: "{{emgb_vars.repo_path}}"
     version: master
 
