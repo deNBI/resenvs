@@ -58,8 +58,6 @@
       "use_proxy": false,
       "extra_arguments": [
         "-vv",
-        "--extra-vars",
-        "@../emgb/packer_emgb_extra_vars.json"
       ]
     }
   ]
