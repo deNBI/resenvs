@@ -1,0 +1,9 @@
+---
+emgb_vars:
+  template_version:
+  create_only_backend: false
+  base_url:
+  default_user: ubuntu
+  emgb_version: 1.6.0
+  emgb_repo: https://gitlab.ub.uni-bielefeld.de/cmg/emgb/emgb-server
+  repo_path: /home/ubuntu/emgb
