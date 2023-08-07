@@ -13,6 +13,13 @@
     docker_users:
       - ubuntu
 
+- name: Install yq
+  ansible.builtin.shell: |
+    VERSION="v4.34.2"  # Specify the desired version of yq
+    BINARY="yq_linux_amd64"  # Change this if you need a different binary
+    wget "https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz" -O - |\
+      tar xz && mv "${BINARY}" /usr/bin/yq
+  become: yes
 
 - name: Clone EMGB Repo
   git:
@@ -24,6 +31,12 @@
   ansible.builtin.copy:
     src: docker-compose.override.yml
     dest: "{{emgb_vars.repo_path}}"
+
+- name: Run yq command to delete nginx ports
+  ansible.builtin.command:
+    cmd: yq -e -i 'del(.services.nginx.ports)' docker-compose.yml
+  args:
+    chdir: "{{ emgb_vars.repo_path }}"
 
 - name: Run docker-compose EMGB
   ansible.builtin.command:
