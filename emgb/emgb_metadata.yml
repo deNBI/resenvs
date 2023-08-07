@@ -15,7 +15,7 @@ title: Elastic MetaGenome Browser 2
 description: Elastic MetaGenome Browser 2
 logo_url: "https://gitlab.ub.uni-bielefeld.de/cmg/emgb/emgb-server/-/raw/master/static/emgb/main/favicon.png?inline=false"
 info_url: ""
-min_ram: 32
+min_ram: "32"
 information_for_display:
   version: 1.6.0
 
