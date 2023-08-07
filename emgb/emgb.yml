@@ -20,6 +20,11 @@
     dest: "{{emgb_vars.repo_path}}"
     version: "{{emgb_vars.emgb_version}}"
 
+- name: Copy docker-compose.override
+  ansible.builtin.copy:
+    src: docker-compose.override.yml
+    dest: "{{emgb_vars.repo_path}}"
+
 - name: Run docker-compose EMGB
   ansible.builtin.command:
     cmd: docker-compose up -d
