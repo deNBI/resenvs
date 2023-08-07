@@ -7,6 +7,7 @@
   "builders": [
     {
       "type": "openstack",
+      "min_ram": "32768",
       "image_name": "EMGB-Server-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
       "source_image_filter": {
         "filters": {
