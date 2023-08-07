@@ -5,7 +5,7 @@ port: 80
 needs_forc_support: true
 forc_versions:
   - v01
-incompatible_versions: [ ]
+incompatible_versions: []
 direction: ingress
 protocol: tcp
 securitygroup_name: _emgb
