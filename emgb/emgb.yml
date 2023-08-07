@@ -27,6 +27,23 @@
     dest: "{{emgb_vars.repo_path}}"
     version: "{{emgb_vars.emgb_version}}"
 
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  with_items:
+    - "{{ emgb_vars.repo_path }}/data/"
+    - "{{ emgb_vars.repo_path }}/esdata/"
+    - "{{ emgb_vars.repo_path }}/blast/db/"
+    - "{{ emgb_vars.repo_path }}/targetdb/db/"
+
+- name: Run prepare-import.sh script
+  ansible.builtin.command:
+    cmd: ./prepare-import.sh
+  args:
+    chdir: "{{ emgb_vars.repo_path }}"
+    
 - name: Copy docker-compose.override
   ansible.builtin.copy:
     src: docker-compose.override.yml
