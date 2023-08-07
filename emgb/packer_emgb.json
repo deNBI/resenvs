@@ -8,6 +8,7 @@
       {
          "type":"openstack",
          "image_name":"EMGB-Server-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
+         "image_min_ram":"32768",
          "source_image_filter":{
             "filters":{
                "tags":[
@@ -16,7 +17,6 @@
                "properties":{
                   "os_distro":"{{user `os_distro`}}",
                   "os_version":"{{user `os_version`}}",
-                  "min_ram":"32768"
                }
             },
             "most_recent":true
