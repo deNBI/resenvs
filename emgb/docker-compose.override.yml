@@ -1,0 +1,18 @@
+version: '2'
+services:
+  nginx:
+    ports:
+      - "0.0.0.0:80:80"
+    restart: always
+
+  elasticsearch:
+    restart: always
+
+  import:
+    restart: always
+
+  blast:
+    restart: always
+
+  targetdb:
+    restart: always

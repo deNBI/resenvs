@@ -6,5 +6,6 @@
   "theiaide_tag": "theiaide",
   "vscode_tag": "vscode",
   "vscode_cwl_tag": "vscode_cwl",
-  "jupyterlab_tag": "jupyterlab"
+  "jupyterlab_tag": "jupyterlab",
+  "emgb_tag": "emgb"
 }

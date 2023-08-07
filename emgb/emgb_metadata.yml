@@ -1,0 +1,21 @@
+---
+template_name: emgb
+is_maintained: true
+port: 80
+needs_forc_support: true
+forc_versions:
+  - v01
+incompatible_versions: [ ]
+direction: ingress
+protocol: tcp
+securitygroup_name: _emgb
+securitygroup_description: Emgb Server
+securitygroup_ssh: false
+title: Elastic MetaGenome Browser 2
+description: Emgb
+logo_url: "https://gitlab.ub.uni-bielefeld.de/cmg/emgb/emgb-server/-/raw/master/static/emgb/main/favicon.png?inline=false"
+info_url: ""
+min_ram: 32
+information_for_display:
+  version: 1.6.0
+
