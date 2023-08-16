@@ -16,7 +16,9 @@
     - name: Retrieve list of all images
       openstack.cloud.image_info:
       register: images
-
+    - name: All Images length
+      ansible.builtin.debug:
+        var: images | length
     - ansible.builtin.set_fact:
         ubuntu_master_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag)
                           | selectattr('os_distro', '==', os_distro)

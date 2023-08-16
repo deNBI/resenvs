@@ -17,6 +17,10 @@
       openstack.cloud.image_info:
       register: images
 
+    - name: All Images length
+      ansible.builtin.debug:
+        var: images | length
+
     - ansible.builtin.set_fact:
         ubuntu_images: "{{ images.images | selectattr('tags', 'search', base_image_tag)
                           | selectattr('os_distro', '==', os_distro)
