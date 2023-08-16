@@ -66,3 +66,10 @@
           os_version: "{{ os_version }}"
           description: Ubuntu is a free and open source operating system and Linux distribution based on Debian.
       when: update
+
+
+    - name: Delete local uploaded file
+      file:
+        path: "{{ name }}"
+        state: absent
+      when: update
