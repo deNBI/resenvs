@@ -1,34 +1,24 @@
 ---
 - name: Clean up base images
   hosts: localhost
-  vars:
-    limit: 1
-    os_distro: ubuntu
-    os_version: 20.04
   vars_files:
     - tags.json
 
-  tasks:
-    - ansible.builtin.set_fact:
-        limit: "{{ keep | int }}"
-      when: keep is defined and keep | int > 0
+  vars:
+    os_distro: ubuntu
+    os_version: 20.04
+    keep_limit: "{{ keep | default(1) | int }}"
 
+  tasks:
     - name: Retrieve list of all images
       openstack.cloud.image_info:
-      register: images
-
-    - name: All Images length
-      ansible.builtin.debug:
-        var: images | length
-
-    - ansible.builtin.set_fact:
-        ubuntu_images: "{{ images.images | selectattr('tags', 'search', base_image_tag)
-                          | selectattr('os_distro', '==', os_distro)
-                          | selectattr('os_version', '==', os_version)
-                          | json_query(filter)
-                          | sort(attribute='created_at') }}"
-      vars:
-        filter: "[?properties.image_type=='image']"
+        filters:
+          - image_type: image
+          - tags:
+              - base_image_tag
+          - os_distro: "{{ os_distro }}"
+          - os_version: "{{ os_version }}"
+      register: ubuntu_images
 
     - name: Echo Ubuntu images length
       ansible.builtin.debug:
@@ -38,7 +28,7 @@
       openstack.cloud.image:
         name: "{{ item.id }}"
         state: absent
-      loop: "{{ ubuntu_images }}"
+      loop: "{{ ubuntu_images.images }}"
       loop_control:
         index_var: index
-      when: ubuntu_images | length > limit | int and index >= limit | int
+      when: ubuntu_images.images | length > keep_limit and index >= keep_limit
