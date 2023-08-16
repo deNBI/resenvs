@@ -33,8 +33,7 @@
       ansible.builtin.set_fact:
         update: true
       when:
-        - base_images | length == 0
-        - (base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ') < date | to_datetime('%Y-%m-%dT%H:%M:%SZ')
+        - (base_images | length == 0) or (base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ') < date | to_datetime('%Y-%m-%dT%H:%M:%SZ')
 
 
     - name: Set Date Fact
@@ -66,4 +65,11 @@
           os_distro: "{{ os_distro }}"
           os_version: "{{ os_version }}"
           description: Ubuntu is a free and open source operating system and Linux distribution based on Debian.
+      when: update
+
+
+    - name: Delete local uploaded file
+      file:
+        path: "{{ name }}"
+        state: absent
       when: update
