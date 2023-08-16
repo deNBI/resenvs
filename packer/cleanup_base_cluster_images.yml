@@ -15,17 +15,17 @@
 
     - name: Retrieve list of all images
       openstack.cloud.image_info:
+        filters:
+          os_distro: "{{os_distro}}"
+          os_version: "{{os_version}}"
       register: images
     - name: All Images length
       ansible.builtin.debug:
         var: images | length
     - ansible.builtin.set_fact:
         ubuntu_master_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag)
-                          | selectattr('os_distro', '==', os_distro)
-                          | selectattr('os_version', '==', os_version)
                           | selectattr('tags', 'search', 'cluster')
                           | selectattr('tags', 'search', 'master')
-                          | json_query(filter)
                           | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.image_type=='image']"
@@ -45,11 +45,8 @@
 
     - ansible.builtin.set_fact:
         ubuntu_worker_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag)
-                          | selectattr('os_distro', '==', os_distro)
-                          | selectattr('os_version', '==', os_version)
                           | selectattr('tags', 'search', 'cluster')
                           | selectattr('tags', 'search', 'worker')
-                          | json_query(filter)
                           | sort(attribute='created_at') }}"
       vars:
         filter: "[?properties.image_type=='image']"
