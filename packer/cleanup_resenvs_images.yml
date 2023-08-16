@@ -23,5 +23,6 @@
         - vscode
         - jupyterlab
         - vscode_cwl
+        - emgb
       loop_control:
         loop_var: resenv
