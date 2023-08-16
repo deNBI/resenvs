@@ -3,6 +3,9 @@
   hosts: localhost
   vars:
     limit: 1
+    os_distro: ubuntu
+    os_version: 20.04
+    resenv: guacamole
   vars_files:
     - tags.json
 
@@ -13,15 +16,62 @@
 
     - name: Retrieve list of all images
       openstack.cloud.image_info:
+        filters:
+          os_distro: "{{os_distro}}"
+          os_version: "{{os_version}}"
       register: images
 
-    - ansible.builtin.include_tasks: cleanup_resenvs_images_subloop.yml
-      loop:
-        - guacamole
-        - rstudio
-        - theiaide
-        - vscode
-        - jupyterlab
-        - vscode_cwl
+    - name: All Images length
+      ansible.builtin.debug:
+        var: images.images | length
+
+    - ansible.builtin.set_fact:
+        resenv_master_images: "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag'])
+                          | selectattr('tags', 'search', resenv)
+                          | selectattr('tags', 'search', 'cluster')
+                          | selectattr('tags', 'search', 'master')
+                          | sort(attribute='created_at', reverse=true)}}"
+      vars:
+        filter: "[?properties.image_type=='image']"
+
+    - name: Echo Ubuntu images length
+      ansible.builtin.debug:
+        var: resenv_master_images | length
+    - name: Print Ubuntu image names
+      ansible.builtin.debug:
+        var: item.name
+      loop: "{{ resenv_master_images }}"
+    - name: Clean up old Ubuntu {{ os_version }} images
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ resenv_master_images }}"
       loop_control:
-        loop_var: resenv
+        index_var: index
+      when: resenv_master_images | length > limit | int and index >= limit | int
+
+
+    - ansible.builtin.set_fact:
+        resenv_worker_images: "{{ images.images |  selectattr('tags', 'search', vars[resenv + '_tag'])
+                          | selectattr('tags', 'search', resenv)
+                          | selectattr('tags', 'search', 'cluster')
+                          | selectattr('tags', 'search', 'master')
+                          | sort(attribute='created_at', reverse=true)}}"
+      vars:
+        filter: "[?properties.image_type=='image']"
+
+    - name: Echo Ubuntu images length
+      ansible.builtin.debug:
+        var: resenv_worker_images | length
+    - name: Print Ubuntu image names
+      ansible.builtin.debug:
+        var: item.name
+      loop: "{{ resenv_worker_images }}"
+    - name: Clean up old Ubuntu {{ os_version }} images
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ resenv_worker_images }}"
+      loop_control:
+        index_var: index
+      when: resenv_worker_images | length > limit | int and index >= limit | int

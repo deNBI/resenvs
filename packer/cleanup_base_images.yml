@@ -3,6 +3,8 @@
   hosts: localhost
   vars:
     limit: 1
+    os_distro: ubuntu
+    os_version: 20.04
   vars_files:
     - tags.json
 
@@ -13,65 +15,33 @@
 
     - name: Retrieve list of all images
       openstack.cloud.image_info:
+        filters:
+          os_distro: "{{os_distro}}"
+          os_version: "{{os_version}}"
       register: images
 
+    - name: All Images length
+      ansible.builtin.debug:
+        var: images.images | length
+
     - ansible.builtin.set_fact:
-        ubuntu18_images: "{{ images.images | selectattr('tags', 'search', base_image_tag)
-                          | selectattr('os_distro', '==', 'ubuntu')
-                          | selectattr('os_version', '==', '18.04')
-                          | json_query(filter)
-                          | sort(attribute='created_at') }}"
+        ubuntu_images: "{{ images.images | selectattr('tags', 'search', base_image_tag)
+                          | sort(attribute='created_at', reverse=true)}}"
       vars:
         filter: "[?properties.image_type=='image']"
 
-
-    - ansible.builtin.set_fact:
-        ubuntu20_images: "{{ images.images | selectattr('tags', 'search', base_image_tag)
-                          | selectattr('os_distro', '==', 'ubuntu')
-                          | selectattr('os_version', '==', '20.04')
-                          | json_query(filter)
-                          | sort(attribute='created_at') }}"
-      vars:
-        filter: "[?properties.image_type=='image']"
-
-    - ansible.builtin.set_fact:
-        ubuntu22_images: "{{ images.images | selectattr('tags', 'search', base_image_tag)
-                          | selectattr('os_distro', '==', 'ubuntu')
-                          | selectattr('os_version', '==', '22.04')
-                          | json_query(filter)
-                          | sort(attribute='created_at') }}"
-      vars:
-        filter: "[?properties.image_type=='image']"
-
-    - name: Clean up old Ubuntu 18.04 images
+    - name: Echo Ubuntu images length
+      ansible.builtin.debug:
+        var: ubuntu_images | length
+    - name: Print Ubuntu image names
+      ansible.builtin.debug:
+        var: item.name
+      loop: "{{ ubuntu_images }}"
+    - name: Clean up old Ubuntu {{ os_version }} images
       openstack.cloud.image:
         name: "{{ item.id }}"
         state: absent
-      loop: "{{ ubuntu18_images }}"
+      loop: "{{ ubuntu_images }}"
       loop_control:
         index_var: index
-      when:
-        - ubuntu18_images | length > limit | int
-        - index < ubuntu18_images | length - limit | int
-
-    - name: Clean up old Ubuntu 20.04 images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ ubuntu20_images }}"
-      loop_control:
-        index_var: index
-      when:
-        - ubuntu20_images | length > limit | int
-        - index < ubuntu20_images | length - limit | int
-
-    - name: Clean up old Ubuntu 22.04 images
-      openstack.cloud.image:
-        name: "{{ item.id }}"
-        state: absent
-      loop: "{{ ubuntu22_images }}"
-      loop_control:
-        index_var: index
-      when:
-        - ubuntu22_images | length > limit | int
-        - index < ubuntu22_images | length - limit | int
+      when: ubuntu_images | length > limit | int and index >= limit | int
