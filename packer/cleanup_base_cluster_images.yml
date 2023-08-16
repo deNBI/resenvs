@@ -26,13 +26,19 @@
         ubuntu_master_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag)
                           | selectattr('tags', 'search', 'cluster')
                           | selectattr('tags', 'search', 'master')
-                          | sort(attribute='created_at') }}"
+                          | sort(attribute='created_at', reverse=true) }}"
+
       vars:
         filter: "[?properties.image_type=='image']"
 
     - name: Echo Ubuntu images length
       ansible.builtin.debug:
         var: ubuntu_master_images | length
+
+    - name: Print master Ubuntu images
+      ansible.builtin.debug:
+        var: item.name
+      loop: "{{ ubuntu_master_images }}"
 
     - name: Clean up old Ubuntu master {{ os_version }} images
       openstack.cloud.image:
@@ -54,7 +60,10 @@
     - name: Echo Ubuntu images length
       ansible.builtin.debug:
         var: ubuntu_worker_images | length
-
+    - name: Print worker Ubuntu images
+      ansible.builtin.debug:
+        var: item.name
+      loop: "{{ ubuntu_worker_images }}"
     - name: Clean up old Ubuntu {{ os_version }} images
       openstack.cloud.image:
         name: "{{ item.id }}"
