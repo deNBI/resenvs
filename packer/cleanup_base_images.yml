@@ -51,8 +51,7 @@
       loop_control:
         index_var: index
       when:
-        - ubuntu18_images | length > limit | int
-        - index < ubuntu18_images | length - limit | int
+        - (ubuntu18_images | length > limit | int) or (index < ubuntu18_images | length - limit | int)
 
     - name: Clean up old Ubuntu 20.04 images
       openstack.cloud.image:
@@ -62,8 +61,7 @@
       loop_control:
         index_var: index
       when:
-        - ubuntu20_images | length > limit | int
-        - index < ubuntu20_images | length - limit | int
+        - (ubuntu20_images | length > limit | int) or (index < ubuntu20_images | length - limit | int)
 
     - name: Clean up old Ubuntu 22.04 images
       openstack.cloud.image:
@@ -73,5 +71,4 @@
       loop_control:
         index_var: index
       when:
-        - ubuntu22_images | length > limit | int
-        - index < ubuntu22_images | length - limit | int
+        - (ubuntu22_images | length > limit | int) or (index < ubuntu22_images | length - limit | int)
