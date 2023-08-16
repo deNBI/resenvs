@@ -13,11 +13,11 @@
     - name: Retrieve list of all images
       openstack.cloud.image_info:
         filters:
-          - image_type: image
-          - tags:
-              - base_image_tag
-          - os_distro: "{{ os_distro }}"
-          - os_version: "{{ os_version }}"
+          image_type: image
+          tags:
+            - "{{ base_image_tag }}"
+          os_distro: "{{ os_distro }}"
+          os_version: "{{ os_version }}"
       register: ubuntu_images
 
     - name: Echo Ubuntu images length
