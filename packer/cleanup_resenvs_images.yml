@@ -26,7 +26,7 @@
         var: images.images | length
 
     - ansible.builtin.set_fact:
-        resenv_master_images: "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag']
+        resenv_master_images: "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag'])
                           | selectattr('tags', 'search', resenv)
                           | selectattr('tags', 'search', 'cluster')
                           | selectattr('tags', 'search', 'master')
@@ -52,7 +52,7 @@
 
 
     - ansible.builtin.set_fact:
-        resenv_worker_images: "{{ images.images |  selectattr('tags', 'search', vars[resenv + '_tag']
+        resenv_worker_images: "{{ images.images |  selectattr('tags', 'search', vars[resenv + '_tag'])
                           | selectattr('tags', 'search', resenv)
                           | selectattr('tags', 'search', 'cluster')
                           | selectattr('tags', 'search', 'master')
