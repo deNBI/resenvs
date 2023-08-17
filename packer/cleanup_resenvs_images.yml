@@ -26,8 +26,30 @@
         var: images.images | length
 
     - ansible.builtin.set_fact:
+        resenv_images: "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag'])
+                          | rejectattr('tags', 'search', 'cluster')
+                          | sort(attribute='created_at', reverse=true)}}"
+      vars:
+        filter: "[?properties.image_type=='image']"
+
+    - name: Echo Ubuntu images length
+      ansible.builtin.debug:
+        var: resenv_images | length
+    - name: Print Ubuntu image names
+      ansible.builtin.debug:
+        var: item.name
+      loop: "{{ resenv_images }}"
+    - name: Clean up old Ubuntu {{ os_version }} images
+      openstack.cloud.image:
+        name: "{{ item.id }}"
+        state: absent
+      loop: "{{ resenv_images }}"
+      loop_control:
+        index_var: index
+      when: resenv_images | length > limit | int and index >= limit | int
+
+    - ansible.builtin.set_fact:
         resenv_master_images: "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag'])
-                          | selectattr('tags', 'search', resenv)
                           | selectattr('tags', 'search', 'cluster')
                           | selectattr('tags', 'search', 'master')
                           | sort(attribute='created_at', reverse=true)}}"
@@ -53,9 +75,8 @@
 
     - ansible.builtin.set_fact:
         resenv_worker_images: "{{ images.images |  selectattr('tags', 'search', vars[resenv + '_tag'])
-                          | selectattr('tags', 'search', resenv)
                           | selectattr('tags', 'search', 'cluster')
-                          | selectattr('tags', 'search', 'master')
+                          | selectattr('tags', 'search', 'worker')
                           | sort(attribute='created_at', reverse=true)}}"
       vars:
         filter: "[?properties.image_type=='image']"
