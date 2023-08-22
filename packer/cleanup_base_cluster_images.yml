@@ -54,6 +54,7 @@
         ubuntu_worker_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag)
                           | selectattr('tags', 'search', 'cluster')
                           | selectattr('tags', 'search', 'worker')
+                          | json_query(filter) 
                           | sort(attribute='created_at', reverse=true) }}"
       vars:
         filter: "[?properties.image_type=='image']"
