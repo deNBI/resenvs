@@ -28,6 +28,7 @@
     - ansible.builtin.set_fact:
         resenv_images: "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag'])
                           | rejectattr('tags', 'search', 'cluster')
+                          | json_query(filter) 
                           | sort(attribute='created_at', reverse=true)}}"
       vars:
         filter: "[?properties.image_type=='image']"
