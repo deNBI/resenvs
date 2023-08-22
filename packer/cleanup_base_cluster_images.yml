@@ -26,6 +26,7 @@
         ubuntu_master_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag)
                           | selectattr('tags', 'search', 'cluster')
                           | selectattr('tags', 'search', 'master')
+                          | json_query(filter) 
                           | sort(attribute='created_at', reverse=true) }}"
 
       vars:
