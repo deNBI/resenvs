@@ -50,8 +50,9 @@
         "github_hash": "{{user `github_hash`}}",
         "md5_hash": "{{user `md5_hash`}}",
         "minram": "{{user `min_ram`}}",
-        "slurm_version": "22"
-
+        "slurm_version": "22",
+        "community_driven": "{{user `community_driven`}}",
+        "wiki_link": "{{user `wiki_link`}}"
       }
     }
   ],

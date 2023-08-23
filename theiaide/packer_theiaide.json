@@ -26,7 +26,6 @@
       "image_tags": [
         "{{user `theiaide_tag`}}",
         "deNBI"
-
       ],
       "metadata": {
         "template_name": "{{user `template_name`}}",
@@ -46,7 +45,9 @@
         "info_url": "{{user `info_url`}}",
         "information_for_display": "{{user `information_for_display`}}",
         "github_hash": "{{user `github_hash`}}",
-        "md5_hash": "{{user `md5_hash`}}"
+        "md5_hash": "{{user `md5_hash`}}",
+        "community_driven": "{{user `community_driven`}}",
+        "wiki_link": "{{user `wiki_link`}}"
       }
     }
   ],

@@ -46,7 +46,9 @@
             "information_for_display":"{{user `information_for_display`}}",
             "github_hash":"{{user `github_hash`}}",
             "md5_hash":"{{user `md5_hash`}}",
-            "minram":"{{user `min_ram`}}"
+            "minram":"{{user `min_ram`}}",
+            "community_driven": "{{user `community_driven`}}",
+            "wiki_link": "{{user `wiki_link`}}"
          }
       }
    ],

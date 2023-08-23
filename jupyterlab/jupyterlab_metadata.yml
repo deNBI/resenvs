@@ -17,5 +17,7 @@ title: Jupyterlab
 description: Jupyterlab
 logo_url: https://cloud.denbi.de/images/DWeSy3W-qRwyp1FJB_QyhhjAwT4=/73/original/
 info_url: ""
+community_driven: false
+wiki_link: "https://cloud.denbi.de/wiki/simple_vm/customization/#jupyterlab"
 information_for_display:
   packages: Jupyterlab with ipykernel preinstalled - install additional packages via conda
