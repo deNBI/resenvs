@@ -13,7 +13,8 @@ securitygroup_description: VsCode
 securitygroup_ssh: false
 title: Visual Studio Code
 description: Visual Studio Code with Common Workflow Language, Snakemake and Nextflow development tools preinstalled.
-
+community_driven: false
+wiki_link: ""
 logo_url: "https://cloud.denbi.de/static/images/vscode.png"
 info_url: ""
 information_for_display:
