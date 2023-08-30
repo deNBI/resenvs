@@ -2,5 +2,6 @@
   "bielefeld_staging": "053f75d5-e7ea-4ccc-8519-3c896c27a2c2",
   "bielefeld_production": "70c155a3-d2df-4373-bc7a-81b9cbf4cd49",
   "giessen_staging": "2a365100-62e9-4d0e-8be0-911a3d8f18c5",
-  "giessen_production": "a9ba0f7a-2ef8-42ff-8197-096dbfb6171f"
+  "giessen_production": "a9ba0f7a-2ef8-42ff-8197-096dbfb6171f",
+  "dsi_production": "c174e49a-3434-410e-9e83-6175f51658b0"
 }
