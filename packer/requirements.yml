@@ -12,7 +12,7 @@ roles:
   - name: andrewrothstein.conda-env
     version: v2.2.0
   - name: geerlingguy.docker
-    version: 6.1.0
+    version: 6.2.0
 
   - name: autoscaling
     src: https://github.com/deNBI/autoscaling-ansible
