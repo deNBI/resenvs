@@ -7,7 +7,7 @@ roles:
     version: v3.1.5
 
   - name: andrewrothstein.miniconda
-    version: v6.1.9
+    version: v6.2.0
 
   - name: andrewrothstein.conda-env
     version: v2.2.0
