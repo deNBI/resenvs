@@ -7,16 +7,16 @@ roles:
     version: v3.1.5
 
   - name: andrewrothstein.miniconda
-    version: v6.1.9
+    version: v6.2.0
 
   - name: andrewrothstein.conda-env
     version: v2.2.0
   - name: geerlingguy.docker
-    version: 6.1.0
+    version: 7.0.1
 
   - name: autoscaling
     src: https://github.com/deNBI/autoscaling-ansible
-    version: 1.1.5
+    version: 1.1.7
 
   - name: geerlingguy.swap
 
