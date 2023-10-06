@@ -24,6 +24,7 @@
         -f json
       register: ubuntu_images_command
 
+
     - name: Set image fact
       ansible.builtin.set_fact:
         ubuntu_images: "{{ ubuntu_images_command.stdout }}"
