@@ -27,13 +27,13 @@
         theia_ide_workspace: ${HOME}
 
     - name: Install nvm
-      shell: |
+      ansible.builtin.shell: |
         curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | NVM_DIR={{ theiaide_vars.NVM_INSTALL_DIR }} /bin/bash
       args:
         creates: "{{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh"
 
     - name: Install node 12 and yarn
-      shell: |
+      ansible.builtin.shell: |
         source {{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh
         nvm install 12
         npm install -g yarn
@@ -41,7 +41,7 @@
         executable: bash
 
     - name: Install prebuild theia
-      shell: |
+      ansible.builtin.shell: |
         curl -o- https://bibiserv.cebitec.uni-bielefeld.de/resources/bibigrid/plugins/theia-ide_node12.tar.gz | tar -xzf -
       args:
         chdir: /opt
