@@ -13,7 +13,7 @@
     docker_users:
       - ubuntu
     docker_compose_package: docker-compose-plugin
-    
+
 - name: Install yq
   ansible.builtin.shell: |
     VERSION="v4.34.2"  # Specify the desired version of yq
