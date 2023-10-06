@@ -12,6 +12,7 @@
   vars:
     docker_users:
       - ubuntu
+    docker_compose_package: docker-compose-plugin
 
 - name: Install yq
   ansible.builtin.shell: |
@@ -57,6 +58,6 @@
 
 - name: Run docker-compose EMGB
   ansible.builtin.command:
-    cmd: docker-compose up -d
+    cmd: docker compose up -d
   args:
     chdir: "{{ emgb_vars.repo_path }}"
