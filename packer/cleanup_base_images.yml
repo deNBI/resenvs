@@ -14,7 +14,7 @@
       when: keep is defined and keep | int > 0
 
     - name: Retrieve list of all images
-      shell: >
+      ansible.builtin.shell: >
         openstack image list
         --private
         --tag "base_image"
@@ -23,7 +23,7 @@
         --sort created_at:desc
         -f json
       register: ubuntu_images_command
-
+      changed_when: false
 
     - name: Set image fact
       ansible.builtin.set_fact:
