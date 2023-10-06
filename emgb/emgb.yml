@@ -57,6 +57,6 @@
 
 - name: Run docker-compose EMGB
   ansible.builtin.command:
-    cmd: docker-compose up -d
+    cmd: docker compose up -d
   args:
     chdir: "{{ emgb_vars.repo_path }}"
