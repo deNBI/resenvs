@@ -14,11 +14,11 @@
         limit: "{{ keep | int }}"
       when: keep is defined and keep | int > 0
 
-    - name: Retrieve list of all {{resenv}} base image
-      shell: >
+    - name: Retrieve list of all {{ resenv }} base image
+      ansible.builtin.shell: >
         openstack image list
         --private
-        --tag {{vars[resenv + '_tag']}}
+        --tag {{ vars[resenv + '_tag'] }}
         --property image_type=image
         --property os_version={{ os_version }}
         --property os_distro={{ os_distro }}
@@ -26,11 +26,12 @@
         --long
         -f json
       register: resenv_images_command
+      changed_when: false
 
 
     - name: Filter images excluding "cluster" tag
-      set_fact:
-        resenv_images: "{{ resenv_images_command.stdout|from_json | rejectattr('Tags', 'search', 'cluster')}}"
+      ansible.builtin.set_fact:
+        resenv_images: "{{ resenv_images_command.stdout | from_json | rejectattr('Tags', 'search', 'cluster') }}"
 
     - name: Echo Ubuntu images length
       ansible.builtin.debug:
@@ -49,11 +50,11 @@
         index_var: index
       when: resenv_images | length > limit | int and index >= limit | int
 
-    - name: Retrieve list of all {{resenv}} base image
-      shell: >
+    - name: Retrieve list of all {{ resenv }} base image
+      ansible.builtin.shell: >
         openstack image list
         --private
-        --tag {{vars[resenv + '_tag']}}
+        --tag {{ vars[resenv + '_tag'] }}
         --tag cluster
         --tag master
         --property image_type=image
@@ -63,6 +64,7 @@
         --long
         -f json
       register: resenv_master_images_command
+      changed_when: false
 
     - name: Set image fact
       ansible.builtin.set_fact:
@@ -87,11 +89,11 @@
       when: resenv_master_images | length > limit | int and index >= limit | int
 
 
-    - name: Retrieve list of all {{resenv}} base image
-      shell: >
+    - name: Retrieve list of all {{ resenv }} base image
+      ansible.builtin.shell: >
         openstack image list
         --private
-        --tag {{vars[resenv + '_tag']}}
+        --tag {{ vars[resenv + '_tag'] }}
         --tag cluster
         --tag worker
         --property image_type=image
@@ -101,6 +103,7 @@
         --long
         -f json
       register: resenv_worker_images_command
+      changed_when: false
 
     - name: Set image fact
       ansible.builtin.set_fact:
