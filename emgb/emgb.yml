@@ -1,7 +1,7 @@
 ---
 
 - name: Ensure python-is-python3 is installed
-  become: yes
+  become: true
   package:
     name: python-is-python3
     state: present
@@ -19,7 +19,7 @@
     BINARY="yq_linux_amd64"  # Change this if you need a different binary
     wget "https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz" -O - |\
       tar xz && mv "${BINARY}" /usr/bin/yq
-  become: yes
+  become: true
 
 - name: Clone EMGB Repo
   git:
@@ -43,11 +43,11 @@
     cmd: ./prepare-import.sh
   args:
     chdir: "{{ emgb_vars.repo_path }}"
-    
+
 - name: Copy docker-compose.override
   ansible.builtin.copy:
     src: docker-compose.override.yml
-    dest: "{{emgb_vars.repo_path}}"
+    dest: "{{ emgb_vars.repo_path }}"
 
 - name: Run yq command to delete nginx ports
   ansible.builtin.command:
@@ -59,6 +59,4 @@
   ansible.builtin.command:
     cmd: docker-compose up -d
   args:
-    chdir: "{{emgb_vars.repo_path}}"
-
-
+    chdir: "{{ emgb_vars.repo_path }}"

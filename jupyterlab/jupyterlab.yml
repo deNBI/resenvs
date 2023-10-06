@@ -26,40 +26,40 @@
 
 - name: Adjust miniconda folder rights
   become: true
-  shell: chown -R {{jupyterlab_vars.default_user}}:{{jupyterlab_vars.default_user}} {{jupyterlab_vars.CONDA_DIR}}/
+  ansible.builtin.shell: chown -R {{jupyterlab_vars.default_user}}:{{jupyterlab_vars.default_user}} {{jupyterlab_vars.CONDA_DIR}}/
   when: not jupyterlab_vars.create_only_backend
 
 - name: Add bioconda channel
   become_user: "{{   jupyterlab_vars.default_user  }}"
-  shell: timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'
+  ansible.builtin.shell: timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'
   args:
     executable: /bin/bash
   when: not jupyterlab_vars.create_only_backend
 
 - name: Add conda-forge channel
   become_user: "{{   jupyterlab_vars.default_user  }}"
-  shell: timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'
+  ansible.builtin.shell: timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'
   args:
     executable: /bin/bash
   when: not jupyterlab_vars.create_only_backend
 
 - name: Add anaconda channel
   become_user: "{{   jupyterlab_vars.default_user  }}"
-  shell: timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels anaconda'
+  ansible.builtin.shell: timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels anaconda'
   args:
     executable: /bin/bash
   when: not jupyterlab_vars.create_only_backend
 
 - name: Init .bashrc for conda
   become_user: "{{   jupyterlab_vars.default_user  }}"
-  shell: timeout 1m bash -c 'source {{ jupyterlab_vars.CONDA_DIR}}/bin/activate && conda init'
+  ansible.builtin.shell: timeout 1m bash -c 'source {{ jupyterlab_vars.CONDA_DIR}}/bin/activate && conda init'
   args:
     executable: /bin/bash
   when: not jupyterlab_vars.create_only_backend
 
 - name: Create alias for environment
   become_user: "{{   jupyterlab_vars.default_user  }}"
-  shell: echo $ALIAS_VARIABLE > ~/.bash_aliases
+  ansible.builtin.shell: echo $ALIAS_VARIABLE > ~/.bash_aliases
   environment:
     ALIAS_VARIABLE: alias {{ jupyterlab_vars.ENV_NAME| quote }}="conda activate {{ jupyterlab_vars.ENV_NAME| quote }}"
   when: not jupyterlab_vars.create_only_backend

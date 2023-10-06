@@ -14,7 +14,7 @@
       when: keep is defined and keep | int > 0
 
     - name: Retrieve list of all master base image
-      shell: >
+      ansible.builtin.shell: >
         openstack image list
         --private
         --tag "base_cluster"
@@ -26,12 +26,11 @@
         --sort created_at:desc
         -f json
       register: ubuntu_master_images_command
+      changed_when: false
 
     - name: Set master image fact
-      set_fact:
+      ansible.builtin.set_fact:
         ubuntu_master_images: "{{ ubuntu_master_images_command.stdout }}"
-
-
 
     - name: Echo Ubuntu images length
       ansible.builtin.debug:
@@ -49,10 +48,10 @@
       loop: "{{ ubuntu_master_images }}"
       loop_control:
         index_var: index
-      when: ubuntu_master_images  | length > limit | int and index >= limit | int
+      when: ubuntu_master_images | length > limit | int and index >= limit | int
 
     - name: Retrieve list of all worker base image
-      shell: >
+      ansible.builtin.shell: >
         openstack image list
         --tag "base_cluster"
         --tag "cluster"
@@ -63,12 +62,11 @@
         --sort created_at:desc
         -f json
       register: ubuntu_worker_images_command
+      changed_when: false
 
     - name: Set worker image fact
-      set_fact:
+      ansible.builtin.set_fact:
         ubuntu_worker_images: "{{ ubuntu_worker_images_command.stdout }}"
-
-
 
     - name: Echo Ubuntu images length
       ansible.builtin.debug:

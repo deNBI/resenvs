@@ -69,7 +69,7 @@
 
 
     - name: Delete local uploaded file
-      file:
+      ansible.builtin.file:
         path: "{{ name }}"
         state: absent
       when: update
