@@ -1,5 +1,5 @@
 
 openstacksdk==1.5.0
 ansible==6.7.0
-python-openstackclient==6.2.0
+python-openstackclient==6.3.0
 paramiko
