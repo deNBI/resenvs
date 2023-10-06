@@ -57,21 +57,21 @@
     update_cache: "yes"
     upgrade: "yes"
 
-- name: Import deadsnake PPA for python3.8
+- name: Import deadsnake PPA for python3.9
   ansible.builtin.apt_repository:
     repo: ppa:deadsnakes/ppa
     update_cache: true
   tags: always
 
-- name: Install python3.8
+- name: Install python3.9
   ansible.builtin.apt:
     state: present
-    name: python3.8
+    name: python3.9
 
-- name: Install Python 3.8 and reset selection to auto
+- name: Install Python 3.9 and reset selection to auto
   community.general.alternatives:
     name: python
-    path: /usr/bin/python3.8
+    path: /usr/bin/python3.9
     link: /usr/bin/python
     state: auto
 
@@ -84,8 +84,8 @@
       - libffi-dev
       - libssl-dev
       - software-properties-common
-      - python3.8-dev
-      - python3.8-venv
+      - python3.9-dev
+      - python3.9-venv
       - python3-pip
       - python3-setuptools
     state: present
