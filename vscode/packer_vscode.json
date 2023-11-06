@@ -23,6 +23,7 @@
       "networks": "{{user `network`}}",
       "flavor": "de.NBI tiny",
       "ssh_username": "ubuntu",
+      "ssh_clear_authorized_keys": true,
       "image_tags": [
         "{{user `vscode_tag`}}",
         "deNBI"
