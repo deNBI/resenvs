@@ -20,6 +20,7 @@
         --tag "base_image"
         --property os_version={{ os_version }}
         --property os_distro={{ os_distro }}
+        --property image_type=image
         --sort created_at:desc
         -f json
       register: ubuntu_images_command

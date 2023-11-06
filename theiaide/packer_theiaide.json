@@ -15,7 +15,9 @@
           ],
           "properties": {
             "os_distro": "{{user `os_distro`}}",
-            "os_version": "{{user `os_version`}}"
+            "os_version": "{{user `os_version`}}",
+            "image_type": "image"
+
           }
         },
         "most_recent": true
