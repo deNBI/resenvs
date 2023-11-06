@@ -65,6 +65,7 @@
           os_distro: "{{ os_distro }}"
           os_version: "{{ os_version }}"
           description: Ubuntu is a free and open source operating system and Linux distribution based on Debian.
+          image_type: image
       when: update
 
 
