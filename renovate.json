@@ -1,83 +1,92 @@
 {
-   "extends":[
-      "config:base",
-      ":automergePatch"
-   ],
-   "platform":"github",
-   "regexManagers":[
-      {
-         "fileMatch":[
-            "guacamole/roles/guacamole/vars/main\\.yml",
-            "guacamole/guacamole_metadata\\.yml"
-         ],
-         "matchStrings":[
-            "guacamole_version: (?<currentValue>.*?)\\n",
-            "version: (?<currentValue>.*?)\\n"
-         ],
-         "depNameTemplate":"apache/guacamole-server",
-         "datasourceTemplate":"github-tags"
-      },
-      {
-         "fileMatch":[
-            "rstudio/rstudio_vars_file\\.yml",
-            "rstudio/rstudio_metadata\\.yml"
-         ],
-         "matchStrings":[
-            "RSTUDIO_VERSION: (?<currentValue>.*?)\\n",
-            "version: (?<currentValue>.*?)\\n"
-         ],
-         "depNameTemplate":"rstudio/rstudio",
-         "datasourceTemplate":"github-tags",
-         "versioningTemplate":"regex:v(?<major>20\\d\\d)\\.(?<minor>\\d\\d)\\.(?<patch>\\d)\\+\\d*"
-      },
-      {
-         "fileMatch":[
-            "vscode/vscode_vars_file\\.yml",
-            "vscode/vscode_metadata\\.yml",
-            "vscode_cwl/vscode_cwl_metadata\\.yml"
-         ],
-         "matchStrings":[
-            "VSCODE_VERSION: (?<currentValue>.*?)\\n",
-            "version: (?<currentValue>.*?)\\n"
-         ],
-         "depNameTemplate":"coder/code-server",
-         "datasourceTemplate":"github-tags"
-      }
-   ],
-   "packageRules":[
-      {
-         "matchUpdateTypes":[
-            "major",
-            "minor",
-            "patch"
-         ],
-         "addLabels":[
-            "major",
-            "minor",
-            "patch"
-         ]
-      }
-   ],
-   "vulnerabilityAlerts":{
-      "labels":[
-         "security"
+  "extends": [
+    "config:base",
+    ":automergePatch"
+  ],
+  "platform": "github",
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "guacamole/roles/guacamole/vars/main\\.yml",
+        "guacamole/guacamole_metadata\\.yml"
+      ],
+      "matchStrings": [
+        "guacamole_version: (?<currentValue>.*?)\\n",
+        "version: (?<currentValue>.*?)\\n"
+      ],
+      "depNameTemplate": "apache/guacamole-server",
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "fileMatch": [
+        "rstudio/rstudio_vars_file\\.yml",
+        "rstudio/rstudio_metadata\\.yml"
+      ],
+      "matchStrings": [
+        "RSTUDIO_VERSION: (?<currentValue>.*?)\\n",
+        "version: (?<currentValue>.*?)\\n"
+      ],
+      "depNameTemplate": "rstudio/rstudio",
+      "datasourceTemplate": "github-tags",
+      "versioningTemplate": "regex:v(?<major>20\\d\\d)\\.(?<minor>\\d\\d)\\.(?<patch>\\d)\\+\\d*"
+    },
+    {
+      "fileMatch": [
+        "vscode/vscode_vars_file\\.yml",
+        "vscode/vscode_metadata\\.yml",
+        "vscode_cwl/vscode_cwl_metadata\\.yml"
+      ],
+      "matchStrings": [
+        "VSCODE_VERSION: (?<currentValue>.*?)\\n",
+        "version: (?<currentValue>.*?)\\n"
+      ],
+      "depNameTemplate": "coder/code-server",
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "fileMatch": [
+        "jupyterlab/jupyterlab_env\\.yml"
+      ],
+      "matchStrings": [
+        "# renovate datasource=conda\\sdepName=(?<depName>.*?)\\s+- [a-z0-9]+==\"?(?<currentValue>.*)\"?"
+      ],
+      "datasourceTemplate": "conda"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ],
+      "addLabels": [
+        "major",
+        "minor",
+        "patch"
       ]
-   },
-   "baseBranches":[
-      "dev"
-   ],
-   "reviewers":[
-      "team:portal-dev"
-   ],
-   "labels":[
-      "dependencies"
-   ],
-   "assignees":[
-      "team:portal-dev"
-   ],
-   "branchPrefix":"deps/",
-   "bumpVersion":"minor",
-   "rebaseWhen":"behind-base-branch",
-   "commitBodyTable":true,
-   "commitMessagePrefix":"feat(Dependencies):"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "labels": [
+      "security"
+    ]
+  },
+  "baseBranches": [
+    "dev"
+  ],
+  "reviewers": [
+    "team:portal-dev"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "assignees": [
+    "team:portal-dev"
+  ],
+  "branchPrefix": "deps/",
+  "bumpVersion": "minor",
+  "rebaseWhen": "behind-base-branch",
+  "commitBodyTable": true,
+  "commitMessagePrefix": "feat(Dependencies):"
 }

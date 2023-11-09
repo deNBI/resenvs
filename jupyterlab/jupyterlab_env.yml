@@ -5,9 +5,13 @@ channels:
   - defaults
   - anaconda
 dependencies:
-  - notebook
-  - jupyter_contrib_nbextensions
-  - ipykernel
-  - widgetsnbextension
-  - ipyparallel
-  - jupyterlab
+  # renovate datasource=conda depName=conda-forge/notebook
+  - notebook=7.0.6
+  # renovate datasource=conda depName=conda-forge/ipykernel
+  - ipykernel=6.26.0
+  # renovate datasource=conda depName=conda-forge/widgetsnbextension
+  - widgetsnbextension=4.0.9
+  # renovate datasource=conda depName=conda-forge/ipyparallel
+  - ipyparallel=8.6.1
+  # renovate datasource=conda depName=conda-forge/jupyterlab
+  - jupyterlab=4.0.8
