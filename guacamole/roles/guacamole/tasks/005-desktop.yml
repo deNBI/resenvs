@@ -34,4 +34,4 @@
 - name: Setup password for default user
   ansible.builtin.user:
     name: "{{ default_user }}"
-    password: "{{ default_password_hashed }}"
+    password: "{{ default_password | password_hash('sha512') }}"
