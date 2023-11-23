@@ -1,5 +1,7 @@
 ---
 # vars file for guacamolerdp-ansible
+default_user: ubuntu
+default_password: ogvkyf
 
 guac_user: denbi
 guac_password: denbi
