@@ -30,8 +30,3 @@
     path: /etc/xrdp/xrdp.ini
     line: exec startxfce4
   notify: Restart xrdp
-
-- name: Setup password for default user
-  ansible.builtin.user:
-    name: "{{ default_user }}"
-    password: "{{ default_password | password_hash('sha512') }}"
