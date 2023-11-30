@@ -1,8 +1,10 @@
 ---
 - name: Setup password for default user
+  become: true
   ansible.builtin.user:
     name: "{{ rstudio_vars.default_user }}"
     password: "{{ rstudio_vars.default_password | password_hash('sha512') }}"
+    update_password: always
 
 - name: Install R role
   include_role:

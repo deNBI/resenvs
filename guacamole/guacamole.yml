@@ -9,9 +9,11 @@
   when: not guacamole_vars.create_only_backend
 
 - name: Setup password  for default ubuntu user - standart
+  become: true
   ansible.builtin.user:
     name: "{{ guacamole_vars.default_user }}"
     password: "{{ guacamole_vars.default_password | password_hash('sha512') }}"
+    update_password: always
 
 - name: Restart xrdp
   ansible.builtin.systemd:
