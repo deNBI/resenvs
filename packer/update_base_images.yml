@@ -47,7 +47,7 @@
       when: update
 
     - name: Download new base image
-      ansible.builtin.command: ~/mc cp osbielefeld/cloud-images/"{{ name }}" .
+      ansible.builtin.command: mc cp osbielefeld/cloud-images/"{{ name }}" .
       when: update
       changed_when: false
 

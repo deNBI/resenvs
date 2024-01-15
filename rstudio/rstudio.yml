@@ -5,6 +5,8 @@
     name: "{{ rstudio_vars.default_user }}"
     password: "{{ rstudio_vars.default_password | password_hash('sha512') }}"
     update_password: always
+    password_lock: false
+
 
 - name: Install R role
   include_role:
