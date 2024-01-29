@@ -5,14 +5,14 @@
     dest: /tmp/miniconda.sh
 
 - name: Install Miniconda
-  command: bash /tmp/miniconda.sh -b -p /opt/miniconda
+  command: bash /tmp/miniconda.sh -b -p {{conda_vars.CONDA_DIR}}
   args:
-    creates: /opt/miniconda/bin/conda  # Check if Miniconda is already installed
+    creates: {{conda_vars.CONDA_DIR}}/bin/conda  # Check if Miniconda is already installed
 
 - name: Add Miniconda to PATH
   lineinfile:
     path: /etc/profile
-    line: 'export PATH=/opt/miniconda/bin:$PATH'
+    line: 'export PATH={{conda_vars.CONDA_DIR}}/bin:$PATH'
   become: true
   become_user: root
 
@@ -25,9 +25,9 @@
     conda_env_environment: conda_env.yml
     conda_env_activate_for_login_shell: true
 
-#- name: Adjust miniconda folder rights
- # become: true
-  #shell: chown -R {{conda_vars.default_user}}:{{conda_vars.default_user}} {{conda_vars.CONDA_DIR}}/
+- name: Adjust miniconda folder rights
+  become: true
+  shell: chown -R {{conda_vars.default_user}}:{{conda_vars.default_user}} {{conda_vars.CONDA_DIR}}/
 
 - name: Add bioconda channel
   become_user: "{{   conda_vars.default_user  }}"
