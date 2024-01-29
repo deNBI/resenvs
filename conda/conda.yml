@@ -20,14 +20,14 @@
   include_role:
     name: andrewrothstein.conda-env
   vars:
-    conda_env_conda_dir: "/opt/miniconda"
+    conda_env_conda_dir: "{{conda_vars.CONDA_DIR}}"
     conda_env_name: "{{ conda_vars.ENV_NAME| quote }}"
     conda_env_environment: conda_env.yml
     conda_env_activate_for_login_shell: true
 
-- name: Adjust miniconda folder rights
-  become: true
-  shell: chown -R {{conda_vars.default_user}}:{{conda_vars.default_user}} {{conda_vars.CONDA_DIR}}/
+#- name: Adjust miniconda folder rights
+ # become: true
+  #shell: chown -R {{conda_vars.default_user}}:{{conda_vars.default_user}} {{conda_vars.CONDA_DIR}}/
 
 - name: Add bioconda channel
   become_user: "{{   conda_vars.default_user  }}"
