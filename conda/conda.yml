@@ -1,11 +1,25 @@
 ---
-- name: Install miniconda role
-  include_role:
-    name: andrewrothstein.miniconda
-  vars:
-    miniconda_parent_dir: /home/{{conda_vars.default_user}}
-    miniconda_link_subdir: miniconda3
+- name: Download Miniconda
+  get_url:
+    url: https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh  # Adjust the URL based on your target platform
+    dest: /tmp/miniconda.sh
 
+- name: Install Miniconda
+  command: bash /tmp/miniconda.sh -b -p /opt/miniconda
+  args:
+    creates: /opt/miniconda/bin/conda  # Check if Miniconda is already installed
+
+- name: Add Miniconda to PATH
+  lineinfile:
+    path: /etc/profile
+    line: 'export PATH=/opt/miniconda/bin:$PATH'
+  become: true
+  become_user: root
+
+- name: Update shell environment
+  command: source /etc/profile
+  args:
+    executable: /bin/bash
 - name: Install conda-env role
   include_role:
     name: andrewrothstein.conda-env
