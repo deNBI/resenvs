@@ -20,7 +20,7 @@
   include_role:
     name: andrewrothstein.conda-env
   vars:
-    conda_env_conda_dir: "{{conda_vars.CONDA_DIR}}"
+    conda_env_conda_dir: "/opt/miniconda/bin/conda"
     conda_env_name: "{{ conda_vars.ENV_NAME| quote }}"
     conda_env_environment: conda_env.yml
     conda_env_activate_for_login_shell: true
