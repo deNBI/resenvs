@@ -16,10 +16,6 @@
   become: true
   become_user: root
 
-- name: Update shell environment
-  command: source /etc/profile
-  args:
-    executable: /bin/bash
 - name: Install conda-env role
   include_role:
     name: andrewrothstein.conda-env
