@@ -9,8 +9,6 @@ roles:
   - name: andrewrothstein.miniconda
     version: v6.2.0
 
-  - name: andrewrothstein.conda-env
-    version: v2.2.0
   - name: geerlingguy.docker
     version: 7.0.2
 

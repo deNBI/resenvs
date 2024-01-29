@@ -4,14 +4,26 @@
     name: geerlingguy.swap
   vars:
     swap_file_size_mb: "2024"
+- name: Download Miniconda
+  get_url:
+    url: https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    dest: /tmp/miniconda.sh
 
-- name: Install miniconda role
-  include_role:
-    name: andrewrothstein.miniconda
-  vars:
-    miniconda_parent_dir: /home/{{jupyterlab_vars.default_user}}
-    miniconda_link_subdir: miniconda3
+- name: Install Miniconda
+  command: bash /tmp/miniconda.sh -b -p {{jupyterlab_vars.CONDA_DIR}}
+  args:
+    creates: "{{jupyterlab_vars.CONDA_DIR}}/bin/conda"
   when: not jupyterlab_vars.create_only_backend
+
+- name: Add Miniconda to PATH
+  lineinfile:
+    path: /etc/profile
+    line: 'export PATH={{jupyterlab_vars.CONDA_DIR}}/bin:$PATH'
+  become: true
+  become_user: root
+  when: not jupyterlab_vars.create_only_backend
+
+
 
 - name: Install conda-env role
   include_role:
