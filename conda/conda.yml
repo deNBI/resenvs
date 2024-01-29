@@ -1,10 +1,20 @@
 ---
-- name: Install miniconda role
-  include_role:
-    name: andrewrothstein.miniconda
-  vars:
-    miniconda_parent_dir: /home/{{conda_vars.default_user}}
-    miniconda_link_subdir: miniconda3
+- name: Download Miniconda
+  get_url:
+    url: https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    dest: /tmp/miniconda.sh
+
+- name: Install Miniconda
+  command: bash /tmp/miniconda.sh -b -p {{conda_vars.CONDA_DIR}}
+  args:
+    creates: "{{conda_vars.CONDA_DIR}}/bin/conda"
+
+- name: Add Miniconda to PATH
+  lineinfile:
+    path: /etc/profile
+    line: 'export PATH={{conda_vars.CONDA_DIR}}/bin:$PATH'
+  become: true
+  become_user: root
 
 - name: Install conda-env role
   include_role:
@@ -20,48 +30,45 @@
   shell: chown -R {{conda_vars.default_user}}:{{conda_vars.default_user}} {{conda_vars.CONDA_DIR}}/
 
 - name: Add bioconda channel
-  become_user: "{{   conda_vars.default_user  }}"
-  shell: timeout 1m bash -c 'source {{conda_vars.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'
+  become_user: "{{conda_vars.default_user}}"
+  shell: 'timeout 1m bash -c ''source {{conda_vars.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'''
   args:
     executable: /bin/bash
 
 - name: Add conda-forge channel
-  become_user: "{{   conda_vars.default_user  }}"
-  ansible.builtin.shell: timeout 1m bash -c 'source {{conda_vars.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'
+  become_user: "{{conda_vars.default_user}}"
+  shell: 'timeout 1m bash -c ''source {{conda_vars.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'''
   args:
     executable: /bin/bash
 
 - name: Add anaconda channel
-  become_user: "{{   conda_vars.default_user  }}"
-  ansible.builtin.shell: timeout 1m bash -c 'source {{conda_vars.CONDA_DIR}}/bin/activate && conda config --add channels anaconda'
+  become_user: "{{conda_vars.default_user}}"
+  shell: 'timeout 1m bash -c ''source {{conda_vars.CONDA_DIR}}/bin/activate && conda config --add channels anaconda'''
   args:
     executable: /bin/bash
 
 - name: Init .bashrc for conda
-  become_user: "{{   conda_vars.default_user  }}"
-  ansible.builtin.shell: timeout 1m bash -c 'source {{ conda_vars.CONDA_DIR}}/bin/activate && conda init'
+  become_user: "{{conda_vars.default_user}}"
+  shell: 'timeout 1m bash -c ''source {{ conda_vars.CONDA_DIR}}/bin/activate && conda init'''
   args:
     executable: /bin/bash
 
 - name: Create alias for environment
-  become_user: "{{ conda_vars.default_user }}"
+  become_user: "{{conda_vars.default_user}}"
   lineinfile:
-    path: /home/{{ conda_vars.default_user }}/.bashrc
-    line: "alias {{ conda_vars.ENV_NAME|quote }}='conda activate {{ conda_vars.ENV_NAME|quote }}'"
-
+    path: "/home/{{conda_vars.default_user}}/.bashrc"
+    line: "alias {{conda_vars.ENV_NAME|quote}}='conda activate {{conda_vars.ENV_NAME|quote}}'"
 
 - name: Check for installed packages
-  become_user: "{{ conda_vars.default_user }}"
-  ansible.builtin.shell: 'source {{ conda_vars.CONDA_DIR }}/bin/activate && conda activate {{ conda_vars.ENV_NAME|quote }} && conda list'
+  become_user: "{{conda_vars.default_user}}"
+  shell: 'source {{conda_vars.CONDA_DIR}}/bin/activate && conda activate {{conda_vars.ENV_NAME|quote}} && conda list'
   register: added_packages
   args:
     executable: /bin/bash
 
-
 - name: Install chosen packages
-  become_user: "{{   conda_vars.default_user  }}"
-  ansible.builtin.shell: 'source {{ conda_vars.CONDA_DIR }}/bin/activate && conda activate {{ conda_vars.ENV_NAME|quote }}
-          && conda install --yes {{ item.key }}={{ item.value.version }}'
+  become_user: "{{conda_vars.default_user}}"
+  shell: 'source {{conda_vars.CONDA_DIR}}/bin/activate && conda activate {{conda_vars.ENV_NAME|quote}} && conda install --yes {{item.key}}={{item.value.version}}'
   args:
     executable: /bin/bash
   loop: "{{ q('dict', conda_vars.packages) }}"
