@@ -29,13 +29,13 @@ Role Variables
 
 **vars/main.yml**
 
-| Variable                  | Description           | Default                                                                       | Mandatory |
-| -------------             |-------------          |            -----                                                              |     ---   |
-| default_user           | Default unix user on which guacamole connects to |                ubuntu                                                    | Yes       |
-| default_password              | Default password of the unix user. Change it when target is not externally protected via ReverseProxy or other.                                  |        ogvkyf                       | Yes       |
-| default_password_hashed         | Hashed password of default_password      |    $6$iRrIJogr...    |   Yes     |
-| guac_user        | Default guacamole user                 | denbi      | Yes       |
-| guac_password         | Default guacamole password                        | denbi                          | Yes       |
+| Variable                  | Description           | Default        | Mandatory |
+| -------------             |-------------          |----------------|     ---   |
+| default_user           | Default unix user on which guacamole connects to | ubuntu         | Yes       |
+| default_password              | Default password of the unix user. Change it when target is not externally protected via ReverseProxy or other.                                  | denbi          | Yes       |
+| default_password_hashed         | Hashed password of default_password      | $6$iRrIJogr... |   Yes     |
+| guac_user        | Default guacamole user                 | denbi          | Yes       |
+| guac_password         | Default guacamole password                        | denbi          | Yes       |
 
 
 Dependencies
