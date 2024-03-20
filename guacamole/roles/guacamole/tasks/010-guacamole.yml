@@ -65,7 +65,9 @@
   args:
     chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
     creates: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/Makefile
-
+  environment:
+    LDFLAGS: "-lrt"
+    
 - name: Ignore depcreated warnings Ubuntu 22
   ansible.builtin.lineinfile:
     path: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/src/common-ssh/Makefile
@@ -74,17 +76,17 @@
     state: present
     firstmatch: true
 
+
+
 - name: Compile guacamole
   community.general.system.make:
     chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
-  environment:
-    LDFLAGS: "-lrt"
+
 - name: Make install
   community.general.system.make:
     chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
     target: install
-  environment:
-    LDFLAGS: "-lrt"
+
 
 - name: Link libraries
   ansible.builtin.command: ldconfig
