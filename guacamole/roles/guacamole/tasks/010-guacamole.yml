@@ -77,11 +77,14 @@
 - name: Compile guacamole
   community.general.system.make:
     chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
-
+  environment:
+    LDFLAGS: "-lrt"
 - name: Make install
   community.general.system.make:
     chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
     target: install
+  environment:
+    LDFLAGS: "-lrt"
 
 - name: Link libraries
   ansible.builtin.command: ldconfig
