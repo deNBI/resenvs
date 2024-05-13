@@ -11,8 +11,8 @@ protocol: tcp
 securitygroup_name: _emgb
 securitygroup_description: Emgb Server
 securitygroup_ssh: false
-title: Elastic MetaGenome Browser 2
-description: Elastic MetaGenome Browser 2
+title: Extreme MetaGenome Browser
+description: Extreme MetaGenome Browser
 logo_url: "https://gitlab.ub.uni-bielefeld.de/cmg/emgb/emgb-server/-/raw/master/static/emgb/main/favicon.png?inline=false"
 info_url: ""
 min_ram: 32
