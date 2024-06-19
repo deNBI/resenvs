@@ -67,7 +67,7 @@
     creates: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/Makefile
   environment:
     LDFLAGS: "-lrt"
-    
+
 - name: Ignore depcreated warnings Ubuntu 22
   ansible.builtin.lineinfile:
     path: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/src/common-ssh/Makefile
