@@ -23,8 +23,6 @@
   become_user: root
   when: not jupyterlab_vars.create_only_backend
 
-
-
 - name: Install conda-env role
   include_role:
     name: andrewrothstein.conda-env
