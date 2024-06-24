@@ -50,14 +50,18 @@
     - name: Download new base image
       ansible.builtin.command: mc cp "{{ s3_path }}" .
       when: update
+      register: download_result
       changed_when: false
 
+    - set_fact:
+        downloaded_filename: "{{ download_result.stdout | regex_findall('`([^`]+)$') | first }}"
+      when: download_result.stdout is defined
 
     - name: Upload image to Openstack
       openstack.cloud.image:
         name: "{{ name + ' de.NBI (' + date_time + ')' }}"
         state: present
-        filename: "{{ name }}"
+        filename: "{{ downloaded_filename }}"
         tags:
           - portalclient
           - "{{ base_image_tag }}"
