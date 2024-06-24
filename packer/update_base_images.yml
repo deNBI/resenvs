@@ -6,6 +6,7 @@
     date: "2000-01-01"
     os_distro: ubuntu
     os_version: "20.04"
+    s3_path: path
   vars_files:
     - tags.json
 
@@ -47,7 +48,7 @@
       when: update
 
     - name: Download new base image
-      ansible.builtin.command: mc cp osbielefeld/cloud-images/"{{ name }}" .
+      ansible.builtin.command: mc cp "{{ s3_path }}" .
       when: update
       changed_when: false
 
