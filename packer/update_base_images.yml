@@ -53,9 +53,15 @@
       register: download_result
       changed_when: false
 
+    - name: Download new base image
+      ansible.builtin.command: "mc cp '{{ s3_path }}' ."
+      register: download_result
+      when: update
+      changed_when: false
+
     - set_fact:
-        downloaded_filename: "{{ download_result.stdout | regex_findall('`([^`]+)$') | first }}"
-      when: download_result.stdout is defined
+        downloaded_filename: "{{ download_result.stdout_lines[0] | regex_replace('^`([^`]+)` -> `(.+)`$', '\\2') }}"
+      when: download_result.stdout_lines | length > 0
 
     - name: Upload image to Openstack
       openstack.cloud.image:
