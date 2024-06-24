@@ -6,6 +6,7 @@
     date: "2000-01-01"
     os_distro: ubuntu
     os_version: "20.04"
+    s3_path: path
   vars_files:
     - tags.json
 
@@ -47,16 +48,26 @@
       when: update
 
     - name: Download new base image
-      ansible.builtin.command: mc cp osbielefeld/cloud-images/"{{ name }}" .
+      ansible.builtin.command: mc cp "{{ s3_path }}" .
+      when: update
+      register: download_result
+      changed_when: false
+
+    - name: Download new base image
+      ansible.builtin.command: "mc cp '{{ s3_path }}' ."
+      register: download_result
       when: update
       changed_when: false
 
+    - set_fact:
+        downloaded_filename: "{{ download_result.stdout_lines[0] | regex_replace('^`([^`]+)` -> `(.+)`$', '\\2') }}"
+      when: download_result.stdout_lines | length > 0
 
     - name: Upload image to Openstack
       openstack.cloud.image:
         name: "{{ name + ' de.NBI (' + date_time + ')' }}"
         state: present
-        filename: "{{ name }}"
+        filename: "{{ downloaded_filename }}"
         tags:
           - portalclient
           - "{{ base_image_tag }}"
