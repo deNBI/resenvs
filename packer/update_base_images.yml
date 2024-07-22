@@ -54,7 +54,7 @@
       when: update
       changed_when: false
 
-    - set_fact:
+    - ansible.builtin.set_fact:
         downloaded_filename: "{{ download_result.stdout_lines[0] | regex_replace('^`([^`]+)` -> `(.+)`$', '\\2') }}"
       when: update and download_result.stdout_lines | length > 0
 
