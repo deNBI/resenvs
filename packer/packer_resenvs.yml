@@ -68,23 +68,7 @@
       ansible.builtin.pip:
         name: pip
         state: latest
-    - name: Install additional docker python libraries
-      ansible.builtin.pip:
-        name:
-          - cryptography>=39.0
-          - pyOpenssl>=22.0
 
-    - name: Install additional docker python libraries
-      ansible.builtin.pip:
-        name:
-          - cryptography>=39.0
-          - pyOpenssl>=22.0
-
-    - name: Install additional docker python libraries
-      ansible.builtin.pip:
-        name:
-          - cryptography>=39.0
-          - pyOpenssl>=22.0
 
   tasks:
     - name: Include {{ resenv }} variables
