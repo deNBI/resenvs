@@ -1,40 +1,52 @@
 ---
-- name: Install required system packages
-  apt: name={{ item }} state=latest update_cache=yes
-  loop: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+- name: Update apt package index
+  apt:
+    update_cache: yes
+    force_apt_get: yes
 
-- name: "Add Docker GPG apt Key"
+- name: Install required packages for apt to use a repository over HTTPS
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    - gnupg
+
+- name: Add Docker’s official GPG key
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
 
-- name: "Add Docker Repository"
+- name: Set up the stable repository
   apt_repository:
-    repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
     state: present
 
-- name: "Update apt and install docker-ce"
-  apt: update_cache=yes name=docker-ce state=latest
+- name: Update the apt package index again
+  apt:
+    update_cache: yes
+    force_apt_get: yes
 
-- name: Install additional docker python libraries
-  pip:
+- name: Install Docker
+  apt:
     name: "{{ item }}"
+    state: present
   loop:
-    - docker
-    - docker-compose
-    - jsondiff
-    - pyyaml
-  remote_user: ubuntu
-  become: false
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
 
-- name: "Ensure the user ansible_user is part of the docker group"
+- name: Ensure Docker service is running
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Add the user to the docker group (optional)
   user:
     name: "{{ ansible_user }}"
     groups: docker
-    append: true
-
-- name: "Restart docker and run daemon-reload to pick up config changes"
-  ansible.builtin.systemd:
-    state: restarted
-    daemon_reload: true
-    name: docker
+    append: yes

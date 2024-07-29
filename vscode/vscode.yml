@@ -1,4 +1,14 @@
 ---
+- name: Ensure pip configuration allows breaking system packages (system-wide)
+  become: true
+  lineinfile:
+    path: /etc/pip.conf
+    create: yes
+    line: |
+      [global]
+      break-system-packages = true
+    insertafter: EOF
+    
 - name: Download Code Server Install Script
   ansible.builtin.get_url:
     url: "{{ vscode_vars.INSTALL_SCRIPT_URL }}"
