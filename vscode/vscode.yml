@@ -24,7 +24,12 @@
     name: vscode
     state: started
     enabled: true
-
+- name: Ensure pip configuration allows breaking system packages
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.config/pip/pip.conf"
+    create: yes
+    line: "[global]\nbreak-system-packages = true"
+    insertafter: EOF
 - name: Include docker tasks
   ansible.builtin.import_tasks: docker.yml
 
