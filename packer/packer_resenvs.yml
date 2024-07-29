@@ -54,7 +54,20 @@
         autoremove: true
         autoclean: true
 
+    # quickfix for base images
+    - name: Del pip
+      ansible.builtin.apt:
+        name: python3-pip
+        state: absent
+    - name: Pip
+      ansible.builtin.apt:
+        name: python3-pip
+        state: latest
 
+    - name: Update pip
+      ansible.builtin.pip:
+        name: pip
+        state: latest
   tasks:
     - name: Include {{ resenv }} variables
       ansible.builtin.include_vars:
