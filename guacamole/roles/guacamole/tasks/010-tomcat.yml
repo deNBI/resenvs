@@ -1,0 +1,70 @@
+- name: Install prerequisites
+  ansible.builtin.apt:
+    update_cache: yes
+    name:
+      - default-jdk
+      - curl
+    state: present
+
+- name: Download Apache Tomcat 10
+  ansible.builtin.get_url:
+    url: https://downloads.apache.org/tomcat/tomcat-10/v10.1.0/bin/apache-tomcat-10.1.0.tar.gz
+    dest: /tmp/apache-tomcat-10.1.0.tar.gz
+
+- name: Create directory for Tomcat
+  ansible.builtin.file:
+    path: /opt/tomcat
+    state: directory
+    mode: '0755'
+
+- name: Extract Tomcat
+  ansible.builtin.unarchive:
+    src: /tmp/apache-tomcat-10.1.0.tar.gz
+    dest: /opt/tomcat
+    remote_src: yes
+    creates: /opt/tomcat/apache-tomcat-10.1.0
+
+- name: Change ownership to the Tomcat directory
+  ansible.builtin.command:
+    cmd: chown -R www-data:www-data /opt/tomcat/apache-tomcat-10.1.0
+    creates: /opt/tomcat/apache-tomcat-10.1.0
+
+- name: Set up Tomcat systemd service
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/tomcat.service
+    content: |
+      [Unit]
+      Description=Apache Tomcat Web Application Container
+      After=network.target
+      
+      [Service]
+      Type=forking
+      
+      Environment=JAVA_HOME=/usr/lib/jvm/default-java
+      Environment=CATALINA_PID=/opt/tomcat/apache-tomcat-10.1.0/temp/tomcat.pid
+      Environment=CATALINA_HOME=/opt/tomcat/apache-tomcat-10.1.0
+      Environment=CATALINA_BASE=/opt/tomcat/apache-tomcat-10.1.0
+      Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
+      Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+      
+      ExecStart=/opt/tomcat/apache-tomcat-10.1.0/bin/startup.sh
+      ExecStop=/opt/tomcat/apache-tomcat-10.1.0/bin/shutdown.sh
+      
+      User=www-data
+      Group=www-data
+      UMask=0007
+      RestartSec=10
+      Restart=always
+      
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Start and enable Tomcat service
+  ansible.builtin.systemd:
+    name: tomcat
+    state: started
+    enabled: yes

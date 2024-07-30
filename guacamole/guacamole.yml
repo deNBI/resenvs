@@ -30,7 +30,7 @@
 
 - name: Restart Tomcat
   ansible.builtin.systemd:
-    name: tomcat9
+    name: tomcat
     enabled: true
     state: restarted
 

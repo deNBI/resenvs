@@ -29,9 +29,6 @@
       - libssl-dev
       - libvorbis-dev
       - libwebp-dev
-      - tomcat9
-      - tomcat9-admin
-      - tomcat9-user
     state: present
 
 - name: Download guacamole src
@@ -126,7 +123,7 @@
   ansible.builtin.copy:
     remote_src: true
     src: /usr/share/guacamole.war
-    dest: /var/lib/tomcat9/webapps/guacamole.war
+    dest: /var/lib/tomcat/webapps/guacamole.war
     mode: "0777"
   notify: Restart Tomcat
 
@@ -134,6 +131,6 @@
   ansible.builtin.file:
     state: link
     src: /etc/guacamole
-    dest: /usr/share/tomcat9/.guacamole
+    dest: /usr/share/tomcat/.guacamole
     mode: "0777"
   notify: Reload systemd

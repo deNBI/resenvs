@@ -1,5 +1,7 @@
 ---
 - ansible.builtin.include_tasks: 005-desktop.yml
   tags: [guacamole_desktop]
-- ansible.builtin.include_tasks: 010-guacamole.yml
+- ansible.builtin.include_tasks: 010-tomcat.yml
+  tags: [guacamole_guacamole]
+- ansible.builtin.include_tasks: 015-guacamole.yml
   tags: [guacamole_guacamole]
