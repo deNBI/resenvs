@@ -33,6 +33,7 @@
       - libfreetype6-dev
       - libfontconfig1-dev
       - libmysqlclient-dev
+      - libsqlite3-dev
       - libpq-dev
       - libfribidi-dev
       - libharfbuzz-dev
