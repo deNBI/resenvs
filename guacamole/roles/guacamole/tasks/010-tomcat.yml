@@ -8,8 +8,9 @@
 
 - name: Download Apache Tomcat 10
   ansible.builtin.get_url:
-    url: https://downloads.apache.org/tomcat/tomcat-10/v10.1.0/bin/apache-tomcat-10.1.0.tar.gz
-    dest: /tmp/apache-tomcat-10.1.0.tar.gz
+    url: https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.26/bin/apache-tomcat-10.1.26.tar.gz
+    
+    dest: /tmp/apache-tomcat-10.1.26.tar.gz
 
 - name: Create directory for Tomcat
   ansible.builtin.file:
@@ -19,15 +20,15 @@
 
 - name: Extract Tomcat
   ansible.builtin.unarchive:
-    src: /tmp/apache-tomcat-10.1.0.tar.gz
+    src: /tmp/apache-tomcat-10.1.26.tar.gz
     dest: /opt/tomcat
     remote_src: yes
-    creates: /opt/tomcat/apache-tomcat-10.1.0
+    creates: /opt/tomcat/apache-tomcat-10.1.26
 
 - name: Change ownership to the Tomcat directory
   ansible.builtin.command:
-    cmd: chown -R www-data:www-data /opt/tomcat/apache-tomcat-10.1.0
-    creates: /opt/tomcat/apache-tomcat-10.1.0
+    cmd: chown -R www-data:www-data /opt/tomcat/apache-tomcat-10.1.26
+    creates: /opt/tomcat/apache-tomcat-10.1.26
 
 - name: Set up Tomcat systemd service
   ansible.builtin.copy:
@@ -41,14 +42,14 @@
       Type=forking
       
       Environment=JAVA_HOME=/usr/lib/jvm/default-java
-      Environment=CATALINA_PID=/opt/tomcat/apache-tomcat-10.1.0/temp/tomcat.pid
-      Environment=CATALINA_HOME=/opt/tomcat/apache-tomcat-10.1.0
-      Environment=CATALINA_BASE=/opt/tomcat/apache-tomcat-10.1.0
+      Environment=CATALINA_PID=/opt/tomcat/apache-tomcat-10.1.26/temp/tomcat.pid
+      Environment=CATALINA_HOME=/opt/tomcat/apache-tomcat-10.1.26
+      Environment=CATALINA_BASE=/opt/tomcat/apache-tomcat-10.1.26
       Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
       Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
       
-      ExecStart=/opt/tomcat/apache-tomcat-10.1.0/bin/startup.sh
-      ExecStop=/opt/tomcat/apache-tomcat-10.1.0/bin/shutdown.sh
+      ExecStart=/opt/tomcat/apache-tomcat-10.1.26/bin/startup.sh
+      ExecStop=/opt/tomcat/apache-tomcat-10.1.26/bin/shutdown.sh
       
       User=www-data
       Group=www-data
