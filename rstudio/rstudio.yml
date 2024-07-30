@@ -34,6 +34,8 @@
       - libfontconfig1-dev
       - libmysqlclient-dev
       - libpq-dev
+      - libfribidi-dev
+      - libharfbuzz-dev
       - libxml2-dev
     state: present
   become: yes
