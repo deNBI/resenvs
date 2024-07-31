@@ -24,7 +24,7 @@
     remote_src: yes
     creates: /opt/tomcat/apache-tomcat-10.1.26
 
-- name: Change ownership to the Tomcat directory
+- name: Change ownership of the Tomcat directory
   ansible.builtin.command:
     cmd: chown -R www-data:www-data /opt/tomcat/apache-tomcat-10.1.26
     creates: /opt/tomcat/apache-tomcat-10.1.26
@@ -33,6 +33,14 @@
   ansible.builtin.file:
     path: /opt/tomcat/apache-tomcat-10.1.26/bin/
     recurse: yes
+    mode: '0755'
+
+- name: Ensure proper permissions for Tomcat logs
+  ansible.builtin.file:
+    path: /opt/tomcat/apache-tomcat-10.1.26/logs/
+    recurse: yes
+    owner: www-data
+    group: www-data
     mode: '0755'
 
 - name: Set up Tomcat systemd service
