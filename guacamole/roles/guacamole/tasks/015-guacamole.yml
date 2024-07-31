@@ -104,6 +104,7 @@
     src: guacamole.properties
     dest: /etc/guacamole/guacamole.properties
     mode: "0644"
+    remote_src: true
   notify: Restart guacd
 
 - name: Generate guacamole mapping
@@ -124,6 +125,7 @@
     src: /usr/share/guacamole.war
     dest: /opt/tomcat/apache-tomcat-10.1.26/webapps/guacamole.war
     mode: "0644"
+    remote_src: true
   notify: Restart Tomcat
 
 - name: Link configuration directory to Tomcat
