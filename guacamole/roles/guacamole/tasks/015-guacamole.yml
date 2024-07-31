@@ -103,8 +103,8 @@
   ansible.builtin.copy:
     src: guacamole.properties
     dest: /etc/guacamole/guacamole.properties
-    mode: "0644"
-    remote_src: true
+    mode: "0777"
+
   notify: Restart guacd
 
 - name: Generate guacamole mapping
@@ -133,5 +133,6 @@
     state: link
     src: /etc/guacamole
     dest: /opt/tomcat/apache-tomcat-10.1.26/.guacamole
+    mode: "0777"
   notify: Reload systemd
 
