@@ -16,6 +16,8 @@ roles:
     src: https://github.com/deNBI/autoscaling-ansible
     version: 1.8.7
 
+  - name: andrewrothstein.conda-env
+
   - name: geerlingguy.swap
 
 collections:
