@@ -35,26 +35,26 @@
   ansible.builtin.get_url:
     url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/{{ guacamole_version }}/source/guacamole-server-{{ guacamole_version }}.tar.gz
     dest: /usr/share/guacamole.tar.gz
-    mode: "0777"
+    mode: "0755"
 
 - name: Download guacamole war file
   ansible.builtin.get_url:
     url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/{{ guacamole_version }}/binary/guacamole-{{ guacamole_version }}.war
     dest: /usr/share/guacamole.war
-    mode: "0777"
+    mode: "0755"
 
 - name: Prepare build directory
   ansible.builtin.file:
     state: directory
     path: /usr/share/guacamole/
-    mode: "0777"
+    mode: "0755"
 
 - name: Unarchive source files
   ansible.builtin.unarchive:
     remote_src: true
     src: /usr/share/guacamole.tar.gz
     dest: /usr/share/guacamole
-    mode: "0777"
+    mode: "0755"
 
 - name: Configure systemd unit
   ansible.builtin.command: ./configure --with-systemd-dir=/etc/systemd/system
@@ -65,7 +65,7 @@
   environment:
     LDFLAGS: "-lrt"
 
-- name: Ignore depcreated warnings Ubuntu 22
+- name: Ignore deprecated warnings Ubuntu 22
   ansible.builtin.lineinfile:
     path: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/src/common-ssh/Makefile
     search_string: CFLAGS = -g -O2
@@ -97,20 +97,20 @@
   ansible.builtin.file:
     state: directory
     path: /etc/guacamole
-    mode: "0777"
+    mode: "0755"
 
 - name: Create guacamole.properties
   ansible.builtin.copy:
     src: guacamole.properties
     dest: /etc/guacamole/guacamole.properties
-    mode: "0777"
+    mode: "0644"
   notify: Restart guacd
 
 - name: Generate guacamole mapping
   ansible.builtin.template:
     src: user-mapping.xml.j2
     dest: /etc/guacamole/user-mapping.xml
-    mode: "0777"
+    mode: "0644"
   notify: Restart guacd
 
 - name: Register path in env
@@ -119,18 +119,31 @@
     line: GUACAMOLE_HOME="/etc/guacamole"
     state: present
 
-- name: Copy tomcat guacamole client
+- name: Copy Tomcat Guacamole client
   ansible.builtin.copy:
-    remote_src: true
     src: /usr/share/guacamole.war
-    dest: /var/lib/tomcat/webapps/guacamole.war
-    mode: "0777"
+    dest: /opt/tomcat/apache-tomcat-10.1.26/webapps/guacamole.war
+    mode: "0644"
   notify: Restart Tomcat
 
-- name: Link configuration directory to tomcat
+- name: Link configuration directory to Tomcat
   ansible.builtin.file:
     state: link
     src: /etc/guacamole
-    dest: /usr/share/tomcat/.guacamole
-    mode: "0777"
+    dest: /opt/tomcat/apache-tomcat-10.1.26/.guacamole
   notify: Reload systemd
+
+handlers:
+  - name: Restart guacd
+    ansible.builtin.systemd:
+      name: guacd
+      state: restarted
+
+  - name: Restart Tomcat
+    ansible.builtin.systemd:
+      name: tomcat
+      state: restarted
+
+  - name: Reload systemd
+    ansible.builtin.systemd:
+      daemon_reload: yes
