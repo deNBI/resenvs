@@ -133,17 +133,3 @@
     dest: /opt/tomcat/apache-tomcat-10.1.26/.guacamole
   notify: Reload systemd
 
-handlers:
-  - name: Restart guacd
-    ansible.builtin.systemd:
-      name: guacd
-      state: restarted
-
-  - name: Restart Tomcat
-    ansible.builtin.systemd:
-      name: tomcat
-      state: restarted
-
-  - name: Reload systemd
-    ansible.builtin.systemd:
-      daemon_reload: yes
