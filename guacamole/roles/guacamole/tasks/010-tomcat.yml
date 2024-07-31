@@ -9,7 +9,6 @@
 - name: Download Apache Tomcat 10
   ansible.builtin.get_url:
     url: https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.26/bin/apache-tomcat-10.1.26.tar.gz
-    
     dest: /tmp/apache-tomcat-10.1.26.tar.gz
 
 - name: Create directory for Tomcat
@@ -29,6 +28,12 @@
   ansible.builtin.command:
     cmd: chown -R www-data:www-data /opt/tomcat/apache-tomcat-10.1.26
     creates: /opt/tomcat/apache-tomcat-10.1.26
+
+- name: Set execute permissions for Tomcat scripts
+  ansible.builtin.file:
+    path: /opt/tomcat/apache-tomcat-10.1.26/bin/
+    recurse: yes
+    mode: '0755'
 
 - name: Set up Tomcat systemd service
   ansible.builtin.copy:
