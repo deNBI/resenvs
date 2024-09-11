@@ -4,6 +4,7 @@
   lineinfile:
     path: /etc/pip.conf
     create: yes
+    state: present
     line: |
       [global]
       break-system-packages = true
