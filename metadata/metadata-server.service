@@ -1,0 +1,11 @@
+# saved at /etc/systemd/system/metadata-server.service
+
+[Unit]
+Description=Run metadata-server scripts at regular intervals
+
+[Service]
+ExecStart=/etc/simplevm/add_keys.sh
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target

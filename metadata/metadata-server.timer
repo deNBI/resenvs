@@ -1,0 +1,12 @@
+# saved at /etc/systemd/system/metadata-server.timer
+
+[Unit]
+Description=Runs the scripts in /etc/simplevm/ every 2 minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=2min
+Unit=metadata-server.service
+
+[Install]
+WantedBy=timers.target
