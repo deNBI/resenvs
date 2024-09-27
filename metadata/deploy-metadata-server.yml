@@ -22,7 +22,7 @@
     - name: Ensure /var/log directory exists
       file:
         path: /var/log
-        state: directory
+        state: directory        
         owner: root
         group: root
         mode: '0755'
@@ -65,3 +65,17 @@
         name: metadata-server.timer
         enabled: yes
         state: started
+    
+    - name: Ensure AuthorizedKeysFile is configured in sshd_config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?AuthorizedKeysFile'
+        line: 'AuthorizedKeysFile .ssh/authorized_keys /home/%u/.ssh/authorized_keys /home/%u/.ssh/metadata_authorized_keys'
+        state: present
+      notify: Restart ssh
+
+  handlers:
+    - name: Restart ssh
+      service:
+        name: ssh
+        state: restarted
