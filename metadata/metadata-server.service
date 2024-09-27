@@ -1,11 +1,16 @@
-# saved at /etc/systemd/system/metadata-server.service
-
 [Unit]
-Description=Run metadata-server scripts at regular intervals
+Description=Update SSH keys from metadata script
+After=network.target
 
 [Service]
-ExecStart=/etc/simplevm/add_keys.sh
-Type=oneshot
+Type=simple
+ExecStart=/bin/bash /etc/simplevm/add_keys.sh
+WorkingDirectory=/etc/simplevm
+EnvironmentFile=/etc/simplevm/metadata_config.env
+User=root
+StandardOutput=append:/var/log/metadata.log
+StandardError=append:/var/log/metadata.log
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
