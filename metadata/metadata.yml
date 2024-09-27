@@ -1,4 +1,67 @@
 ---
-- name: Download Metadata-Scripts
-  get_url:
-  
+- name: Deploy and configure metadata update service
+  hosts: target_machine
+  become: yes  # Ensure that tasks are run as root
+  tasks:
+    - name: Ensure /etc/simplevm directory exists
+      file:
+        path: /etc/simplevm
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Copy add_keys.sh to /etc/simplevm
+      copy:
+        src: ./add_keys.sh
+        dest: /etc/simplevm/add_keys.sh
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Ensure /var/log directory exists
+      file:
+        path: /var/log
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Create metadata.log if it does not exist
+      file:
+        path: /var/log/metadata.log
+        state: touch
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Copy metadata-server.service to /etc/systemd/system
+      copy:
+        src: ./metadata-server.service
+        dest: /etc/systemd/system/metadata-server.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Copy metadata-server.timer to /etc/systemd/system
+      copy:
+        src: ./metadata-server.timer
+        dest: /etc/systemd/system/metadata-server.timer
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload systemd daemon to recognize new service and timer files
+      command: systemctl daemon-reload
+
+    - name: Enable and start metadata-server.service
+      systemd:
+        name: metadata-server.service
+        enabled: yes
+        state: started
+
+    - name: Enable and start metadata-server.timer
+      systemd:
+        name: metadata-server.timer
+        enabled: yes
+        state: started
