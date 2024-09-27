@@ -29,7 +29,7 @@
 
     - name: Copy check_version.sh to /etc/simplevm/scripts/utils
       copy:
-        src: ./scripts/utils/check_version.sh
+        src: ./check_version.sh
         dest: /etc/simplevm/scripts/utils/check_version.sh
         owner: root
         group: root

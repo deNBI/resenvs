@@ -16,14 +16,23 @@ check_version() {
 
   # Read the JSON file and extract the list of compatible versions for the function key and script version
   compatible_versions=$(jq -r --arg function_key "$function_key" --arg script_version "$script_version" \\
-    '.[$function_key][$script_version] // empty' "$COMPATIBILITY_FILE")
+    '.[$function_key][$script_version][]' "$COMPATIBILITY_FILE")
 
   # Check if the metadata version is in the list of compatible versions
-  if echo "$compatible_versions" | grep -q "$metadata_version"; then
-    return 0  # true
-  else
-    return 1  # false
-  fi
+  for version in $compatible_versions; do
+    if [ "$version" == "$metadata_version" ]; then
+      return 0  # true
+    fi
+  done
+
+  return 1  # false
 }
 
+# Check if compatibility file exists
+if [ ! -f "$COMPATIBILITY_FILE" ]; then
+  echo "Compatibility file not found: $COMPATIBILITY_FILE"
+  exit 1
+fi
+
+# Perform the version check
 check_version "$FUNCTION_KEY" "$SCRIPT_VERSION" "$METADATA_VERSION"
