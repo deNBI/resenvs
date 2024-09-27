@@ -3,15 +3,19 @@
   # Path to the log file
   LOG_FILE="/var/log/metadata.log"
 
+  # script version and affected keys from the metadata-response
+  SCRIPT_VERSION="1.0.0"
+  SCRIPT_DATA=("userdata")
+
   # Function to log messages with timestamps
   log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> "$LOG_FILE"
   }
 
   # Load the auth token and user from .metadata_config.env
-  source metadata_config.env
+  source config/metadata_config.env
 
-  # Set default user to 'ubuntu' if not provided
+  # Set default user to 'ubuntu' if not provided  
   USER_TO_SET="${USER_TO_SET:-ubuntu}"
   USER_HOME=$(eval echo "~$USER_TO_SET")
 
@@ -27,6 +31,33 @@
     log_message "Invalid JSON response. Exiting."
     exit 1
   fi
+
+  # Extract the VERSION from the JSON response
+  metadata_version=$(echo "$response" | jq -r '.userdata.VERSION')
+
+  # Log the extracted VERSION
+  log_message "Metadata version for userdata: $metadata_version"
+
+  # Check if the metadata versions are compatible
+for key in "${SCRIPT_DATA[@]}"; do
+    # Check if the key exists in the JSON response
+    if ! echo "$response" | jq -e ".${key}" >/dev/null 2>&1; then
+        log_message "Needed data $key missing in metadata response. Exiting."
+        exit 1
+    fi
+
+    # Extract the VERSION for the given key from the JSON response
+    metadata_version=$(echo "$response" | jq -r ".${key}.VERSION")
+
+    # Log the extracted VERSION
+    log_message "$key version: $metadata_version"
+
+    # Check if the metadata version is compatible
+    if ! ./scripts/utils/check_version.sh "$key" "$SCRIPT_VERSION" "$metadata_version"; then
+        log_message "$key version $metadata_version is not compatible. Exiting."
+        exit 1
+    fi
+done
 
   # Extract public_keys from the nested JSON structure
   public_keys=$(echo "$response" | jq -r '.userdata.data[] | .public_keys[]?')

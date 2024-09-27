@@ -3,18 +3,34 @@
   hosts: target_machine
   become: yes  # Ensure that tasks are run as root
   tasks:
-    - name: Ensure /etc/simplevm directory exists
+    - name: Ensure /etc/simplevm/scripts/users directory exists
       file:
-        path: /etc/simplevm
+        path: /etc/simplevm/scripts/users
         state: directory
         owner: root
         group: root
         mode: '0755'
 
-    - name: Copy add_keys.sh to /etc/simplevm
+    - name: Copy add_keys.sh to /etc/simplevm/script/users
       copy:
         src: ./add_keys.sh
-        dest: /etc/simplevm/add_keys.sh
+        dest: /etc/simplevm/scripts/users/add_keys.sh
+        owner: root
+        group: root
+        mode: '0755'
+    
+    - name: Ensure /etc/simplevm/scripts/utils directory exists
+      file:
+        path: /etc/simplevm/scripts/utils
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Copy check_version.sh to /etc/simplevm/scripts/utils
+      copy:
+        src: ./scripts/utils/check_version.sh
+        dest: /etc/simplevm/scripts/utils/check_version.sh
         owner: root
         group: root
         mode: '0755'
@@ -22,7 +38,7 @@
     - name: Ensure /var/log directory exists
       file:
         path: /var/log
-        state: directory        
+        state: directory           
         owner: root
         group: root
         mode: '0755'
