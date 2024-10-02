@@ -5,4 +5,4 @@ rstudio_vars:
   default_user: ubuntu
   default_password: simplevm
   RSESSION_FILE_PATH: /etc/rstudio/rsession.conf
-  RSTUDIO_VERSION: v2024.04.2+764
+  RSTUDIO_VERSION: v2024.09.0+375

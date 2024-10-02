@@ -17,9 +17,29 @@
   include_role:
     name: oefenweb.rstudio_server
   vars:
-    rstudio_install: [r-base]
+    rstudio_install: [ r-base ]
     rstudio_server_version: "{{ rstudio_vars.RSTUDIO_VERSION | replace('v', '') | replace('+', '-') }}"
   when: not rstudio_vars.create_only_backend
+- name: Install essential system packages
+  ansible.builtin.apt:
+    name:
+      - build-essential
+      - libcurl4-openssl-dev
+      - libssl-dev
+      - zlib1g-dev
+      - libpng-dev
+      - libjpeg-dev
+      - libtiff-dev
+      - libfreetype6-dev
+      - libfontconfig1-dev
+      - libmysqlclient-dev
+      - libsqlite3-dev
+      - libpq-dev
+      - libfribidi-dev
+      - libharfbuzz-dev
+      - libxml2-dev
+    state: present
+  become: yes
 
 - name: Copy session file if also installing rstudio
   ansible.builtin.copy:
