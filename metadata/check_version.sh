@@ -1,6 +1,4 @@
-#!/bin/bash
 
-# Load the key, script version, and metadata version from arguments
 FUNCTION_KEY="$1"
 SCRIPT_VERSION="$2"
 METADATA_VERSION="$3"
@@ -20,7 +18,7 @@ check_version() {
 
   # Check if the metadata version is in the list of compatible versions
   for version in $compatible_versions; do
-    if [ "$version" == "$metadata_version" ]; then
+    if [[ "$version" == "$metadata_version" ]]; then
       return 0  # true
     fi
   done
@@ -36,3 +34,10 @@ fi
 
 # Perform the version check
 check_version "$FUNCTION_KEY" "$SCRIPT_VERSION" "$METADATA_VERSION"
+
+# Capture the result of the check_version function
+if [ $? -eq 0 ]; then
+  echo "Versions are compatible."
+else
+  echo "Versions are not compatible."
+fi

@@ -14,6 +14,10 @@
       - ubuntu
     docker_compose_package: docker-compose-plugin
 
+#- name: Install Metadata role
+#  include_role:
+#    name: metadataservice // name of role in requirements
+
 - name: Install yq
   ansible.builtin.shell: |
     VERSION="v4.34.2"  # Specify the desired version of yq

@@ -20,6 +20,10 @@ roles:
 
   - name: geerlingguy.swap
 
+#  - name: metadataservice
+#    src: https://github.com/deNBI/REPONAME
+#    version: 0.0.1
+
 collections:
   - name: openstack.cloud
     version: 2.2.0

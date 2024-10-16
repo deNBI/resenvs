@@ -107,3 +107,4 @@ done
   # currently this file works when executed by hand - why is it not finding keys when
   # executed by the service?
   # the usernames we have as keys might be a problem --> cannot add users with such identifiers
+  # check this: https://github.com/deNBI/ansible-portal-dev-keys
