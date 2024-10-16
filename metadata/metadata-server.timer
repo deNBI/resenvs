@@ -1,7 +1,7 @@
 # saved at /etc/systemd/system/metadata-server.timer
 
 [Unit]
-Description=Runs the scripts in /etc/simplevm/ every 2 minutes
+Description=Runs the public key script in /etc/simplevm/ every 2 minutes
 
 [Timer]
 OnBootSec=5min
