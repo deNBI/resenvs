@@ -1,4 +1,9 @@
 ---
+
+- name: Install python3-passlib
+  apt:
+    name: python3-passlib
+    state: present
 - name: Install guacamole role
   ansible.builtin.include_role:
     name: guacamole

@@ -38,6 +38,7 @@
       - libfribidi-dev
       - libharfbuzz-dev
       - libxml2-dev
+      - cmake
     state: present
   become: yes
 
