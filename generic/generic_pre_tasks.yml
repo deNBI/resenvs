@@ -1,7 +1,4 @@
 ---
-- name: Generic PRE Tasks
-  ansible.builtin.import_tasks: ../generic/generic_pre_tasks.yml
-
 - name: PRE_TASK Wait for cloud-init / user-data to finish
   ansible.builtin.command: cloud-init status --wait
   changed_when: false
