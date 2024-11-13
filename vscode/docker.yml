@@ -1,8 +1,8 @@
 ---
 - name: Update apt package index
   apt:
-    update_cache: yes
-    force_apt_get: yes
+    update_cache: true
+    force_apt_get: true
 
 - name: Install required packages for apt to use a repository over HTTPS
   apt:
@@ -27,8 +27,8 @@
 
 - name: Update the apt package index again
   apt:
-    update_cache: yes
-    force_apt_get: yes
+    update_cache: true
+    force_apt_get: true
 
 - name: Install Docker
   apt:
@@ -42,11 +42,11 @@
 - name: Ensure Docker service is running
   systemd:
     name: docker
-    enabled: yes
+    enabled: true
     state: started
 
 - name: Add the user to the docker group (optional)
   user:
     name: "{{ ansible_user }}"
     groups: docker
-    append: yes
+    append: true
