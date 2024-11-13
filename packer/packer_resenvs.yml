@@ -22,4 +22,3 @@
   post_tasks:
     - name: Generic POST Tasks
       ansible.builtin.import_tasks: ../generic/generic_post_tasks.yml
- 

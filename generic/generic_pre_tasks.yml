@@ -19,11 +19,11 @@
     name: "{{ item }}"
     state: stopped
   with_items:
-        - unattended-upgrades
-        - apt-daily
-        - apt-daily.timer
-        - apt-daily-upgrade
-        - apt-daily-upgrade.timer
+    - unattended-upgrades
+    - apt-daily
+    - apt-daily.timer
+    - apt-daily-upgrade
+    - apt-daily-upgrade.timer
 
 - name: PRE_TASK   Wait for automatic system updates 1
   ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
@@ -36,16 +36,12 @@
 - name: PRE_TASK   Update apt cache
   become: true
   ansible.builtin.apt:
-        upgrade: true
-        update_cache: true
-        autoremove: true
-        autoclean: true
-
+    upgrade: true
+    update_cache: true
+    autoremove: true
+    autoclean: true
 
 - name: Pip
   ansible.builtin.apt:
     name: python3-pip
     state: latest
-
-
- 
