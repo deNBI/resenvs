@@ -3,13 +3,13 @@
   become: true
   lineinfile:
     path: /etc/pip.conf
-    create: yes
+    create: true
     state: present
     line: |
       [global]
       break-system-packages = true
     insertafter: EOF
-    
+
 - name: Download Code Server Install Script
   ansible.builtin.get_url:
     url: "{{ vscode_vars.INSTALL_SCRIPT_URL }}"
