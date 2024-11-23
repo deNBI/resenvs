@@ -10,7 +10,7 @@ roles:
     version: v6.4.0
 
   - name: geerlingguy.docker
-    version: 7.4.2
+    version: 7.4.3
 
   - name: autoscaling
     src: https://github.com/deNBI/autoscaling-ansible
