@@ -4,8 +4,8 @@
     update_cache: true
     upgrade: dist
     cache_valid_time: 3600
-- name: Install required packages
 
+- name: Install required packages
   ansible.builtin.apt:
     pkg:
       - apt-transport-https
@@ -29,7 +29,7 @@
 - name: Print architecture variables
   ansible.builtin.debug:
     msg: "Architecture: {{ ansible_architecture }}, Codename: {{ ansible_lsb.codename }}"
-    
+
 - name: Add Docker repository
   ansible.builtin.apt_repository:
     repo: >-
