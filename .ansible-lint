@@ -39,7 +39,6 @@ skip_list:
   - risky-file-permissions
 
 mock_roles:
-  - geerlingguy.docker
   - autoscaling
 
 mock_modules:
