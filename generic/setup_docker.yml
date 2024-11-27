@@ -1,4 +1,7 @@
 ---
+- name: Install and configure Docker on Ubuntu
+  become: true
+
 - name: Update and upgrade all packages to the latest version
   ansible.builtin.apt:
     update_cache: true
@@ -34,7 +37,7 @@
   ansible.builtin.apt_repository:
     repo: >-
       deb [arch={{ arch_mapping[ansible_architecture] | default(ansible_architecture) }}
-      signed-by=/usr/share/keyrings/docker-archive-keyring.gpg]
+      signed-by=/etc/apt/keyrings/docker.gpg]
       https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
     filename: docker
     state: present
@@ -47,7 +50,7 @@
     name: "{{ item }}"
     state: present
     update_cache: true
-  loop:
+  with_items:
     - docker-ce
     - docker-ce-cli
     - containerd.io
@@ -70,6 +73,6 @@
     name: "{{ item }}"
     enabled: true
     state: started
-  loop:
+  with_items:
     - docker.service
     - containerd.service
