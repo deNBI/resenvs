@@ -1,7 +1,4 @@
 ---
-- name: Install and configure Docker on Ubuntu
-  become: true
-
 - name: Update and upgrade all packages to the latest version
   ansible.builtin.apt:
     update_cache: true
