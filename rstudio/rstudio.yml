@@ -41,7 +41,7 @@
 - name: Ensure .Rprofile file exists
   become: true
   file:
-    path: /home/{{ rstudio_vars.default_user }}git/.Rprofile
+    path: /home/{{ rstudio_vars.default_user }}/.Rprofile
     state: touch
   when: not rstudio_vars.create_only_backend
 - name: Configure R profile
