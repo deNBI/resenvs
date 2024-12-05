@@ -1,17 +1,4 @@
 ---
-- name: PRE_TASK   Update apt cache
-  become: true
-  ansible.builtin.apt:
-    upgrade: true
-    update_cache: true
-    autoremove: true
-    autoclean: true
-
-- name: Pip
-  ansible.builtin.apt:
-    name: python3-pip
-    state: latest
-
 - name: Setup password for default user
   become: true
   ansible.builtin.user:
@@ -19,6 +6,20 @@
     password: "{{ rstudio_vars.default_password | password_hash('sha512') }}"
     update_password: always
     password_lock: false
+
+- name: Update package index
+  become: true
+  apt:
+    update_cache: true
+  when: not rstudio_vars.create_only_backend
+
+- name: Install apt-file
+  become: true
+  apt:
+    name: apt-file
+    state: present
+  when: not rstudio_vars.create_only_backend
+
 
 - name: Install R role
   include_role:
