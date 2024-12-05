@@ -1,18 +1,4 @@
 ---
-- name: PRE_TASK   Update apt cache
-  become: true
-  ansible.builtin.apt:
-        upgrade: true
-        update_cache: true
-        autoremove: true
-        autoclean: true
-
-
-- name: Pip
-  ansible.builtin.apt:
-        name: python3-pip
-        state: latest
-
 - name: Setup password for default user
   become: true
   ansible.builtin.user:
@@ -21,19 +7,53 @@
     update_password: always
     password_lock: false
 
+- name: Update package index
+  become: true
+  apt:
+    update_cache: true
+  when: not rstudio_vars.create_only_backend
+
+- name: Install apt-file
+  become: true
+  apt:
+    name: apt-file
+    state: present
+  when: not rstudio_vars.create_only_backend
 
 - name: Install R role
   include_role:
     name: oefenweb.latest_r
+  vars:
+    r_packages:
+      - name: remotes
+      - name: cran4linux/rspm
+        type: github
   when: not rstudio_vars.create_only_backend
 
 - name: Install rstudio-server role
   include_role:
     name: oefenweb.rstudio_server
   vars:
-    rstudio_install: [ r-base ]
+    rstudio_install: [r-base]
     rstudio_server_version: "{{ rstudio_vars.RSTUDIO_VERSION | replace('v', '') | replace('+', '-') }}"
   when: not rstudio_vars.create_only_backend
+
+- name: Ensure .Rprofile file exists
+  become: true
+  file:
+    path: /home/{{ rstudio_vars.default_user }}/.Rprofile
+    state: touch
+  when: not rstudio_vars.create_only_backend
+- name: Configure R profile
+  become: true
+  become_user: ubuntu
+  blockinfile:
+    path: /home/{{ rstudio_vars.default_user }}/.Rprofile
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    block: |
+      suppressMessages(rspm::enable())
+  when: not rstudio_vars.create_only_backend
+
 - name: Install essential system packages
   ansible.builtin.apt:
     name:
@@ -54,7 +74,7 @@
       - libxml2-dev
       - cmake
     state: present
-  become: yes
+  become: true
 
 - name: Copy session file if also installing rstudio
   ansible.builtin.copy:
