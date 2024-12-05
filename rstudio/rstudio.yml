@@ -23,6 +23,11 @@
 - name: Install R role
   include_role:
     name: oefenweb.latest_r
+  vars:
+    r_packages:
+      - name: remotes
+      - name: cran4linux/rspm
+        type: github
   when: not rstudio_vars.create_only_backend
 
 - name: Install rstudio-server role
@@ -31,16 +36,12 @@
   vars:
     rstudio_install: [r-base]
     rstudio_server_version: "{{ rstudio_vars.RSTUDIO_VERSION | replace('v', '') | replace('+', '-') }}"
-    r_packages:
-      - name: remotes
-      - name: cran4linux/rspm
-        type: github
   when: not rstudio_vars.create_only_backend
 
 - name: Ensure .Rprofile file exists
   become: true
   file:
-    path: /home/{{ rstudio_vars.default_user }}/.Rprofile
+    path: /home/{{ rstudio_vars.default_user }}git/.Rprofile
     state: touch
   when: not rstudio_vars.create_only_backend
 - name: Configure R profile
