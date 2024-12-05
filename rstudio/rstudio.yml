@@ -20,7 +20,6 @@
     state: present
   when: not rstudio_vars.create_only_backend
 
-
 - name: Install R role
   include_role:
     name: oefenweb.latest_r
@@ -38,6 +37,12 @@
         type: github
   when: not rstudio_vars.create_only_backend
 
+- name: Ensure .Rprofile file exists
+  become: true
+  file:
+    path: /home/{{ rstudio_vars.default_user }}/.Rprofile
+    state: touch
+  when: not rstudio_vars.create_only_backend
 - name: Configure R profile
   become: true
   become_user: ubuntu
