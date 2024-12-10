@@ -36,8 +36,6 @@
     state: started
     enabled: true
 
-- name: Include docker tasks
-  ansible.builtin.import_tasks: docker.yml
 
 - name: Include cwl tasks
   ansible.builtin.import_tasks: cwl.yml
