@@ -55,11 +55,6 @@
   args:
         executable: /bin/bash
 
-- name: Add anaconda channel
-  become_user: "{{conda_vars.default_user}}"
-  shell: 'timeout 1m bash -c ''source {{conda_vars.CONDA_DIR}}/bin/activate && conda config --add channels anaconda'''
-  args:
-        executable: /bin/bash
 
 - name: Init .bashrc for conda
   become_user: "{{conda_vars.default_user}}"
