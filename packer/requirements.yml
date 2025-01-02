@@ -7,7 +7,7 @@ roles:
     version: v3.1.11
 
   - name: andrewrothstein.miniconda
-    version: v6.4.0
+    version: v6.4.1
 
   - name: autoscaling
     src: https://github.com/deNBI/autoscaling-ansible
