@@ -2,8 +2,6 @@
 channels:
   - conda-forge
   - bioconda
-  - defaults
-  - anaconda
 dependencies:
   # renovate datasource=conda depName=conda-forge/notebook
   - notebook=7.0.6

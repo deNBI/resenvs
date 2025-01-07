@@ -4,24 +4,23 @@
     name: geerlingguy.swap
   vars:
     swap_file_size_mb: "2024"
-- name: Download Miniconda
+
+- name: Download Miniforge
   get_url:
-    url: https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-    dest: /tmp/miniconda.sh
+    url: https://github.com/conda-forge/miniforge/releases/download/{{jupyterlab_vars.MINI_FORGE_RELEASE}}/Miniforge3-{{jupyterlab_vars.MINI_FORGE_RELEASE}}-Linux-x86_64.sh
+    dest: /tmp/miniforge.sh
 
-- name: Install Miniconda
-  command: bash /tmp/miniconda.sh -b -p {{jupyterlab_vars.CONDA_DIR}}
+- name: Install Miniforge
+  command: bash /tmp/miniforge.sh -b -p {{ jupyterlab_vars.CONDA_DIR }}
   args:
-    creates: "{{jupyterlab_vars.CONDA_DIR}}/bin/conda"
-  when: not jupyterlab_vars.create_only_backend
+    creates: "{{ jupyterlab_vars.CONDA_DIR }}/bin/mamba"
 
-- name: Add Miniconda to PATH
+- name: Add Miniforge to PATH
   lineinfile:
     path: /etc/profile
-    line: 'export PATH={{jupyterlab_vars.CONDA_DIR}}/bin:$PATH'
+    line: 'export PATH={{ jupyterlab_vars.CONDA_DIR }}/bin:$PATH'
   become: true
   become_user: root
-  when: not jupyterlab_vars.create_only_backend
 
 - name: Install conda-env role
   include_role:
@@ -49,13 +48,6 @@
 - name: Add conda-forge channel
   become_user: "{{   jupyterlab_vars.default_user  }}"
   ansible.builtin.shell: timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'
-  args:
-    executable: /bin/bash
-  when: not jupyterlab_vars.create_only_backend
-
-- name: Add anaconda channel
-  become_user: "{{   jupyterlab_vars.default_user  }}"
-  ansible.builtin.shell: timeout 1m bash -c 'source {{jupyterlab_vars.CONDA_DIR}}/bin/activate && conda config --add channels anaconda'
   args:
     executable: /bin/bash
   when: not jupyterlab_vars.create_only_backend
