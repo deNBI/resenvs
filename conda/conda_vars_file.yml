@@ -1,7 +1,8 @@
 ---
 conda_vars:
   default_user: ubuntu
-  CONDA_DIR: /home/ubuntu/miniconda3
+  CONDA_DIR: /home/ubuntu/miniforge
   ENV_NAME: denbi
   TIMEOUT_LENGTH: 5m
+  MINI_FORGE_RELEASE: 24.11.2-1
   packages:
