@@ -9,3 +9,5 @@ jupyterlab_vars:
   conda_env_environment_yml: ./jupyterlab_env.yml
   ENV_NAME: denbi
   TIMEOUT_LENGTH: 5m
+  MINI_FORGE_RELEASE: 24.11.2-1
+
