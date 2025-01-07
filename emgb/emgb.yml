@@ -6,13 +6,6 @@
     name: python-is-python3
     state: present
 
-- name: Install Docker role
-  include_role:
-    name: geerlingguy.docker
-  vars:
-    docker_users:
-      - ubuntu
-    docker_compose_package: docker-compose-plugin
 
 - name: Install yq
   ansible.builtin.shell: |
