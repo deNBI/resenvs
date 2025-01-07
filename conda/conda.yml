@@ -19,7 +19,7 @@
     dest: /tmp/miniforge.sh
 
 - name: Install Miniforge
-  command: bash /tmp/miniforge.sh -b -p {{ miniforge_vars.CONDA_DIR }}
+  command: bash /tmp/miniforge.sh -b -p {{ conda_vars.CONDA_DIR }}
   args:
     creates: "{{ conda_vars.CONDA_DIR }}/bin/mamba"
 
