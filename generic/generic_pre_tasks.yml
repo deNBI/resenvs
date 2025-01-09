@@ -40,6 +40,9 @@
     update_cache: true
     autoremove: true
     autoclean: true
+- name : PRE_TASK Install Metadata-Service
+  become: true
+  ansible.builtin.import_tasks: ../generic/install_metadata_service.yml
 
 - name: Pip
   ansible.builtin.apt:
