@@ -3,13 +3,13 @@
   become: true
   lineinfile:
     path: /etc/pip.conf
-    create: yes
+    create: true
     state: present
     line: |
       [global]
       break-system-packages = true
     insertafter: EOF
-    
+
 - name: Download Code Server Install Script
   ansible.builtin.get_url:
     url: "{{ vscode_vars.INSTALL_SCRIPT_URL }}"
@@ -36,8 +36,6 @@
     state: started
     enabled: true
 
-- name: Include docker tasks
-  ansible.builtin.import_tasks: docker.yml
 
 - name: Include cwl tasks
   ansible.builtin.import_tasks: cwl.yml

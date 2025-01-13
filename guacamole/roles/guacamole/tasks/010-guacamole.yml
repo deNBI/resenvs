@@ -1,6 +1,6 @@
 ---
 - name: Add Jammy repository for ubuntu 24
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "deb http://archive.ubuntu.com/ubuntu/ jammy main universe"
     state: present
 - name: Install needed libraries and tools

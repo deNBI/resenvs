@@ -1,16 +1,13 @@
 ---
 roles:
   - name: oefenweb.rstudio_server
-    version: v5.0.0
+    version: v5.0.1
 
   - name: oefenweb.latest_r
-    version: v3.1.10
+    version: v3.1.11
 
   - name: andrewrothstein.miniconda
-    version: v6.4.0
-
-  - name: geerlingguy.docker
-    version: 7.4.1
+    version: v6.4.1
 
   - name: autoscaling
     src: https://github.com/deNBI/autoscaling-ansible
