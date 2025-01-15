@@ -25,7 +25,7 @@
 
     - name: Set Base Image Fact
       ansible.builtin.set_fact:
-        base_images: "{{ images.images | selectattr('tags', 'search', base_image_build)
+        base_images: "{{ images.images | selectattr('tags', 'search', base_image_build_tag)
                       | selectattr('os_distro', '==', os_distro)
                       | selectattr('os_version', '==', os_version)
                       | sort(attribute='created_at') }}"

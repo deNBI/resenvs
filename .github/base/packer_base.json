@@ -11,7 +11,7 @@
          "source_image_filter":{
             "filters":{
                "tags":[
-                  "{{user `base_image_build`}}"
+                  "{{user `base_image_build_tag`}}"
                ],
                "properties":{
                   "os_distro":"{{user `os_distro`}}",
