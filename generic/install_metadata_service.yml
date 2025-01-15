@@ -10,12 +10,11 @@
     repo: deb https://apt.bi.denbi.de/repos/apt/{{ ansible_distribution_release | lower }} {{ ansible_distribution_release | lower }} main
 
 
-- name: Update apt cache
+- name: Update and upgrade all packages to the latest version
   ansible.builtin.apt:
-    upgrade: "yes"
-    update_cache: "yes"
-    cache_valid_time: 86400 # One day
-
+    update_cache: true
+    upgrade: dist
+    cache_valid_time: 3600
 
 - name: Install SimpleVM Metadata Service
   ansible.builtin.apt:
