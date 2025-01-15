@@ -25,7 +25,7 @@
 
     - name: Set Base Image Fact
       ansible.builtin.set_fact:
-        base_images: "{{ images.images | selectattr('tags', 'search', base_image_tag)
+        base_images: "{{ images.images | selectattr('tags', 'search', base_image_build)
                       | selectattr('os_distro', '==', os_distro)
                       | selectattr('os_version', '==', os_version)
                       | sort(attribute='created_at') }}"
@@ -60,12 +60,12 @@
 
     - name: Upload image to Openstack
       openstack.cloud.image:
-        name: "{{ name + ' de.NBI (' + date_time + ')' }}"
+        name: "{{ name + ' de.NBI BUILD (' + date_time + ')' }}"
         state: present
         filename: "{{ downloaded_filename }}"
         tags:
           - portalclient
-          - "{{ base_image_tag }}"
+          - "{{ base_image_build }}"
           - deNBI
         properties:
           os_distro: "{{ os_distro }}"
@@ -80,3 +80,63 @@
         path: "{{ name }}"
         state: absent
       when: download_result
+
+    - name: Set Update Fact to false
+      ansible.builtin.set_fact:
+        update: false
+
+    - name: Retrieve list of all images
+      openstack.cloud.image_info:
+      register: images
+
+    - name: Get Latest Master Branch Commit
+      ansible.builtin.command: git rev-parse --short --verify origin/master
+      register: github_hash
+      changed_when: false
+
+    - name: Get md5 Hash from resenv folder
+      ansible.builtin.shell: set -o pipefail &&  find ../base -type f -exec md5sum {} \; | md5sum
+      register: md5_hash
+      args:
+        executable: /bin/bash
+      changed_when: false
+    - name: Set Base BUILD Images
+      ansible.builtin.set_fact:
+        base_images: >-
+          {{
+            images.images
+            | selectattr('tags', 'search', base_image_build)
+            | selectattr('os_distro', '==', os_distro)
+            | selectattr('os_version', '==', os_version)
+            | sort(attribute='created_at')
+          }}
+    - name: Set Base Images
+      ansible.builtin.set_fact:
+        base_images: >-
+          {{
+            images.images
+            | selectattr('tags', 'search', base_image_tag)
+            | selectattr('os_distro', '==', os_distro)
+            | selectattr('os_version', '==', os_version)
+            | sort(attribute='created_at')
+          }}
+
+
+    - name: Set Update facts
+      ansible.builtin.set_fact:
+        update: true
+      when:
+        - base_image_build | length > 0
+        - base_images | length == 0 or (base_image_build | last).created_at > (base_images | last).created_at
+          or (base_images | last).github_hash | default('undefined') != github_hash.stdout
+          or (base_images | last).md5_hash|default ('undefined')  != md5_hash.stdout)
+
+
+    - name: Build new Base  image - {{ os_distro }} {{ os_version }}
+      ansible.builtin.command: packer build -var-file=tags.json -var 'os_distro={{ os_distro }}'
+                               -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}'
+                               -var 'md5_hash={{ md5_hash.stdout}}'
+                               -var 'network={{ vars[location + '_' + upload_environment] }}'
+                               ../base/packer_base.json
+      when: update
+      changed_when: false

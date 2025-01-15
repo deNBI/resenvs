@@ -1,0 +1,15 @@
+---
+- name: Setting up research environment
+  hosts: all
+  become: true
+  gather_facts: true
+
+  vars:
+    bielefeld_mirror_service_exist: false
+  pre_tasks:
+    - name: Generic PRE Tasks
+      ansible.builtin.import_tasks: ../generic/generic_pre_tasks.yml
+
+  post_tasks:
+    - name: Generic POST Tasks
+      ansible.builtin.import_tasks: ../generic/generic_post_tasks.yml

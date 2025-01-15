@@ -1,0 +1,50 @@
+{
+   "variables":{
+      "network":"",
+      "os_distro":"",
+      "os_version":""
+   },
+   "builders":[
+      {
+         "type":"openstack",
+         "image_name":"{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
+         "source_image_filter":{
+            "filters":{
+               "tags":[
+                  "{{user `base_image_build`}}"
+               ],
+               "properties":{
+                  "os_distro":"{{user `os_distro`}}",
+                  "os_version":"{{user `os_version`}}",
+                  "image_type": "image"
+
+               }
+            },
+            "most_recent":true
+         },
+         "networks":"{{user `network`}}",
+         "flavor":"de.NBI tiny",
+         "description": "Ubuntu is a free and open source operating system and Linux distribution based on Debian.",
+         "ssh_username":"ubuntu",
+         "ssh_clear_authorized_keys": true,
+         "image_tags":[
+            "{{user `base_image_tag`}}",
+            "deNBI"
+         ],
+         "metadata": {
+            "github_hash": "{{user `github_hash`}}",
+            "md5_hash": "{{user `md5_hash`}}"
+          }
+      }
+   ],
+   "provisioners":[
+      {
+         "type":"ansible",
+         "playbook_file":"../base/base.yml",
+         "use_proxy":false,
+         "extra_arguments":[
+            "-vv"
+         ]
+      }
+   ]
+}
