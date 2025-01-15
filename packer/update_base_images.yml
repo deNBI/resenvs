@@ -129,10 +129,10 @@
         - base_image_build | length > 0
         - base_images | length == 0 or (base_image_build | last).created_at > (base_images | last).created_at
           or (base_images | last).github_hash | default('undefined') != github_hash.stdout
-          or (base_images | last).md5_hash|default ('undefined')  != md5_hash.stdout)
+          or (base_images | last).md5_hash|default ('undefined')  != md5_hash.stdout
 
 
-    - name: Build new Base  image - {{ os_distro }} {{ os_version }}
+    - name: Build new Base image - {{ os_distro }} {{ os_version }}
       ansible.builtin.command: packer build -var-file=tags.json -var 'os_distro={{ os_distro }}'
                                -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}'
                                -var 'md5_hash={{ md5_hash.stdout}}'
