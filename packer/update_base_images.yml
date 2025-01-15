@@ -65,7 +65,7 @@
         filename: "{{ downloaded_filename }}"
         tags:
           - portalclient
-          - "{{ base_image_build }}"
+          - "{{ base_image_build_tag }}"
           - deNBI
         properties:
           os_distro: "{{ os_distro }}"
@@ -102,10 +102,10 @@
       changed_when: false
     - name: Set Base BUILD Images
       ansible.builtin.set_fact:
-        base_images: >-
+        base_image_build: >-
           {{
             images.images
-            | selectattr('tags', 'search', base_image_build)
+            | selectattr('tags', 'search', base_image_build_tag)
             | selectattr('os_distro', '==', os_distro)
             | selectattr('os_version', '==', os_version)
             | sort(attribute='created_at')
