@@ -33,7 +33,7 @@
          "metadata": {
             "github_hash": "{{user `github_hash`}}",
             "md5_hash": "{{user `md5_hash`}}",
-            "description": "Ubuntu is a free and open source operating system and Linux distribution based on Debian.",
+            "description": "Ubuntu is a free and open source operating system and Linux distribution based on Debian."
 
           }
       }
