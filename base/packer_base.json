@@ -24,7 +24,6 @@
          },
          "networks":"{{user `network`}}",
          "flavor":"de.NBI tiny",
-         "description": "Ubuntu is a free and open source operating system and Linux distribution based on Debian.",
          "ssh_username":"ubuntu",
          "ssh_clear_authorized_keys": true,
          "image_tags":[
@@ -33,7 +32,9 @@
          ],
          "metadata": {
             "github_hash": "{{user `github_hash`}}",
-            "md5_hash": "{{user `md5_hash`}}"
+            "md5_hash": "{{user `md5_hash`}}",
+            "description": "Ubuntu is a free and open source operating system and Linux distribution based on Debian.",
+
           }
       }
    ],
