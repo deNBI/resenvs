@@ -9,6 +9,7 @@
     s3_path: path
   vars_files:
     - tags.json
+    - networks.json
 
   tasks:
     - name: Set Update default false
@@ -132,10 +133,10 @@
           or (base_images | last).md5_hash|default ('undefined')  != md5_hash.stdout
 
 
-    - name: Build new Base image - {{ os_distro }} {{ os_version }}
+    - name: Build new Base image -{{ os_distro }} {{ os_version }}
       ansible.builtin.command: packer build -var-file=tags.json -var 'os_distro={{ os_distro }}'
                                -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}'
-                               -var 'md5_hash={{ md5_hash.stdout}}'
+                               -var 'md5_hash={{ md5_hash.stdout }}'
                                -var 'network={{ vars[location + '_' + upload_environment] }}'
                                ../base/packer_base.json
       when: update

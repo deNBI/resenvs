@@ -4,8 +4,6 @@
   become: true
   gather_facts: true
 
-  vars:
-    bielefeld_mirror_service_exist: false
   pre_tasks:
     - name: Generic PRE Tasks
       ansible.builtin.import_tasks: ../generic/generic_pre_tasks.yml
