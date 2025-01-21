@@ -1,5 +1,6 @@
 {
   "base_image_tag": "base_image",
+  "base_image_build_tag": "base_image_build",
   "base_cluster_tag": "base_cluster",
   "guacamole_tag": "guacamole",
   "rstudio_tag": "rstudio",

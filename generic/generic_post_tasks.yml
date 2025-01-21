@@ -13,3 +13,9 @@
         - unattended-upgrades
         - apt-daily
         - apt-daily.timer
+
+- name: POST_TASK Clear all SSH public keys from authorized_keys
+  ansible.builtin.copy:
+    content: ""
+    dest: "{{ ansible_user_dir }}/.ssh/authorized_keys"
+    mode: '0600'
