@@ -13,7 +13,7 @@
         - unattended-upgrades
         - apt-daily
         - apt-daily.timer
-        
+
 - name: POST_TASK Clear all SSH public keys from authorized_keys
   ansible.builtin.copy:
     content: ""

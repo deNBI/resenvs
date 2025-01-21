@@ -1,0 +1,22 @@
+---
+- name: Add apt.bi.denbi.de repository key
+  ansible.builtin.apt_key:
+    url: https://apt.bi.denbi.de/repo_key.key
+    state: present
+
+
+- name: Add apt.bi.denbi.de repository
+  ansible.builtin.apt_repository:
+    repo: deb https://apt.bi.denbi.de/repos/apt/{{ ansible_distribution_release | lower }} {{ ansible_distribution_release | lower }} main
+
+
+- name: Update and upgrade all packages to the latest version
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist
+    cache_valid_time: 3600
+
+- name: Install SimpleVM Metadata Service
+  ansible.builtin.apt:
+    name: simplevm-metadata-service
+    state: present
