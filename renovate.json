@@ -19,6 +19,16 @@
     },
     {
       "fileMatch": [
+        "generic/generic_vars\\.yml",
+      ],
+      "matchStrings": [
+        "SIMPLEVM_METADATA_VERSION: (?<currentValue>.*?)\\n"
+      ],
+      "depNameTemplate": "SimpleVM/metadata-service-roles",
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "fileMatch": [
         "rstudio/rstudio_vars_file\\.yml",
         "rstudio/rstudio_metadata\\.yml"
       ],
