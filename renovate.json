@@ -1,11 +1,12 @@
 {
   "extends": [
-    "config:base",
+    "config:recommended",
     ":automergePatch"
   ],
   "platform": "github",
-  "regexManagers": [
+  "customManagers": [
     {
+      "customType": "regex",
       "fileMatch": [
         "guacamole/roles/guacamole/vars/main\\.yml",
         "guacamole/guacamole_metadata\\.yml"
@@ -18,6 +19,7 @@
       "datasourceTemplate": "github-tags"
     },
     {
+      "customType": "regex",
       "fileMatch": [
         "generic/generic_vars\\.yml"
       ],
@@ -28,6 +30,7 @@
       "datasourceTemplate": "github-tags"
     },
     {
+      "customType": "regex",
       "fileMatch": [
         "rstudio/rstudio_vars_file\\.yml",
         "rstudio/rstudio_metadata\\.yml"
@@ -41,6 +44,7 @@
       "versioningTemplate": "regex:v(?<major>20\\d\\d)\\.(?<minor>\\d\\d)\\.(?<patch>\\d)\\+\\d*"
     },
     {
+      "customType": "regex",
       "fileMatch": [
         "vscode/vscode_vars_file\\.yml",
         "vscode/vscode_metadata\\.yml",
@@ -54,6 +58,7 @@
       "datasourceTemplate": "github-tags"
     },
     {
+      "customType": "regex",
       "fileMatch": [
         "jupyterlab/jupyterlab_env\\.yml"
       ],
