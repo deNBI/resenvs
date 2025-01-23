@@ -19,7 +19,7 @@
     },
     {
       "fileMatch": [
-        "generic/generic_vars\\.yml",
+        "generic/generic_vars\\.yml"
       ],
       "matchStrings": [
         "SIMPLEVM_METADATA_VERSION: (?<currentValue>.*?)\\n"
