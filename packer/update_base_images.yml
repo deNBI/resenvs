@@ -106,7 +106,7 @@
         base_image_build: >-
           {{
             images.images
-            | selectattr('tags', 'intersect', [base_image_build_tag])
+            | selectattr('tags', 'contains', base_image_build_tag)
             | selectattr('os_distro', '==', os_distro)
             | selectattr('os_version', '==', os_version)
             | sort(attribute='created_at')
@@ -116,7 +116,7 @@
         base_images: >-
           {{
             images.images
-            | selectattr('tags', 'intersect', [base_image_tag])
+            | selectattr('tags', 'contains', base_image_tag)
             | selectattr('os_distro', '==', os_distro)
             | selectattr('os_version', '==', os_version)
             | sort(attribute='created_at')
