@@ -96,16 +96,6 @@
     state: present
   when: mode == "openstack"
 
-- name: Add Docker repository key
-  ansible.builtin.apt_key:
-    url: 'https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg'
-    state: present
-
-- name: Add Docker repository
-  ansible.builtin.apt_repository:
-    repo: 'deb https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_lsb.codename }} stable'
-    state: present
-
 - name: Add apt.bi.denbi.de repository key
   ansible.builtin.apt_key:
     url: https://apt.bi.denbi.de/repo_key.key
