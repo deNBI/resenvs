@@ -18,5 +18,5 @@
 
 - name: Install SimpleVM Metadata Service
   ansible.builtin.apt:
-    name: simplevm-metadata-service
+    name: "simplevm-metadata-service"
     state: present

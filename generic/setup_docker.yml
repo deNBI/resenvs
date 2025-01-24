@@ -58,6 +58,7 @@
   ansible.builtin.group:
     name: docker
     state: present
+    gid: 1200
 
 - name: Add user to Docker group
   ansible.builtin.user:
