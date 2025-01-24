@@ -35,6 +35,8 @@
 - name: Install docker-api via PIP
   pip:
     name: ['docker', 'docker-compose']
+    break_system_packages: True
+
 
 - name: (Re-)start docker socket
   systemd:
