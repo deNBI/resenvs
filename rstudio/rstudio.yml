@@ -37,7 +37,8 @@
   when: not rstudio_vars.create_only_backend
 
 - name: Install rspm from GitHub
-  shell: Rscript -e "remotes::install_github('cran4linux/rspm')"
+  shell: Rscript -e "install.packages('rspm')"
+
   
 - name: Ensure .Rprofile file exists
   become: true
