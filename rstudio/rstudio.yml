@@ -26,8 +26,6 @@
   vars:
     r_packages:
       - name: remotes
-      - name: cran4linux/rspm
-        type: github
   when: not rstudio_vars.create_only_backend
 
 - name: Install rstudio-server role
@@ -38,6 +36,9 @@
     rstudio_server_version: "{{ rstudio_vars.RSTUDIO_VERSION | replace('v', '') | replace('+', '-') }}"
   when: not rstudio_vars.create_only_backend
 
+- name: Install rspm from GitHub
+  shell: Rscript -e "remotes::install_github('cran4linux/rspm')"
+  
 - name: Ensure .Rprofile file exists
   become: true
   file:
