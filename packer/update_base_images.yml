@@ -96,7 +96,7 @@
       changed_when: false
 
     - name: Get md5 Hash from resenv folder
-      ansible.builtin.shell: set -o pipefail &&  find ../base -type f -exec md5sum {} \; | md5sum
+      ansible.builtin.shell: set -o pipefail && find ../base -type f -exec cat {} \; > /tmp/md5_input && md5sum /tmp/md5_input | cut -d ' ' -f1
       register: md5_hash
       args:
         executable: /bin/bash
@@ -128,9 +128,9 @@
         update: true
       when:
         - base_image_build | length > 0
-        - base_images | length == 0 or (base_image_build | last).created_at > (base_images | last).created_at
-          or (base_images | last).github_hash | default('undefined') != github_hash.stdout
-          or (base_images | last).md5_hash|default ('undefined')  != md5_hash.stdout
+        - base_images | length == 0 or (base_image_build | last).created_at | strftime('%Y%m%d%H%M%S') > (base_images | last).created_at | strftime('%Y%m%d%H%M%S')
+          or (base_images | last).github_hash | trim | default('undefined') != github_hash.stdout | trim
+          or (base_images | last).md5_hash | trim | default ('undefined')  != md5_hash.stdout | trim
 
 
     - name: Build new Base image -{{ os_distro }} {{ os_version }}
