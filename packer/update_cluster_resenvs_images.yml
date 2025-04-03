@@ -70,8 +70,8 @@
         update: true
       when:
         - cluster_base_images | length > 0
-        - cluster_resenv_images | length == 0 or (cluster_base_images | last).created_at > (cluster_resenv_images | last).created_at
-          or (cluster_resenv_images | last).md5_hash | default('undefined') != md5_hash.stdout
+        - cluster_resenv_images | length == 0 or (cluster_base_images | last).created_at | strftime('%Y%m%d%H%M%S') > (cluster_resenv_images | last).created_at | strftime('%Y%m%d%H%M%S')
+          or (cluster_resenv_images | last).md5_hash | trim | default('undefined') != md5_hash.stdout | trim
 
 
     - name: Build new {{ resenv }} cluster master image - {{ os_distro }} {{ os_version }}
