@@ -69,12 +69,9 @@
       ansible.builtin.set_fact:
         update: true
       when:
-              - base_images | length > 0
-              - resenv_images | length == 0
-                or (resenv_images | length > 0
-                and ((base_images | last).created_at is version('gt', (resenv_images | last).created_at))
-                or (resenv_images| length > 0
-                and (resenv_images | last).md5_hash | trim |default ('undefined')  != md5_hash.stdout |trim)
+        - base_images | length > 0
+        - resenv_images | length == 0 or ((base_images | last).created_at | to_datetime) > ((resenv_images | last).created_at | to_datetime)
+          or (resenv_images| length > 0 and (resenv_images | last).md5_hash | trim | default('undefined') != md5_hash.stdout | trim)
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}
       ansible.builtin.command: packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json \

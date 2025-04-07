@@ -70,7 +70,7 @@
         update: true
       when:
         - cluster_base_images | length > 0
-        - cluster_resenv_images | length == 0 or ((cluster_base_images | last).created_at is version('gt', (cluster_resenv_images | last).created_at))
+        - cluster_resenv_images | length == 0 or ((cluster_base_images | last).created_at | to_datetime) > ((cluster_resenv_images | last).created_at | to_datetime)
           or (cluster_resenv_images | last).md5_hash | trim | default('undefined') != md5_hash.stdout | trim
 
 

@@ -51,8 +51,8 @@
         update: true
       when:
         - base_images | length > 0
-        - cluster_images | length == 0 or ((base_images | last).created_at is version('gt', (cluster_images | last).created_at))
-          or (cluster_images | last).github_hash |trim | default('undefined') != github_hash.stdout | trim
+        - cluster_images | length == 0 or ((base_images | last).created_at | to_datetime) > ((cluster_images | last).created_at | to_datetime)
+          or (cluster_images | last).github_hash | trim | default('undefined') != github_hash.stdout | trim
 
 
 
