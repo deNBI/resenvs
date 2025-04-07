@@ -129,8 +129,8 @@
       when:
         - base_images | length > 0
         - base_images | length == 0 or ((base_image_build | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) > ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ'))
-          or (base_images | last).github_hash | trim | default('undefined') != github_hash.stdout | trim
-          or (base_images | last).md5_hash | trim | default ('undefined')  != md5_hash.stdout | trim
+          or (base_images | last).properties.github_hash | trim | default('undefined') != github_hash.stdout | trim
+          or (base_images | last).properties.md5_hash | trim | default ('undefined')  != md5_hash.stdout | trim
 
 
 

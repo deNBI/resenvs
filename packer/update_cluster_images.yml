@@ -52,7 +52,7 @@
       when:
         - base_images | length > 0
         - cluster_images | length == 0 or ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) > ((cluster_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ'))
-          or (cluster_images | last).github_hash | trim | default('undefined') != github_hash.stdout | trim
+          or (cluster_images | last).properties.github_hash | trim | default('undefined') != github_hash.stdout | trim
 
 
 
