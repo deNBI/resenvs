@@ -71,7 +71,7 @@
       when:
         - base_images | length > 0
         - resenv_images | length == 0 or ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) > ((resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ'))
-          or (resenv_images| length > 0 and (resenv_images | last).md5_hash | trim | default('undefined') != md5_hash.stdout | trim)
+          or (resenv_images| length > 0 and (resenv_images | last).properties.md5_hash | trim | default('undefined') != md5_hash.stdout | trim)
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}
       ansible.builtin.command: packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json \
