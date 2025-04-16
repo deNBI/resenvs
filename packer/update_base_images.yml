@@ -122,9 +122,6 @@
             | sort(attribute='created_at')
           }}
 
-    - name: Debug base_images and base_image_build
-      ansible.builtin.debug:
-        msg: "base_images: {{ base_images | last }} - base_image_build: {{ base_image_build | last }}"
 
     - name: Set Update facts
       ansible.builtin.set_fact:
