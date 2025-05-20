@@ -10,4 +10,3 @@ jupyterlab_vars:
   ENV_NAME: denbi
   TIMEOUT_LENGTH: 5m
   MINI_FORGE_RELEASE: 24.11.2-1
-
