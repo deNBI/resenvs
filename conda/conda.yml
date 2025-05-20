@@ -15,29 +15,32 @@
 
 - name: Download Miniforge
   get_url:
-    url: https://github.com/conda-forge/miniforge/releases/download/{{conda_vars.MINI_FORGE_RELEASE}}/Miniforge3-{{conda_vars.MINI_FORGE_RELEASE}}-Linux-x86_64.sh
-    dest: /tmp/miniforge.sh
+        url: >-
+          https://github.com/conda-forge/miniforge/releases/download/
+          {{ conda_vars.MINI_FORGE_RELEASE }}/
+          Miniforge3-{{ conda_vars.MINI_FORGE_RELEASE }}-Linux-x86_64.sh
+        dest: /tmp/miniforge.sh
 
 - name: Install Miniforge
   command: bash /tmp/miniforge.sh -b -p {{ conda_vars.CONDA_DIR }}
   args:
-    creates: "{{ conda_vars.CONDA_DIR }}/bin/mamba"
+        creates: "{{ conda_vars.CONDA_DIR }}/bin/mamba"
 
 - name: Add Miniforge to PATH
   lineinfile:
-    path: /etc/profile
-    line: 'export PATH={{ conda_vars.CONDA_DIR }}/bin:$PATH'
+        path: /etc/profile
+        line: 'export PATH={{ conda_vars.CONDA_DIR }}/bin:$PATH'
   become: true
   become_user: root
 
 - name: Install conda-env role
   include_role:
-    name: andrewrothstein.conda-env
+        name: andrewrothstein.conda-env
   vars:
-    conda_env_conda_dir: "{{conda_vars.CONDA_DIR}}"
-    conda_env_name: "{{ conda_vars.ENV_NAME| quote }}"
-    conda_env_environment: conda_env.yml
-    conda_env_activate_for_login_shell: true
+        conda_env_conda_dir: "{{conda_vars.CONDA_DIR}}"
+        conda_env_name: "{{ conda_vars.ENV_NAME| quote }}"
+        conda_env_environment: conda_env.yml
+        conda_env_activate_for_login_shell: true
 
 - name: Adjust miniforge folder rights
   become: true
@@ -47,32 +50,32 @@
   become_user: "{{conda_vars.default_user}}"
   shell: 'timeout 1m bash -c ''source {{conda_vars.CONDA_DIR}}/bin/activate && conda config --add channels bioconda'''
   args:
-    executable: /bin/bash
+        executable: /bin/bash
 
 - name: Add conda-forge channel
   become_user: "{{conda_vars.default_user}}"
   shell: 'timeout 1m bash -c ''source {{conda_vars.CONDA_DIR}}/bin/activate && conda config --add channels conda-forge'''
   args:
-    executable: /bin/bash
+        executable: /bin/bash
 
 - name: Init .bashrc for conda
   become_user: "{{conda_vars.default_user}}"
   shell: 'timeout 1m bash -c ''source {{ conda_vars.CONDA_DIR}}/bin/activate && conda init'''
   args:
-    executable: /bin/bash
+        executable: /bin/bash
 
 - name: Create alias for environment
   become_user: "{{conda_vars.default_user}}"
   lineinfile:
-    path: "/home/{{conda_vars.default_user}}/.bashrc"
-    line: "alias {{conda_vars.ENV_NAME|quote}}='conda activate {{conda_vars.ENV_NAME|quote}}'"
+        path: "/home/{{conda_vars.default_user}}/.bashrc"
+        line: "alias {{conda_vars.ENV_NAME|quote}}='conda activate {{conda_vars.ENV_NAME|quote}}'"
 
 - name: Check for installed packages
   become_user: "{{conda_vars.default_user}}"
   shell: 'source {{conda_vars.CONDA_DIR}}/bin/activate && conda activate {{conda_vars.ENV_NAME|quote}} && conda list'
   register: added_packages
   args:
-    executable: /bin/bash
+        executable: /bin/bash
 
 - name: Install chosen packages
   become_user: "{{conda_vars.default_user}}"
@@ -81,6 +84,6 @@
     conda activate {{conda_vars.ENV_NAME|quote}} &&
     conda install --yes {{item.key}}={{item.value.version}}
   args:
-    executable: /bin/bash
+        executable: /bin/bash
   loop: "{{ q('dict', conda_vars.packages) }}"
   when: added_packages.stdout.find(item.key) == -1

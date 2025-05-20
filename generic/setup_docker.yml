@@ -1,4 +1,3 @@
-
 ---
 - name: Update and upgrade all packages to the latest version
   ansible.builtin.apt:
@@ -52,7 +51,6 @@
     - docker-buildx-plugin
     - docker-compose-plugin
 
-
 - name: Install Docker
   apt:
     name: docker.io
@@ -91,4 +89,3 @@
   systemd:
     name: docker.socket
     state: restarted
-

@@ -34,7 +34,6 @@
             | sort(attribute='created_at')
           }}
 
-
     - name: Set Cluster {{ cluster_type }} Images
       ansible.builtin.set_fact:
         cluster_images: >-
@@ -45,15 +44,20 @@
              | sort(attribute='created_at')
           }}
 
-
     - name: Set Update facts
       ansible.builtin.set_fact:
         update: true
       when:
         - base_images | length > 0
-        - cluster_images | length == 0 or ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) > ((cluster_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ'))
-          or (cluster_images | last).properties.github_hash | trim | default('undefined') != github_hash.stdout | trim
-
+        - cluster_images | length == 0
+          or (
+            (base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ') >
+            (cluster_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
+          )
+          or (
+            (cluster_images | last).properties.github_hash | trim | default('undefined')
+            != github_hash.stdout | trim
+          )
 
 
     - name: Build new Cluster [{{ cluster_type }}] image - {{ os_distro }} {{ os_version }}
