@@ -133,8 +133,6 @@
           or (base_images | last).properties.github_hash | trim | default('undefined') != github_hash.stdout | trim
           or (base_images | last).properties.md5_hash | trim | default ('undefined')  != md5_hash.stdout | trim
 
-
-
     - name: Build new Base image -{{ os_distro }} {{ os_version }}
       ansible.builtin.command: packer build -var-file=tags.json -var 'os_distro={{ os_distro }}'
                                -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}'
