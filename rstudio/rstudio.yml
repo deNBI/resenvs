@@ -39,7 +39,6 @@
 - name: Install rspm from GitHub
   shell: Rscript -e "install.packages('rspm')"
 
-  
 - name: Ensure .Rprofile file exists
   become: true
   file:

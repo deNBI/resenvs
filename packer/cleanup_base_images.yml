@@ -51,7 +51,7 @@
       when: ubuntu_images | length > limit | int and index >= limit | int
 
     - name: Retrieve list of all images base build
-      ansible.builtin.shell: > 
+      ansible.builtin.shell: >
         openstack image list
         --private
         --tag {{ base_image_build_tag }}
@@ -77,7 +77,7 @@
       ansible.builtin.debug:
         var: item.Name
       loop: "{{ ubuntu_build_images }}"
-      
+
     - name: Clean up old Ubuntu BULD{{ os_version }} images
       openstack.cloud.image:
         name: "{{ item.ID }}"
