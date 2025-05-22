@@ -25,7 +25,7 @@
       changed_when: false
 
     - name: Get md5 Hash from resenv folder
-      ansible.builtin.shell: set -o pipefail &&  find ../{{ resenv }} -type f -exec md5sum {} \; | md5sum
+      ansible.builtin.shell: set -o pipefail &&  find ../generic ../{{ resenv }} -type f -exec md5sum {} \; | md5sum
       register: md5_hash
       args:
         executable: /bin/bash
