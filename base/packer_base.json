@@ -6,12 +6,13 @@
     "base_image_tag": "",
     "base_image_build_tag": "",
     "github_hash": "",
-    "md5_hash": ""
+    "md5_hash": "",
+    "build_date": "{{isotime `2006-01-02`}}"
   },
   "builders": [
     {
       "type": "openstack",
-      "image_name": "{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
+      "image_name": "{{user `os_distro`}}{{user `os_version`}} de.NBI ({{user `build_date`}})",
       "source_image_filter": {
         "filters": {
           "tags": [
@@ -52,18 +53,18 @@
     {
       "type": "shell",
       "inline": [
-        "echo 'Cleaning cloud-init and OS cache...'",
+        "echo '🧼 Cleaning cloud-init and OS cache...'",
         "sudo cloud-init clean --logs",
         "sudo truncate -s 0 /etc/machine-id",
         "sudo apt-get clean",
         "sudo rm -rf /var/lib/cloud/* /var/lib/apt/lists/* /tmp/* /var/tmp/*",
         "sudo find /var/log -type f -exec truncate -s 0 {} +",
         "sync",
-        "echo 'Zeroing free space for compression...'",
+        "echo '🧼 Zeroing free space for compression...'",
         "sudo dd if=/dev/zero of=/EMPTY bs=1M || true",
         "sudo rm -f /EMPTY",
         "sync",
-        "echo 'Cleanup and shrink step completed.'"
+        "echo '✅ Cleanup and shrink step completed.'"
       ]
     }
   ],
@@ -73,25 +74,25 @@
         "type": "shell-local",
         "inline": [
           "set -e",
-          "ORIG_IMAGE=\"{{ build_name }}\"",
+          "ORIG_IMAGE=\"{{user `os_distro`}}{{user `os_version`}} de.NBI ({{user `build_date`}})\"",
           "EXPORT_FILE=\"${ORIG_IMAGE}.qcow2\"",
           "SPARSE_FILE=\"${ORIG_IMAGE}-sparse.qcow2\"",
           "OPTIMIZED_IMAGE=\"${ORIG_IMAGE}-optimized\"",
 
-          "echo \"Exporting image from OpenStack: $ORIG_IMAGE\"",
+          "echo \"📤 Exporting image from OpenStack: $ORIG_IMAGE\"",
           "openstack image save \"$ORIG_IMAGE\" --file \"$EXPORT_FILE\"",
 
-          "echo \"Running virt-sparsify...\"",
+          "echo \"🧩 Running virt-sparsify...\"",
           "virt-sparsify --compress \"$EXPORT_FILE\" \"$SPARSE_FILE\"",
 
-          "echo \"Fetching metadata from original image...\"",
+          "echo \"🔍 Fetching metadata from original image...\"",
           "PROPERTIES=$(openstack image show \"$ORIG_IMAGE\" -f json | jq -r '.properties | to_entries | map(\"--property \" + .key + \"='\" + .value + \"'\") | join(\" \")')",
           "TAGS=$(openstack image show \"$ORIG_IMAGE\" -f json | jq -r '.tags | map(\"--tag \" + .) | join(\" \")')",
 
-          "echo \"Uploading optimized image with original metadata...\"",
+          "echo \"⬆ Uploading optimized image with original metadata...\"",
           "openstack image create --disk-format qcow2 --container-format bare --file \"$SPARSE_FILE\" $TAGS $PROPERTIES \"$OPTIMIZED_IMAGE\"",
 
-          "echo \"✔ Done. Optimized image uploaded as $OPTIMIZED_IMAGE\""
+          "echo \"✅ Done. Optimized image uploaded as $OPTIMIZED_IMAGE\""
         ]
       }
     ]
