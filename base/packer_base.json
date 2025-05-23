@@ -1,44 +1,46 @@
 {
-   "variables":{
-      "network":"",
-      "os_distro":"",
-      "os_version":""
-   },
-   "builders":[
-      {
-         "type":"openstack",
-         "image_name":"{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
-         "source_image_filter":{
-            "filters":{
-               "tags":[
-                  "{{user `base_image_build_tag`}}"
-               ],
-               "properties":{
-                  "os_distro":"{{user `os_distro`}}",
-                  "os_version":"{{user `os_version`}}",
-                  "image_type": "image"
-
-               }
-            },
-            "most_recent":true
-         },
-         "networks":"{{user `network`}}",
-         "flavor":"de.NBI tiny",
-         "ssh_username":"ubuntu",
-         "ssh_clear_authorized_keys": true,
-         "image_tags":[
-            "{{user `base_image_tag`}}",
-            "deNBI"
-         ],
-         "metadata": {
-            "github_hash": "{{user `github_hash`}}",
-            "md5_hash": "{{user `md5_hash`}}",
-            "description": "Ubuntu is a free and open source operating system and Linux distribution based on Debian."
-
+  "variables": {
+    "network": "",
+    "os_distro": "",
+    "os_version": "",
+    "base_image_tag": "",
+    "base_image_build_tag": "",
+    "github_hash": "",
+    "md5_hash": ""
+  },
+  "builders": [
+    {
+      "type": "openstack",
+      "image_name": "{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
+      "source_image_filter": {
+        "filters": {
+          "tags": [
+            "{{user `base_image_build_tag`}}"
+          ],
+          "properties": {
+            "os_distro": "{{user `os_distro`}}",
+            "os_version": "{{user `os_version`}}",
+            "image_type": "image"
           }
+        },
+        "most_recent": true
+      },
+      "networks": "{{user `network`}}",
+      "flavor": "de.NBI tiny",
+      "ssh_username": "ubuntu",
+      "ssh_clear_authorized_keys": true,
+      "image_tags": [
+        "{{user `base_image_tag`}}",
+        "deNBI"
+      ],
+      "metadata": {
+        "github_hash": "{{user `github_hash`}}",
+        "md5_hash": "{{user `md5_hash`}}",
+        "description": "Ubuntu is a free and open source operating system and Linux distribution based on Debian."
       }
-   ],
- "provisioners": [
+    }
+  ],
+  "provisioners": [
     {
       "type": "ansible",
       "playbook_file": "../base/base.yml",
@@ -49,20 +51,49 @@
     },
     {
       "type": "shell",
-    "inline": [
-       "echo 'Cleaning cloud-init and OS cache...'",
-       "sudo cloud-init clean --logs",
-       "sudo truncate -s 0 /etc/machine-id",
-       "sudo apt-get clean",
-       "sudo rm -rf /var/lib/cloud/* /var/lib/apt/lists/* /tmp/* /var/tmp/*",
-       "sudo find /var/log -type f -exec truncate -s 0 {} +",
-       "sync",
-       "echo 'Zeroing free space for compression...'",
-       "sudo dd if=/dev/zero of=/EMPTY bs=1M || true",
-       "sudo rm -f /EMPTY",
-       "sync",
-       "echo 'Cleanup and shrink step completed.'"
-     ]
+      "inline": [
+        "echo 'Cleaning cloud-init and OS cache...'",
+        "sudo cloud-init clean --logs",
+        "sudo truncate -s 0 /etc/machine-id",
+        "sudo apt-get clean",
+        "sudo rm -rf /var/lib/cloud/* /var/lib/apt/lists/* /tmp/* /var/tmp/*",
+        "sudo find /var/log -type f -exec truncate -s 0 {} +",
+        "sync",
+        "echo 'Zeroing free space for compression...'",
+        "sudo dd if=/dev/zero of=/EMPTY bs=1M || true",
+        "sudo rm -f /EMPTY",
+        "sync",
+        "echo 'Cleanup and shrink step completed.'"
+      ]
     }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "shell-local",
+        "inline": [
+          "set -e",
+          "ORIG_IMAGE=\"{{ build_name }}\"",
+          "EXPORT_FILE=\"${ORIG_IMAGE}.qcow2\"",
+          "SPARSE_FILE=\"${ORIG_IMAGE}-sparse.qcow2\"",
+          "OPTIMIZED_IMAGE=\"${ORIG_IMAGE}-optimized\"",
+
+          "echo \"Exporting image from OpenStack: $ORIG_IMAGE\"",
+          "openstack image save \"$ORIG_IMAGE\" --file \"$EXPORT_FILE\"",
+
+          "echo \"Running virt-sparsify...\"",
+          "virt-sparsify --compress \"$EXPORT_FILE\" \"$SPARSE_FILE\"",
+
+          "echo \"Fetching metadata from original image...\"",
+          "PROPERTIES=$(openstack image show \"$ORIG_IMAGE\" -f json | jq -r '.properties | to_entries | map(\"--property \" + .key + \"='\" + .value + \"'\") | join(\" \")')",
+          "TAGS=$(openstack image show \"$ORIG_IMAGE\" -f json | jq -r '.tags | map(\"--tag \" + .) | join(\" \")')",
+
+          "echo \"Uploading optimized image with original metadata...\"",
+          "openstack image create --disk-format qcow2 --container-format bare --file \"$SPARSE_FILE\" $TAGS $PROPERTIES \"$OPTIMIZED_IMAGE\"",
+
+          "echo \"✔ Done. Optimized image uploaded as $OPTIMIZED_IMAGE\""
+        ]
+      }
+    ]
   ]
 }
