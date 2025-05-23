@@ -25,7 +25,8 @@
 
 
     - name: Get md5 Hash from resenv folder
-      ansible.builtin.shell: set -o pipefail && find ../generic ../{{ resenv }}  -type f -exec cat {} \; > /tmp/md5_input && md5sum /tmp/md5_input | cut -d ' ' -f1
+      ansible.builtin.shell: >
+          set -o pipefail && find ../generic ../{{ resenv }}  -type f -exec cat {} \; > /tmp/md5_input && md5sum /tmp/md5_input | cut -d ' ' -f1
       register: md5_hash
       args:
         executable: /bin/bash
