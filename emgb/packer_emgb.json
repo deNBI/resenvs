@@ -7,7 +7,7 @@
    "builders":[
       {
          "type":"openstack",
-         "image_name":"EMGB-Server-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
+         "image_name":"Guacamole-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
          "source_image_filter":{
             "filters":{
                "tags":[
@@ -16,8 +16,7 @@
                "properties":{
                   "os_distro":"{{user `os_distro`}}",
                   "os_version":"{{user `os_version`}}",
-                  "image_type": "image"
-
+                  "image_type":"image"
                }
             },
             "most_recent":true
@@ -25,9 +24,9 @@
          "networks":"{{user `network`}}",
          "flavor":"de.NBI tiny",
          "ssh_username":"ubuntu",
-         "ssh_clear_authorized_keys": true,
+         "ssh_clear_authorized_keys":true,
          "image_tags":[
-            "{{user `emgb_tag`}}",
+            "{{user `guacamole_tag`}}",
             "deNBI"
          ],
          "metadata":{
@@ -48,20 +47,19 @@
             "info_url":"{{user `info_url`}}",
             "information_for_display":"{{user `information_for_display`}}",
             "github_hash":"{{user `github_hash`}}",
-            "md5_hash":"{{user `md5_hash`}}",
-            "minram":"{{user `min_ram`}}",
-            "community_driven": "{{user `community_driven`}}",
-            "wiki_link": "{{user `wiki_link`}}"
+            "md5_hash":"{{user `md5_hash`}}"
          }
       }
    ],
- "provisioners":[
+   "provisioners":[
       {
          "type":"ansible",
-         "playbook_file":"../base/base.yml",
+         "playbook_file":"./packer_resenvs.yml",
          "use_proxy":false,
          "extra_arguments":[
-            "-vv"
+            "-vv",
+            "--extra-vars",
+            "resenv=emgb"
          ]
       },
       {
