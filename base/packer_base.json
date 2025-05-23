@@ -83,7 +83,7 @@
           "openstack image save \"$ORIG_IMAGE\" --file \"$EXPORT_FILE\"",
 
           "echo \"🧩 Running virt-sparsify...\"",
-          "virt-sparsify --compress \"$EXPORT_FILE\" \"$SPARSE_FILE\"",
+          "TMPDIR=/vol virt-sparsify --compress \"$EXPORT_FILE\" \"$SPARSE_FILE\"",
 
           "echo \"🔍 Fetching metadata from original image...\"",
           "PROPERTIES=$(openstack image show \"$ORIG_IMAGE\" -f json | jq -r '.properties | to_entries | map(\"--property \" + .key + \"='\" + .value + \"'\") | join(\" \")')",
