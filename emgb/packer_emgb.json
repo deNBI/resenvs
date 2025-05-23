@@ -7,7 +7,7 @@
    "builders":[
       {
          "type":"openstack",
-         "image_name":"Guacamole-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
+         "image_name":"EMGB-Server-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
          "source_image_filter":{
             "filters":{
                "tags":[
@@ -26,7 +26,7 @@
          "ssh_username":"ubuntu",
          "ssh_clear_authorized_keys":true,
          "image_tags":[
-            "{{user `guacamole_tag`}}",
+            "{{user `emgb_tag`}}",
             "deNBI"
          ],
          "metadata":{
@@ -47,7 +47,10 @@
             "info_url":"{{user `info_url`}}",
             "information_for_display":"{{user `information_for_display`}}",
             "github_hash":"{{user `github_hash`}}",
-            "md5_hash":"{{user `md5_hash`}}"
+            "md5_hash":"{{user `md5_hash`}}",
+            "minram":"{{user `min_ram`}}",
+            "community_driven":"{{user `community_driven`}}",
+            "wiki_link":"{{user `wiki_link`}}"
          }
       }
    ],
