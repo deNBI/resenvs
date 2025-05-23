@@ -1,4 +1,4 @@
-openstacksdk==4.3.0
+openstacksdk==4.5.0
 ansible==10.7.0
 python-openstackclient==8.0.0
 paramiko==3.5.1
