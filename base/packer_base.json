@@ -12,7 +12,7 @@
   "builders": [
     {
       "type": "openstack",
-      "image_name": "{{user `os_distro`}}{{user `os_version`}} de.NBI ({{user `build_date`}})",
+      "image_name": "{{user `os_distro`}}{{user `os_version`}} de.NBI ({{user `build_date`}})-com",
       "source_image_filter": {
         "filters": {
           "tags": [
@@ -74,7 +74,7 @@
         "type": "shell-local",
         "inline": [
           "set -e",
-          "ORIG_IMAGE=\"{{user `os_distro`}}{{user `os_version`}} de.NBI ({{user `build_date`}})\"",
+          "ORIG_IMAGE=\"{{user `os_distro`}}{{user `os_version`}} de.NBI ({{user `build_date`}})-com\"",
           "EXPORT_FILE=\"${ORIG_IMAGE}.qcow2\"",
           "SPARSE_FILE=\"${ORIG_IMAGE}-sparse.qcow2\"",
           "OPTIMIZED_IMAGE=\"${ORIG_IMAGE}-optimized\"",
