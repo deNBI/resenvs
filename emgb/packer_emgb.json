@@ -16,8 +16,7 @@
                "properties":{
                   "os_distro":"{{user `os_distro`}}",
                   "os_version":"{{user `os_version`}}",
-                  "image_type": "image"
-
+                  "image_type":"image"
                }
             },
             "most_recent":true
@@ -25,7 +24,7 @@
          "networks":"{{user `network`}}",
          "flavor":"de.NBI tiny",
          "ssh_username":"ubuntu",
-         "ssh_clear_authorized_keys": true,
+         "ssh_clear_authorized_keys":true,
          "image_tags":[
             "{{user `emgb_tag`}}",
             "deNBI"
@@ -50,8 +49,8 @@
             "github_hash":"{{user `github_hash`}}",
             "md5_hash":"{{user `md5_hash`}}",
             "minram":"{{user `min_ram`}}",
-            "community_driven": "{{user `community_driven`}}",
-            "wiki_link": "{{user `wiki_link`}}"
+            "community_driven":"{{user `community_driven`}}",
+            "wiki_link":"{{user `wiki_link`}}"
          }
       }
    ],
@@ -64,6 +63,23 @@
             "-vv",
             "--extra-vars",
             "resenv=emgb"
+         ]
+      },
+      {
+         "type":"shell",
+         "inline":[
+            "echo 'Cleaning cloud-init and OS cache...'",
+            "sudo cloud-init clean --logs",
+            "sudo truncate -s 0 /etc/machine-id",
+            "sudo apt-get clean",
+            "sudo rm -rf /var/lib/cloud/* /var/lib/apt/lists/* /tmp/* /var/tmp/*",
+            "sudo find /var/log -type f -exec truncate -s 0 {} +",
+            "sync",
+            "echo 'Zeroing free space for compression...'",
+            "sudo dd if=/dev/zero of=/EMPTY bs=1M || true",
+            "sudo rm -f /EMPTY",
+            "sync",
+            "echo 'Cleanup and shrink step completed.'"
          ]
       }
    ]
