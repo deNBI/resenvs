@@ -38,14 +38,28 @@
           }
       }
    ],
-   "provisioners":[
-      {
-         "type":"ansible",
-         "playbook_file":"../base/base.yml",
-         "use_proxy":false,
-         "extra_arguments":[
-            "-vv"
-         ]
-      }
-   ]
+  "provisioners": [
+  {
+    "type": "ansible",
+    "playbook_file": "../base/base.yml",
+    "use_proxy": false,
+    "extra_arguments": [
+      "-vv"
+    ]
+  },
+  {
+    "type": "shell",
+    "inline": [
+      "echo 'Cleaning up apt cache and logs...'",
+      "sudo apt-get clean",
+      "sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*",
+      "sudo find /var/log -type f -exec truncate -s 0 {} +",
+      "echo 'Zeroing free space...'",
+      "sudo dd if=/dev/zero of=/EMPTY bs=1M || true",
+      "sync",
+      "sudo rm -f /EMPTY",
+      "sync"
+    ]
+  }
+]
 }
