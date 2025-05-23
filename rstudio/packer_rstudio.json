@@ -56,10 +56,12 @@
    "provisioners":[
       {
          "type":"ansible",
-         "playbook_file":"../base/base.yml",
+         "playbook_file":"./packer_resenvs.yml",
          "use_proxy":false,
          "extra_arguments":[
-            "-vv"
+            "-v",
+            "--extra-vars",
+            "resenv=rstudio os_version={{user `os_version`}}"
          ]
       },
       {
