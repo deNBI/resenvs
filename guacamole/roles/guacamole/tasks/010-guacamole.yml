@@ -126,6 +126,11 @@
     line: GUACAMOLE_HOME="/etc/guacamole"
     state: present
 
+- name: Stop Tomcat
+  ansible.builtin.systemd:
+    name: tomcat9
+    state: stopped
+    
 - name: Copy tomcat guacamole client
   ansible.builtin.copy:
     remote_src: true
