@@ -5,4 +5,4 @@ default_password: denbi
 
 guac_user: denbi
 guac_password: denbi
-guacamole_version: 1.5.5
+guacamole_version: 1.6.0
