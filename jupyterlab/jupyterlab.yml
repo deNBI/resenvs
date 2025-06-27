@@ -8,9 +8,7 @@
 - name: Download Miniforge
   get_url:
     url: >-
-      https://github.com/conda-forge/miniforge/releases/download/
-      {{ jupyterlab_vars.MINI_FORGE_RELEASE }}/
-      Miniforge3-{{ jupyterlab_vars.MINI_FORGE_RELEASE }}-Linux-x86_64.sh
+      https://github.com/conda-forge/miniforge/releases/download/{{ jupyterlab_vars.MINI_FORGE_RELEASE }}/Miniforge3-{{ jupyterlab_vars.MINI_FORGE_RELEASE }}-Linux-x86_64.sh
     dest: /tmp/miniforge.sh
 
 - name: Install Miniforge
