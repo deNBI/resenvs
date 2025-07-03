@@ -9,12 +9,43 @@
     name: xfce4*
     state: present
 
-- name: Install Firefox
-  ansible.builtin.apt:
-    update_cache: true
+- name: Remove snap Firefox
+  become: true
+  snap:
     name: firefox
-    state: present
+    state: absent
 
+
+- name: Ensure software-properties-common is installed
+  become: true
+  apt:
+    name: software-properties-common
+    state: present
+    update_cache: yes
+
+- name: Add MozillaTeam PPA
+  become: true
+  apt_repository:
+    repo: ppa:mozillateam/ppa
+    state: present
+    update_cache: yes
+
+- name: Configure APT pinning for Mozilla Firefox
+  become: true
+  copy:
+    dest: /etc/apt/preferences.d/mozilla-firefox
+    content: |
+      Package: firefox*
+      Pin: release o=LP-PPA-mozillateam
+      Pin-Priority: 501
+
+- name: Install Firefox from APT
+  become: true
+  apt:
+    name: firefox
+    state: latest
+    update_cache: yes
+    
 - name: Install xrdp and other goodies
   ansible.builtin.apt:
     update_cache: true
