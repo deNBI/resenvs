@@ -137,7 +137,7 @@
         - base_image_build | length > 0
         - base_images | length == 0
           or ((base_image_build | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) > ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ'))
-          or (github_hash_from_image != 'undefined' or md5_checksum_from_image != 'undefined')
+          or (github_hash_from_image == 'undefined' or md5_checksum_from_image == 'undefined')
           or (github_hash_from_image != github_hash.stdout | trim or md5_checksum_from_image != md5_hash.stdout |trim )
 
     - name: Build new Base image -{{ os_distro }} {{ os_version }}
