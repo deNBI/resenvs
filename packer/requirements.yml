@@ -11,7 +11,7 @@ roles:
 
   - name: autoscaling
     src: https://github.com/deNBI/autoscaling-ansible
-    version: 1.8.7
+    version: 2.0.0
 
   - name: andrewrothstein.conda-env
     version: v2.2.0
