@@ -1,6 +1,6 @@
 ---
 vscode_vars:
   INSTALL_SCRIPT_URL: https://code-server.dev/install.sh
-  VSCODE_VERSION: v4.101.2
+  VSCODE_VERSION: v4.102.1
   DEFAULT_USER: ubuntu
   PORT: 3000
