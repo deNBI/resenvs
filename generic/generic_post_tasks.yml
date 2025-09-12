@@ -14,6 +14,13 @@
         - apt-daily
         - apt-daily.timer
 
+- name: POST_TASK Disable fail2ban if present
+  ansible.builtin.service:
+    name: fail2ban
+    state: stopped
+    enabled: false
+  ignore_errors: true  # Ignore errors if fail2ban is not installed
+
 - name: POST_TASK Clear all SSH public keys from authorized_keys
   ansible.builtin.copy:
         content: ""
