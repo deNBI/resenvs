@@ -1,5 +1,5 @@
-openstacksdk==4.6.0
+openstacksdk==4.7.1
 ansible==10.7.0
-python-openstackclient==8.1.0
+python-openstackclient==8.2.0
 paramiko==4.0.0
 passlib==1.7.4 
