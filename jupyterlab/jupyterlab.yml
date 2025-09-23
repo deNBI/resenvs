@@ -6,10 +6,10 @@
     swap_file_size_mb: "2024"
 
 - name: Download Miniforge
-  get_url:
-    url: >-
-      https://github.com/conda-forge/miniforge/releases/download/{{ jupyterlab_vars.MINI_FORGE_RELEASE }}/Miniforge3-{{ jupyterlab_vars.MINI_FORGE_RELEASE }}-Linux-x86_64.sh
+  ansible.builtin.get_url:
+    url: "https://github.com/conda-forge/miniforge/releases/download/{{ jupyterlab_vars.MINI_FORGE_RELEASE }}/Miniforge3-{{ jupyterlab_vars.MINI_FORGE_RELEASE }}-Linux-x86_64.sh"
     dest: /tmp/miniforge.sh
+    mode: '0755'
 
 - name: Install Miniforge
   command: bash /tmp/miniforge.sh -b -p {{ jupyterlab_vars.CONDA_DIR }}
