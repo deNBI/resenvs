@@ -1,119 +1,119 @@
 {
-   "extends":[
+   "extends": [
       "config:recommended",
       ":automergePatch"
    ],
-   "platform":"github",
-   "customManagers":[
+   "platform": "github",
+   "customManagers": [
       {
-         "customType":"regex",
-         "fileMatch":[
-            "guacamole/roles/guacamole/vars/main\\.yml",
-            "guacamole/guacamole_metadata\\.yml"
+         "customType": "regex",
+         "managerFilePatterns": [
+            "/guacamole/roles/guacamole/vars/main\\.yml/",
+            "/guacamole/guacamole_metadata\\.yml/"
          ],
-         "matchStrings":[
+         "matchStrings": [
             "guacamole_version: (?<currentValue>.*?)\\n",
             "version: (?<currentValue>.*?)\\n"
          ],
-         "depNameTemplate":"apache/guacamole-server",
-         "datasourceTemplate":"github-tags"
+         "depNameTemplate": "apache/guacamole-server",
+         "datasourceTemplate": "github-tags"
       },
       {
-         "customType":"regex",
-         "fileMatch":[
-            "conda/conda_vars_file\\.yml",
-            "jupyterlab/jupyterlab_vars_file\\.yml"
+         "customType": "regex",
+         "managerFilePatterns": [
+            "/conda/conda_vars_file\\.yml/",
+            "/jupyterlab/jupyterlab_vars_file\\.yml/"
          ],
-         "matchStrings":[
+         "matchStrings": [
             "MINI_FORGE_RELEASE: (?<currentValue>.*?)\\n"
          ],
-         "depNameTemplate":"conda-forge/miniforge",
-         "datasourceTemplate":"github-tags"
+         "depNameTemplate": "conda-forge/miniforge",
+         "datasourceTemplate": "github-tags"
       },
       {
-         "customType":"regex",
-         "fileMatch":[
-            "generic/generic_vars\\.yml"
+         "customType": "regex",
+         "managerFilePatterns": [
+            "/generic/generic_vars\\.yml/"
          ],
-         "matchStrings":[
+         "matchStrings": [
             "SIMPLEVM_METADATA_VERSION: (?<currentValue>.*?)\\n"
          ],
-         "depNameTemplate":"SimpleVM/metadata-service-roles",
-         "datasourceTemplate":"github-tags"
+         "depNameTemplate": "SimpleVM/metadata-service-roles",
+         "datasourceTemplate": "github-tags"
       },
       {
-         "customType":"regex",
-         "fileMatch":[
-            "rstudio/rstudio_vars_file\\.yml",
-            "rstudio/rstudio_metadata\\.yml"
+         "customType": "regex",
+         "managerFilePatterns": [
+            "/rstudio/rstudio_vars_file\\.yml/",
+            "/rstudio/rstudio_metadata\\.yml/"
          ],
-         "matchStrings":[
+         "matchStrings": [
             "RSTUDIO_VERSION: (?<currentValue>.*?)\\n",
             "version: (?<currentValue>.*?)\\n"
          ],
-         "depNameTemplate":"rstudio/rstudio",
-         "datasourceTemplate":"github-tags",
-         "versioningTemplate":"regex:v(?<major>20\\d\\d)\\.(?<minor>\\d\\d)\\.(?<patch>\\d)\\+\\d*"
+         "depNameTemplate": "rstudio/rstudio",
+         "datasourceTemplate": "github-tags",
+         "versioningTemplate": "regex:v(?<major>20\\d\\d)\\.(?<minor>\\d\\d)\\.(?<patch>\\d)\\+\\d*"
       },
       {
-         "customType":"regex",
-         "fileMatch":[
-            "vscode/vscode_vars_file\\.yml",
-            "vscode/vscode_metadata\\.yml",
-            "vscode_cwl/vscode_cwl_metadata\\.yml"
+         "customType": "regex",
+         "managerFilePatterns": [
+            "/vscode/vscode_vars_file\\.yml/",
+            "/vscode/vscode_metadata\\.yml/",
+            "/vscode_cwl/vscode_cwl_metadata\\.yml/"
          ],
-         "matchStrings":[
+         "matchStrings": [
             "VSCODE_VERSION: (?<currentValue>.*?)\\n",
             "version: (?<currentValue>.*?)\\n"
          ],
-         "depNameTemplate":"coder/code-server",
-         "datasourceTemplate":"github-tags"
+         "depNameTemplate": "coder/code-server",
+         "datasourceTemplate": "github-tags"
       },
       {
-         "customType":"regex",
-         "fileMatch":[
-            "jupyterlab/jupyterlab_env\\.yml"
+         "customType": "regex",
+         "managerFilePatterns": [
+            "/jupyterlab/jupyterlab_env\\.yml/"
          ],
-         "matchStrings":[
+         "matchStrings": [
             "# renovate datasource=conda\\sdepName=(?<depName>.*?)\\s+- [a-z0-9]+==\"?(?<currentValue>.*)\"?"
          ],
-         "datasourceTemplate":"conda"
+         "datasourceTemplate": "conda"
       }
    ],
-   "packageRules":[
+   "packageRules": [
       {
-         "matchUpdateTypes":[
+         "matchUpdateTypes": [
             "major",
             "minor",
             "patch"
          ],
-         "addLabels":[
+         "addLabels": [
             "major",
             "minor",
             "patch"
          ]
       }
    ],
-   "vulnerabilityAlerts":{
-      "labels":[
+   "vulnerabilityAlerts": {
+      "labels": [
          "security"
       ]
    },
-   "baseBranches":[
+   "baseBranchPatterns": [
       "dev"
    ],
-   "reviewers":[
+   "reviewers": [
       "team:portal-dev"
    ],
-   "labels":[
+   "labels": [
       "dependencies"
    ],
-   "assignees":[
+   "assignees": [
       "team:portal-dev"
    ],
-   "branchPrefix":"deps/",
-   "bumpVersion":"minor",
-   "rebaseWhen":"behind-base-branch",
-   "commitBodyTable":true,
-   "commitMessagePrefix":"feat(Dependencies):"
+   "branchPrefix": "deps/",
+   "bumpVersion": "minor",
+   "rebaseWhen": "behind-base-branch",
+   "commitBodyTable": true,
+   "commitMessagePrefix": "feat(Dependencies):"
 }
