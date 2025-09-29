@@ -85,6 +85,7 @@
         executable: /bin/bash
   loop: "{{ q('dict', conda_vars.packages) }}"
   register: conda_install_results
+  ignore_errors: true
   when: added_packages.stdout.find(item.key) == -1
 
 - name: Show conda install results
