@@ -80,7 +80,7 @@
   shell: >
     source {{conda_vars.CONDA_DIR}}/bin/activate &&
     conda activate {{conda_vars.ENV_NAME|quote}} &&
-    conda install --yes {{item.key}}={{item.value.version}}
+    conda install --quiet --yes {{item.key}}={{item.value.version}}
   args:
         executable: /bin/bash
   loop: "{{ q('dict', conda_vars.packages) }}"
