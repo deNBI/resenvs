@@ -84,4 +84,14 @@
   args:
         executable: /bin/bash
   loop: "{{ q('dict', conda_vars.packages) }}"
+  register: conda_install_results
   when: added_packages.stdout.find(item.key) == -1
+
+- name: Show conda install results
+  debug:
+    msg: |
+      Package '{{ item.item.key }}' install return code: {{ item.rc }}
+      Stdout: {{ item.stdout }}
+      Stderr: {{ item.stderr }}
+  loop: "{{ conda_install_results.results }}"
+  when: item is defined
