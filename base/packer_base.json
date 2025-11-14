@@ -60,6 +60,7 @@
        "sudo dd if=/dev/zero of=/EMPTY bs=1M || true",
        "sudo rm -f /EMPTY",
        "sync",
+       "sudo resize2fs /dev/sda1 4.5G",
        "echo 'Cleanup and shrink step completed.'"
      ]
     }
