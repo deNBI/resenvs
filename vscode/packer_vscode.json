@@ -22,7 +22,7 @@
             "most_recent":true
          },
          "networks":"{{user `network`}}",
-         "flavor":"de.NBI tiny",
+         "flavor":"M1-NVME-1vCPU-4R-50D",
          "ssh_username":"ubuntu",
          "ssh_clear_authorized_keys":true,
          "image_tags":[
