@@ -29,7 +29,6 @@
          "image_disk_format": "qcow2",
          "use_blockstorage_volume": true,
          "volume_size": 15,
-         "disk_format": "qcow2",
          "image_tags":[
             "{{user `base_image_tag`}}",
             "deNBI"
