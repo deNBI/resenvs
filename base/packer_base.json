@@ -25,10 +25,6 @@
          "networks":"{{user `network`}}",
          "flavor":"M1-NVME-1vCPU-4R-50D",
          "ssh_username":"ubuntu",
-         "ssh_clear_authorized_keys": true,
-         "image_disk_format": "qcow2",
-         "use_blockstorage_volume": true,
-         "volume_size": 15,
          "image_tags":[
             "{{user `base_image_tag`}}",
             "deNBI"
@@ -66,17 +62,6 @@
        "sync",
        "echo 'Cleanup and shrink step completed.'"
      ]
-    }
-  ],
-  "post-processors": [
-    {
-      "type": "shell-local",
-      "inline": [
-        "echo 'Running virt-sparsify...'",
-        "virt-sparsify --compress {{ .ArtifactPath }} {{ .ArtifactPath }}-sparse.qcow2",
-        "mv {{ .ArtifactPath }}-sparse.qcow2 {{ .ArtifactPath }}",
-        "echo 'Sparse QCOW2 image ready.'"
-      ]
     }
   ]
 }
