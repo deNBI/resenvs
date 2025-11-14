@@ -56,15 +56,12 @@
          "sudo rm -rf /var/lib/cloud/* /var/lib/apt/lists/* /tmp/* /var/tmp/*",
          "sudo find /var/log -type f -exec truncate -s 0 {} +",
          "sync",
-         "echo 'Calculating minimal safe filesystem size...'",
-         "# Determine root device (assumes / mounted on root partition)",
-         "ROOT_DEV=$(findmnt -n -o SOURCE /)",
-         "USED=$(df --output=used / | tail -n1)",
-         "BUFFER=$(($USED / 10))",   
-         "TARGET=$(($USED + $BUFFER))",
-         "echo \"Shrinking filesystem on ${ROOT_DEV} to ${TARGET}K...\"",
-         "sudo resize2fs -f $ROOT_DEV ${TARGET}K",
-         "echo 'Cleanup and shrink step completed.'"
+         "echo 'Zeroing free space for better compression (optional)...'",
+         "# Fill free space with zeros to improve qcow2 compression",
+         "sudo dd if=/dev/zero of=/EMPTY bs=1M || true",
+         "sudo rm -f /EMPTY",
+         "sync",
+         "echo 'Cleanup completed. The image is ready for offline shrinking.'"
      ]
     }
   ]
