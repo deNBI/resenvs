@@ -63,7 +63,7 @@
          "BUFFER=$(($USED / 10))",   
          "TARGET=$(($USED + $BUFFER))",
          "echo \"Shrinking filesystem on ${ROOT_DEV} to ${TARGET}K...\"",
-         "sudo resize2fs --force $ROOT_DEV ${TARGET}K",
+         "sudo resize2fs -f $ROOT_DEV ${TARGET}K",
          "echo 'Cleanup and shrink step completed.'"
      ]
     }
