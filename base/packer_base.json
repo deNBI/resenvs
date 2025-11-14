@@ -49,19 +49,26 @@
     {
       "type": "shell",
     "inline": [
-       "echo 'Cleaning cloud-init and OS cache...'",
-       "sudo cloud-init clean --logs",
-       "sudo truncate -s 0 /etc/machine-id",
-       "sudo apt-get clean",
-       "sudo rm -rf /var/lib/cloud/* /var/lib/apt/lists/* /tmp/* /var/tmp/*",
-       "sudo find /var/log -type f -exec truncate -s 0 {} +",
-       "sync",
-       "echo 'Zeroing free space for compression...'",
-       "sudo dd if=/dev/zero of=/EMPTY bs=1M || true",
-       "sudo rm -f /EMPTY",
-       "sync",
-       "sudo resize2fs /dev/sda1 4.5G",
-       "echo 'Cleanup and shrink step completed.'"
+         "echo 'Cleaning cloud-init and OS cache...'",
+         "sudo cloud-init clean --logs",
+         "sudo truncate -s 0 /etc/machine-id",
+         "sudo apt-get clean",
+         "sudo rm -rf /var/lib/cloud/* /var/lib/apt/lists/* /tmp/* /var/tmp/*",
+         "sudo find /var/log -type f -exec truncate -s 0 {} +",
+         "sync",
+         "echo 'Zeroing free space for compression...'",
+         "sudo dd if=/dev/zero of=/EMPTY bs=1M || true",
+         "sudo rm -f /EMPTY",
+         "sync",
+         "echo 'Calculating minimal safe filesystem size...'",
+         "# Determine root device (assumes / mounted on root partition)",
+         "ROOT_DEV=$(findmnt -n -o SOURCE /)",
+         "USED=$(df --output=used / | tail -n1)",
+         "BUFFER=$(($USED / 10))",   
+         "TARGET=$(($USED + $BUFFER))",
+         "echo \"Shrinking filesystem on ${ROOT_DEV} to ${TARGET}K...\"",
+         "sudo resize2fs --force $ROOT_DEV ${TARGET}K",
+         "echo 'Cleanup and shrink step completed.'"
      ]
     }
   ]
