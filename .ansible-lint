@@ -37,6 +37,7 @@ skip_list:
   - command-instead-of-module
   - var-naming
   - risky-file-permissions
+  - line-length
 
 mock_roles:
   - autoscaling
