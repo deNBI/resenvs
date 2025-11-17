@@ -123,11 +123,11 @@
           }}
 
     - name: Extract GitHub Hash
-      set_fact:
+      ansible.builtin.set_fact:
         github_hash_from_image: "{{ (base_images | last).github_hash | default((base_images | last).properties.github_hash | default('undefined')) | trim }}"
 
     - name: Extract MD5 Checksum
-      set_fact:
+      ansible.builtin.set_fact:
         md5_checksum_from_image: "{{ (base_images | last).md5_hash | default((base_images | last).properties.md5_hash | default('undefined')) | trim }}"
 
     - name: Set Update facts
