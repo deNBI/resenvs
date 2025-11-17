@@ -15,9 +15,9 @@
 
 - name: Download Miniforge
   get_url:
-    url: >-
-        https://github.com/conda-forge/miniforge/releases/download/{{ conda_vars.MINI_FORGE_RELEASE }}/Miniforge3-{{ conda_vars.MINI_FORGE_RELEASE }}-Linux-x86_64.sh
-    dest: /tmp/miniforge.sh
+        url: >-
+          https://github.com/conda-forge/miniforge/releases/download/{{ conda_vars.MINI_FORGE_RELEASE }}/Miniforge3-{{ conda_vars.MINI_FORGE_RELEASE }}-Linux-x86_64.sh
+        dest: /tmp/miniforge.sh
 
 - name: Install Miniforge
   command: bash /tmp/miniforge.sh -b -p {{ conda_vars.CONDA_DIR }}
