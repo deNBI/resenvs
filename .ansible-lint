@@ -13,6 +13,7 @@ exclude_paths:
   - .cache/ # implicit unless exclude_paths is defined in config
   - .github/
   - guacamole/roles/guacamole/tests/test.yml/
+  - ./packer/requirements.yml
 
 # Enable checking of loop variable prefixes in roles
 loop_var_prefix: "{role}_"
@@ -21,11 +22,7 @@ loop_var_prefix: "{role}_"
 # requirements, like avoiding python identifiers. To disable add `var-naming`
 # to skip_list.
 var_naming_pattern: ^[a-z_][a-z0-9_]*$
-# Ansible-lint does not fail on warnings from the rules or tags listed below
-rules:
-  line-length:
-    max: 200
-    level: error
+
 
 use_default_rules: true
 # Load custom rules from this specific folder
