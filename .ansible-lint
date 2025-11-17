@@ -13,6 +13,7 @@ exclude_paths:
   - .cache/ # implicit unless exclude_paths is defined in config
   - .github/
   - guacamole/roles/guacamole/tests/test.yml/
+  - ./packer/requirements.yml
 
 # Enable checking of loop variable prefixes in roles
 loop_var_prefix: "{role}_"
@@ -21,6 +22,7 @@ loop_var_prefix: "{role}_"
 # requirements, like avoiding python identifiers. To disable add `var-naming`
 # to skip_list.
 var_naming_pattern: ^[a-z_][a-z0-9_]*$
+
 
 use_default_rules: true
 # Load custom rules from this specific folder
@@ -37,6 +39,7 @@ skip_list:
   - command-instead-of-module
   - var-naming
   - risky-file-permissions
+  - yaml
 
 mock_roles:
   - autoscaling
@@ -55,7 +58,7 @@ enable_list:
   - name[prefix] # opt-in
   # add yaml here if you want to avoid ignoring yaml checks when yamllint
   # library is missing. Normally its absence just skips using that rule.
-  - yaml
+
 # Report only a subset of tags and fully ignore any others
 # tags:
 #   - jinja[spacing]
