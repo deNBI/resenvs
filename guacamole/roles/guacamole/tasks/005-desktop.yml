@@ -18,17 +18,17 @@
 
 - name: Ensure software-properties-common is installed
   become: true
-  apt:
+  ansible.builtin.apt:
     name: software-properties-common
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Add MozillaTeam PPA
   become: true
   apt_repository:
     repo: ppa:mozillateam/ppa
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Configure APT pinning for Mozilla Firefox
   become: true
@@ -41,10 +41,10 @@
 
 - name: Install Firefox from APT
   become: true
-  apt:
+  ansible.builtin.apt:
     name: firefox
     state: latest
-    update_cache: yes
+    update_cache: true
     
 - name: Install xrdp and other goodies
   ansible.builtin.apt:
