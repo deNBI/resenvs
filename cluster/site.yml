@@ -1,6 +1,6 @@
 ---
-- hosts: master
-  name: Cluster Master Setup
+- name: Cluster Master Setup
+  hosts: master
   become: true
   vars_files:
     - vars/common_configuration.yml

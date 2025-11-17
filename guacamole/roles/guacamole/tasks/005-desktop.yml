@@ -25,14 +25,14 @@
 
 - name: Add MozillaTeam PPA
   become: true
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: ppa:mozillateam/ppa
     state: present
     update_cache: true
 
 - name: Configure APT pinning for Mozilla Firefox
   become: true
-  copy:
+  ansible.builtin.copy:
     dest: /etc/apt/preferences.d/mozilla-firefox
     content: |
       Package: firefox*
@@ -45,7 +45,7 @@
     name: firefox
     state: latest
     update_cache: true
-    
+
 - name: Install xrdp and other goodies
   ansible.builtin.apt:
     update_cache: true

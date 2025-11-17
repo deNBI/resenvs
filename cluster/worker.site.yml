@@ -1,6 +1,6 @@
 ---
-- hosts: all
-  name: Cluster Worker Setup
+- name: Cluster Worker Setup
+  hosts: all
   become: true
   vars_files:
     - vars/common_configuration.yml
