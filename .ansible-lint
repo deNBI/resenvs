@@ -39,7 +39,7 @@ skip_list:
   - command-instead-of-module
   - var-naming
   - risky-file-permissions
-  - line-length
+  - yaml
 
 mock_roles:
   - autoscaling
@@ -58,7 +58,7 @@ enable_list:
   - name[prefix] # opt-in
   # add yaml here if you want to avoid ignoring yaml checks when yamllint
   # library is missing. Normally its absence just skips using that rule.
-  - yaml
+
 # Report only a subset of tags and fully ignore any others
 # tags:
 #   - jinja[spacing]
