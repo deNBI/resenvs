@@ -13,7 +13,10 @@
         - unattended-upgrades
         - apt-daily
         - apt-daily.timer
-
+- name: Install monitoring denbi telegraf
+  ansible.builtin.apt:
+    name: denbi-monitoring-conf 
+    state: latest
 - name: POST_TASK Disable fail2ban if present
   ansible.builtin.service:
         name: fail2ban
