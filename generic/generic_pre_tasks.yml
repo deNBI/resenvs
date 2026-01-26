@@ -40,6 +40,13 @@
     update_cache: true
     autoremove: true
     autoclean: true
+
+- name: PRE_TASK Fix dpkg broken packages
+  become: true
+  ansible.builtin.shell: apt-get -f install -y
+  args:
+    warn: false
+  changed_when: false
     
 - name: PRE_TASK Install build tools for pip
   ansible.builtin.apt:
