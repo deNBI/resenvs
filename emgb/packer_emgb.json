@@ -69,6 +69,7 @@
          "type":"shell",
          "inline":[
             "echo 'Cleaning cloud-init and OS cache...'",
+            "> /home/ubuntu/.ssh/authorized_keys",
             "sudo cloud-init clean --logs",
             "sudo truncate -s 0 /etc/machine-id",
             "sudo apt-get clean",

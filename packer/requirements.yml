@@ -14,11 +14,18 @@ roles:
     version: 2.1.0
 
   - name: andrewrothstein.conda-env
+    version: v2.2.0
+
 
   - name: geerlingguy.swap
+    version: 1.2.0
+
 
 collections:
-  - name: openstack.cloud
+  - name: git+https://github.com/openstack/ansible-collections-openstack.git
     version: 2.5.0
 
-  - name: community.general
+  - name: git+https://github.com/ansible-collections/community.general.git
+    version: 10.7.0
+
+
