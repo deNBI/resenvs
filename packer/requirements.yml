@@ -22,10 +22,10 @@ roles:
 
 
 collections:
-  - name: openstack.cloud
+  - name: git+https://github.com/openstack/ansible-collections-openstack.git
     version: 2.5.0
 
-  - name: community.general
+  - name: git+https://github.com/ansible-collections/community.general.git
     version: 10.7.0
 
 
