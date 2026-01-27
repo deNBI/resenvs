@@ -48,9 +48,8 @@
 
 - name: Install monitoring denbi telegraf
   ansible.builtin.apt:
-    pkg:
-      - denbi-monitoring-conf
-
+    name: denbi-monitoring-conf 
+    state: latest
 - name: Setup Docker
   ansible.builtin.import_tasks: ../generic/setup_docker.yml
 
