@@ -31,6 +31,12 @@
                       | selectattr('os_version', '==', os_version)
                       | sort(attribute='created_at') }}"
 
+
+    - name: Set latest base image name
+      ansible.builtin.set_fact:
+        latest_base_image_name: "{{ (base_images | last).name }}"
+      when: base_images | length > 0
+      
     - name: Set Update Fact
       ansible.builtin.set_fact:
         update: true
@@ -141,10 +147,16 @@
           or (github_hash_from_image != github_hash.stdout | trim or md5_checksum_from_image != md5_hash.stdout |trim )
 
     - name: Build new Base image -{{ os_distro }} {{ os_version }}
-      ansible.builtin.command: packer build -var-file=tags.json -var 'os_distro={{ os_distro }}'
-                               -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}'
-                               -var 'md5_hash={{ md5_hash.stdout }}'
-                               -var 'network={{ vars[location + '_' + upload_environment] }}'
-                               ../base/packer_base.json
+      ansible.builtin.command: >
+        packer build
+          -var-file=tags.json
+          -var "os_distro={{ os_distro }}"
+          -var "os_version={{ os_version }}"
+          -var "md5_hash={{ md5_hash.stdout }}"
+          -var "github_hash={{ github_hash.stdout }}"
+          -var "network={{ vars[location + '_' + upload_environment] }}"
+          -var "source_image_name={{ latest_base_image_name }}"
+          ../base/packer_base.json
       when: update
       changed_when: false
+
