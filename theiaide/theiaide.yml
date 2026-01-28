@@ -35,14 +35,14 @@
     - name: Install node 12 and yarn
       ansible.builtin.shell: |
         source {{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh
-        nvm install 12
+        nvm install 22
         npm install -g yarn
       args:
         executable: bash
 
     - name: Install prebuild theia
       ansible.builtin.shell: |
-        curl -o- https://bibiserv.cebitec.uni-bielefeld.de/resources/bibigrid/plugins/theia-ide_node12.tar.gz | tar -xzf -
+        curl -o- https://github.com/eclipse-theia/theia-ide/archive/refs/tags/{{ theiaide_vars.THEIA_VERSION }}.tar.gz | tar -xzf -
       args:
         chdir: /opt
         creates: "{{ theiaide_vars.THEIA_INSTALL_DIR }}"
