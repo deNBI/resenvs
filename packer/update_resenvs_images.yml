@@ -54,6 +54,10 @@
                       | selectattr('os_version', '==', os_version)
                       | sort(attribute='created_at') }}"
 
+    - name: Set latest base image name
+      ansible.builtin.set_fact:
+        latest_base_image_name: "{{ (base_images | last).name }}"
+
 
     - name: Set Resens Images
       ansible.builtin.set_fact:
@@ -85,10 +89,16 @@
           )
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}
-      ansible.builtin.command: packer build -var-file=tags.json -var-file=./{{ resenv }}_metadata.json \
-       -var 'os_distro={{ os_distro }}' -var 'md5_hash={{ md5_hash.stdout
-        }}' -var 'github_hash={{ github_hash.stdout }}' \
-         -var 'os_version={{ os_version }}' -var 'network={{ vars[location + '_' + upload_environment] }}' ../{{
-        resenv }}/packer_{{ vars[resenv + '_tag'] }}.json
+      ansible.builtin.command: >
+        packer build
+          -var-file=tags.json
+          -var-file=./{{ resenv }}_metadata.json
+          -var "os_distro={{ os_distro }}"
+          -var "os_version={{ os_version }}"
+          -var "network={{ vars[location + '_' + upload_environment] }}"
+          -var "md5_hash={{ md5_hash.stdout }}"
+          -var "github_hash={{ github_hash.stdout }}"
+          -var "source_image_name={{ latest_base_image_name }}"
+          ../{{ resenv }}/packer_{{ vars[resenv + '_tag'] }}.json
       when: update
       changed_when: false
