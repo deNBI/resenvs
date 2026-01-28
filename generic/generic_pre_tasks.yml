@@ -46,13 +46,13 @@
     name: python3-pip
     state: latest
 
-- name: Install monitoring denbi telegraf
-  ansible.builtin.apt:
-    pkg:
-      - denbi-monitoring-conf
-
+#- name: Install monitoring denbi telegraf
+ # ansible.builtin.apt:
+  #  name: denbi-monitoring-conf 
+   # state: latest
 - name: Setup Docker
   ansible.builtin.import_tasks: ../generic/setup_docker.yml
 
 - name: PRE_TASK Install Metadata-Service
   ansible.builtin.import_tasks: ../generic/install_metadata_service.yml
+

@@ -4,7 +4,7 @@
     name: "{{ item }}"
   loop:
     - snakemake
-    - pulp==2.7.0
+    - pulp
   remote_user: ubuntu
   become: false
 
