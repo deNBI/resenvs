@@ -45,11 +45,8 @@
         path: "{{ theiaide_vars.NVM_INSTALL_DIR }}"
         state: directory
         mode: "0755"
-      become_user: "{{ theia_ide_user }}"
-    - name: Set fact 'theia_ide_user' when not defined
-      ansible.builtin.set_fact:
-        theia_ide_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
-      when: theia_ide_user is not defined
+      become_user: "{{ theiaide_vars.THEIA_USER }}"
+
 
     - name: Set fact 'theia_ide_workspace' to '${HOME}'
       ansible.builtin.set_fact:
@@ -62,7 +59,7 @@
         creates: "{{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh"
       environment:
         HOME: "{{ theia_ide_workspace }}"
-      become_user: "{{ theia_ide_user }}"
+      become_user: "{{ theiaide_vars.THEIA_USER }}"
 
     - name: Install Node.js 22 via NVM
       ansible.builtin.shell: |
@@ -72,39 +69,39 @@
         npm install -g yarn
       args:
         executable: /bin/bash
-      become_user: "{{ theia_ide_user }}"
+      become_user: "{{ theiaide_vars.THEIA_USER }}"
 
     - name: Create directories
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
-        owner: "{{ theia_ide_user }}"
+        owner: "{{ theiaide_vars.THEIA_USER }}"
         mode: "0755"
       loop:
-        - "{{ theia_install_dir }}"
-        - "{{ theia_workspace }}"
+        - "{{ theiaide_vars.THEIA_INSTALL_DIR  }}"
 
     - name: Clone Theia repository
       ansible.builtin.git:
-        repo: "{{ theia_repo }}"
-        dest: "{{ theia_install_dir }}"
-        version: "{{ theia_version }}"
+        repo: "{{ theiaide_vars.THEIA_REPO }}"
+        dest: "{{ theiaide_vars.THEIA_INSTALL_DIR  }}"
+        version: "{{ theiaide_vars.THEIA_VERSION }}"
         force: yes
         update: yes
         accept_hostkey: yes
         clone: yes
-      become_user: "{{ theia_ide_user }}"
+      become_user: "{{ theiaide_vars.THEIA_USER }}"
 
     - name: Install Node dependencies
       ansible.builtin.shell: |
         source {{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh
+        export GITHUB_TOKEN="{{ github_token }}"
         yarn
         yarn build
         yarn download:plugins
       args:
-        chdir: "{{ theia_install_dir }}"
+        chdir: "{{ theiaide_vars.THEIA_INSTALL_DIR  }}"
         executable: /bin/bash
-      become_user: "{{ theia_ide_user }}"
+      become_user: "{{ theiaide_vars.THEIA_USER }}"
 
     - name: Create theia systemd service
       ansible.builtin.copy:
@@ -116,10 +113,10 @@
 
           [Service]
           User={{ theia_ide_user }}
-          WorkingDirectory={{ theia_install_dir }}
+          WorkingDirectory={{ theiaide_vars.THEIA_INSTALL_DIR }}
           ExecStart=/bin/bash -c 'source {{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh && yarn browser start --hostname 0.0.0.0 --port 8080'
           Restart=always
-          Environment=HOME={{ theia_ide_workspace }}
+          Environment=HOME={{ theiaide_vars.THEIA_INSTALL_DIR }}
 
           # Hardening
           NoNewPrivileges=true
