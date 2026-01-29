@@ -1,19 +1,4 @@
 ---
-- name: Install Theia IDE (AppImage) as systemd service
-  hosts: all
-  become: yes
-
-  vars:
-    theia_version: "1.67.0"
-    theia_user: ubuntu
-    theia_port: 8080
-    theia_dir: /opt/theia
-    theia_bin: /opt/theia/theia.AppImage
-
-    theia_appimage_url: "https://github.com/eclipse-theia/theia/releases/download/v{{ theia_version }}/theia-ide-{{ theia_version }}-linux-x86_64.AppImage"
-
-  tasks:
-
   # -----------------------------
   # Base dependencies
   # -----------------------------
