@@ -10,7 +10,7 @@
          "image_name":"TheiaIDE-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
          "source_image_name": "{{ user `source_image_name` }}",
          "networks":"{{user `network`}}",
-         "flavor":"de.NBI tiny",
+         "flavor":"de.NBI small",
          "ssh_username":"ubuntu",
          "ssh_clear_authorized_keys":true,
          "image_tags":[
