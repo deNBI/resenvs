@@ -114,7 +114,7 @@
           [Service]
           User={{ theiaide_vars.THEIA_USER }}
           WorkingDirectory={{ theiaide_vars.THEIA_INSTALL_DIR }}
-          ExecStart=/bin/bash -c 'source {{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh && yarn browser start --hostname 0.0.0.0 --port 8080'
+          ExecStart=yarn browser start --hostname 0.0.0.0 --port 8080'
           Restart=always
           Environment=HOME={{ theiaide_vars.THEIA_INSTALL_DIR }}
 
