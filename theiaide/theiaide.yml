@@ -44,7 +44,7 @@
       ansible.builtin.file:
         path: "{{ theiaide_vars.NVM_INSTALL_DIR }}"
         state: directory
-        mode: "0755"
+        mode: "0777"
 
     - name: Set fact 'theia_ide_user' when not defined
       ansible.builtin.set_fact:
