@@ -1,74 +1,107 @@
 ---
-- name: Install theia_ide role
-  block:
-    - name: Install packages
-      ansible.builtin.apt:
-        name: [python3, make, g++, curl, git]
-      when: ansible_distribution_file_variety == 'Debian'
+- name: Install Theia IDE (AppImage) as systemd service
+  hosts: all
+  become: yes
 
-    - name: install packages
-      yum:
-        name: [python3, curl, git, make, gcc, gcc-c++]
-      when: ansible_distribution_file_variety == 'RedHat'
+  vars:
+    theia_version: "1.67.0"
+    theia_user: ubuntu
+    theia_port: 8080
+    theia_dir: /opt/theia
+    theia_bin: /opt/theia/theia.AppImage
 
-    - name: Create NVM install dir
-      ansible.builtin.file:
-        path: "{{ theiaide_vars.NVM_INSTALL_DIR }}"
-        state: directory
-        mode: "0755"
+    theia_appimage_url: "https://github.com/eclipse-theia/theia/releases/download/v{{ theia_version }}/theia-ide-{{ theia_version }}-linux-x86_64.AppImage"
 
-    - name: Set fact 'theia_ide_user' when not defined
-      ansible.builtin.set_fact:
-        theia_ide_user: "{{ ansible_env.SUDO_USER }}"
-      when: theia_ide_user is not defined
+  tasks:
 
-    - name: Set fact 'theia_ide_workspace' to '${HOME}'
-      ansible.builtin.set_fact:
-        theia_ide_workspace: ${HOME}
+  # -----------------------------
+  # Base dependencies
+  # -----------------------------
+  - name: Install runtime dependencies
+    ansible.builtin.apt:
+      update_cache: yes
+      name:
+        - fuse
+        - libfuse2
+        - curl
+        - ca-certificates
+      state: present
 
-    - name: Install nvm
-      ansible.builtin.shell: |
-        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | NVM_DIR={{ theiaide_vars.NVM_INSTALL_DIR }} /bin/bash
-      args:
-        creates: "{{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh"
+  # -----------------------------
+  # Create directories
+  # -----------------------------
+  - name: Create Theia directories
+    ansible.builtin.file:
+      path: "{{ item }}"
+      state: directory
+      owner: "{{ theia_user }}"
+      group: "{{ theia_user }}"
+      mode: "0755"
+    loop:
+      - "{{ theia_dir }}"
+      - "/home/{{ theia_user }}/workspace"
+      - "/home/{{ theia_user }}/.theia-ide"
 
-    - name: Install node 12 and yarn
-      ansible.builtin.shell: |
-        source {{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh
-        nvm install 22
-        npm install -g yarn
-      args:
-        executable: bash
+  # -----------------------------
+  # Download AppImage
+  # -----------------------------
+  - name: Download Theia AppImage
+    ansible.builtin.get_url:
+      url: "{{ theia_appimage_url }}"
+      dest: "{{ theia_bin }}"
+      mode: "0755"
+      force: yes
 
-    - name: Install prebuild theia
-      ansible.builtin.shell: |
-        curl -o- https://github.com/eclipse-theia/theia-ide/archive/refs/tags/{{ theiaide_vars.THEIA_VERSION }}.tar.gz | tar -xzf -
-      args:
-        chdir: /opt
-        creates: "{{ theiaide_vars.THEIA_INSTALL_DIR }}"
+  # -----------------------------
+  # Extract AppImage (server-safe mode)
+  # -----------------------------
+  - name: Extract AppImage
+    ansible.builtin.command: "{{ theia_bin }} --appimage-extract"
+    args:
+      chdir: "{{ theia_dir }}"
+      creates: "{{ theia_dir }}/squashfs-root"
 
-    - name: Set facts for templates
-      ansible.builtin.set_fact:
-        theia_ide_install_dir: "{{ theiaide_vars.THEIA_INSTALL_DIR }}"
-        theia_ide_bind_address: "{{ theiaide_vars.THEIA_BIND_ADDRESS }}"
-        theia_ide_bind_port: "{{ theiaide_vars.THEIA_BIND_PORT }}"
-        nvm_install_dir: "{{ theiaide_vars.NVM_INSTALL_DIR }}"
+  # -----------------------------
+  # Create systemd service
+  # -----------------------------
+  - name: Create Theia systemd service
+    ansible.builtin.copy:
+      dest: /etc/systemd/system/theia.service
+      mode: "0644"
+      content: |
+        [Unit]
+        Description=Theia IDE (AppImage Headless)
+        After=network.target
 
-    - name: Generate IDE start skript to /usr/local/bin
-      template:
-        src: "{{ theiaide_vars.templates_path }}theia-ide.sh.j2"
-        dest: "{{ theiaide_vars.THEIA_INSTALL_DIR }}/theia-ide.sh"
-        mode: "0755"
+        [Service]
+        Type=simple
+        User={{ theia_user }}
+        Environment=HOME=/home/{{ theia_user }}
+        WorkingDirectory=/home/{{ theia_user }}
+        ExecStart={{ theia_dir }}/squashfs-root/AppRun \
+          --hostname 0.0.0.0 \
+          --port {{ theia_port }} \
+          /home/{{ theia_user }}/workspace
+        Restart=always
+        RestartSec=5
+        LimitNOFILE=100000
+        NoNewPrivileges=true
+        PrivateTmp=true
+        ProtectSystem=full
+        ProtectHome=false
 
-    - name: Generate systemd service
-      template:
-        src: "{{ theiaide_vars.templates_path }}theia-ide.service.j2"
-        dest: /etc/systemd/system/theia-ide.service
-        mode: "0644"
+        [Install]
+        WantedBy=multi-user.target
 
-    - name: Enable and Start service
-      ansible.builtin.systemd:
-        name: theia-ide.service
-        enabled: true
-        state: restarted
-  when: not theiaide_vars.create_only_backend
+  # -----------------------------
+  # Enable service
+  # -----------------------------
+  - name: Reload systemd
+    ansible.builtin.systemd:
+      daemon_reload: yes
+
+  - name: Enable and start Theia
+    ansible.builtin.systemd:
+      name: theia
+      enabled: yes
+      state: started
