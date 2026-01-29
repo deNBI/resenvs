@@ -72,7 +72,7 @@
       become_user: "{{ theia_user }}"
 
 
-    - name: Create Theia systemd service
+    - name: Create theia systemd service
       copy:
         dest: /etc/systemd/system/theia.service
         content: |
@@ -81,11 +81,17 @@
           After=network.target
 
           [Service]
-          User={{ theia_user }}
-          WorkingDirectory={{ theia_workspace }}
-          ExecStart=/usr/bin/yarn --cwd {{ theia_install_dir }} start
+          User=theia
+          WorkingDirectory=/srv/theia
+          ExecStart=/usr/bin/node /opt/theia/packages/browser/src-gen/backend/main.js --hostname 0.0.0.0 --port 8080
           Restart=always
-          Environment=HOME={{ theia_workspace }}
+          Environment=HOME=/srv/theia
+
+          # Hardening
+          NoNewPrivileges=true
+          ProtectSystem=strict
+          ProtectHome=true
+          PrivateTmp=true
 
           [Install]
           WantedBy=multi-user.target
