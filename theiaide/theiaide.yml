@@ -32,9 +32,9 @@
       args:
         creates: "{{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh"
 
-    - name: Install Node.js 20 (NodeSource)
+    - name: Install Node.js 22 (NodeSource)
       shell: |
-        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+        curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
         apt-get install -y nodejs
         npm install -g yarn
       args:
