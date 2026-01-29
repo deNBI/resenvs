@@ -8,7 +8,19 @@
       {
          "type":"openstack",
          "image_name":"TheiaIDE-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
-         "source_image_name": "{{ user `source_image_name` }}",
+         "source_image_filter":{
+            "filters":{
+               "tags":[
+                  "{{user `base_image_tag`}}"
+               ],
+               "properties":{
+                  "os_distro":"{{user `os_distro`}}",
+                  "os_version":"{{user `os_version`}}",
+                  "image_type":"image"
+               }
+            },
+            "most_recent":true
+         },
          "networks":"{{user `network`}}",
          "flavor":"de.NBI tiny",
          "ssh_username":"ubuntu",
@@ -56,7 +68,6 @@
          "type":"shell",
          "inline":[
             "echo 'Cleaning cloud-init and OS cache...'",
-            "> /home/ubuntu/.ssh/authorized_keys",
             "sudo cloud-init clean --logs",
             "sudo truncate -s 0 /etc/machine-id",
             "sudo apt-get clean",

@@ -8,9 +8,8 @@ theiaide_vars:
   THEIA_BIND_ADDRESS: 0.0.0.0
   THEIA_BIND_PORT: 8080
   templates_path: ./templates/
-  THEIA_VERSION: v1.67.100
-theia_version: "1.67.0"
-theia_appimage_url: "https://github.com/eclipse-theia/theia/releases/download/v{{ theia_version }}/theia-linux-x64.AppImage"
+theia_version: "v1.67.100"      # replace with the tag you want
+theia_user: "ubuntu"
 theia_install_dir: "/opt/theia"
 theia_workspace: "/srv/theia"
-theia_user: "theia"
+theia_repo: "https://github.com/eclipse-theia/theia-ide.git"
