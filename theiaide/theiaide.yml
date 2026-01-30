@@ -106,15 +106,15 @@
 
           [Service]
           User={{ theiaide_vars.THEIA_USER }}
-          WorkingDirectory={{ theiaide_vars.THEIA_INSTALL_DIR }}
+          WorkingDirectory=/home/{{ theiaide_vars.THEIA_USER }}
           ExecStart=/usr/bin/yarn browser start --hostname {{ theiaide_vars.THEIA_BIND_ADDRESS }} --port {{ theiaide_vars.THEIA_BIND_PORT }}
           Restart=always
-          Environment=HOME={{ theiaide_vars.THEIA_INSTALL_DIR }}
+          Environment=HOME=/home/{{ theiaide_vars.THEIA_USER }}
 
           # Hardening
-          NoNewPrivileges=true
-          ProtectSystem=strict
-          ProtectHome=true
+          NoNewPrivileges=false
+          ProtectSystem=full
+          ProtectHome=falsee
           PrivateTmp=true
 
           [Install]
