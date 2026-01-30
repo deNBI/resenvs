@@ -40,17 +40,18 @@
           - alsa-lib-devel
         state: present
       when: ansible_distribution_file_variety == 'RedHat'
+      
     - name: Create NVM install dir
-      ansible.builtin.file:
+      file:
         path: "{{ theiaide_vars.NVM_INSTALL_DIR }}"
         state: directory
+        owner: "{{ theiaide_vars.THEIA_USER }}"
+        group: "{{ theiaide_vars.THEIA_USER }}"
         mode: "0755"
-      become_user: "{{ theiaide_vars.THEIA_USER }}"
-
 
     - name: Set fact 'theia_ide_workspace' to '${HOME}'
       ansible.builtin.set_fact:
-        theia_ide_workspace: "{{ lookup('env','HOME') }}"
+        theia_ide_workspace: "/home/{{ theiaide_vars.THEIA_USER }}"
 
     - name: Install nvm
       ansible.builtin.shell: |
@@ -114,7 +115,7 @@
           [Service]
           User={{ theiaide_vars.THEIA_USER }}
           WorkingDirectory={{ theiaide_vars.THEIA_INSTALL_DIR }}
-          ExecStart=yarn browser start --hostname 0.0.0.0 --port 8080
+          ExecStart=/bin/bash -lc "yarn browser start --hostname {{ theiaide_vars.THEIA_BIND_ADDRESS }} --port {{ theiaide_vars.THEIA_BIND_PORT }}"
           Restart=always
           Environment=HOME={{ theiaide_vars.THEIA_INSTALL_DIR }}
 
