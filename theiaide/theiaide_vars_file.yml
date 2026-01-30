@@ -11,4 +11,3 @@ theiaide_vars:
   THEIA_VERSION: v1.67.100
   THEIA_REPO: "https://github.com/eclipse-theia/theia-ide.git"
 
-theia_workspace: "/srv/theia"
