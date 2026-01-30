@@ -41,36 +41,29 @@
         state: present
       when: ansible_distribution_file_variety == 'RedHat'
       
-    - name: Create NVM install dir
-      file:
-        path: "{{ theiaide_vars.NVM_INSTALL_DIR }}"
-        state: directory
-        owner: "{{ theiaide_vars.THEIA_USER }}"
-        group: "{{ theiaide_vars.THEIA_USER }}"
-        mode: "0755"
-
     - name: Set fact 'theia_ide_workspace' to '${HOME}'
       ansible.builtin.set_fact:
         theia_ide_workspace: "/home/{{ theiaide_vars.THEIA_USER }}"
 
-    - name: Install nvm
-      ansible.builtin.shell: |
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | NVM_DIR={{ theiaide_vars.NVM_INSTALL_DIR }} bash
-      args:
-        creates: "{{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh"
-      environment:
-        HOME: "{{ theia_ide_workspace }}"
-      become_user: "{{ theiaide_vars.THEIA_USER }}"
 
-    - name: Install Node.js 22 via NVM
+    - name: Install Node.js 22 on Debian/Ubuntu
       ansible.builtin.shell: |
-        source {{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh
-        nvm install 22
-        nvm use 22
+        curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+        apt-get install -y nodejs
         npm install -g yarn
       args:
         executable: /bin/bash
-      become_user: "{{ theiaide_vars.THEIA_USER }}"
+      when: ansible_distribution_file_variety == 'Debian'
+
+    - name: Install Node.js 22 on RedHat/CentOS
+      ansible.builtin.shell: |
+        curl -fsSL https://rpm.nodesource.com/setup_22.x | bash -
+        yum install -y nodejs
+        npm install -g yarn
+      args:
+        executable: /bin/bash
+      when: ansible_distribution_file_variety == 'RedHat'
+
 
     - name: Create directories
       ansible.builtin.file:
@@ -94,7 +87,6 @@
 
     - name: Install Node dependencies
       ansible.builtin.shell: |
-        source {{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh
         export GITHUB_TOKEN="{{ github_token }}"
         yarn
         yarn build
@@ -115,7 +107,7 @@
           [Service]
           User={{ theiaide_vars.THEIA_USER }}
           WorkingDirectory={{ theiaide_vars.THEIA_INSTALL_DIR }}
-          ExecStart=/bin/bash -lc 'yarn browser start --hostname {{ theiaide_vars.THEIA_BIND_ADDRESS }} --port {{ theiaide_vars.THEIA_BIND_PORT }}'
+          ExecStart=/usr/bin/yarn browser start --hostname {{ theiaide_vars.THEIA_BIND_ADDRESS }} --port {{ theiaide_vars.THEIA_BIND_PORT }}
           Restart=always
           Environment=HOME={{ theiaide_vars.THEIA_INSTALL_DIR }}
 
