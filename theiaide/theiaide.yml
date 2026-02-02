@@ -1,74 +1,130 @@
 ---
 - name: Install theia_ide role
   block:
-    - name: Install packages
+
+    - name: Install build packages on Debian/Ubuntu
       ansible.builtin.apt:
-        name: [python3, make, g++, curl, git]
+        name:
+          - python3
+          - make
+          - g++
+          - curl
+          - git
+          - pkg-config
+          - libx11-dev
+          - libxkbfile-dev
+          - libsecret-1-dev
+          - libgtk-3-dev
+          - libnss3-dev
+          - libasound2-dev
+          - libxss1
+        state: present
+        update_cache: yes
       when: ansible_distribution_file_variety == 'Debian'
 
-    - name: install packages
-      yum:
-        name: [python3, curl, git, make, gcc, gcc-c++]
+    - name: Install build packages on RedHat/CentOS
+      ansible.builtin.yum:
+        name:
+          - python3
+          - curl
+          - git
+          - make
+          - gcc
+          - gcc-c++
+          - pkgconfig
+          - libX11-devel
+          - libxkbfile-devel
+          - libsecret-devel
+          - gtk3-devel
+          - nss-devel
+          - alsa-lib-devel
+        state: present
       when: ansible_distribution_file_variety == 'RedHat'
-
-    - name: Create NVM install dir
-      ansible.builtin.file:
-        path: "{{ theiaide_vars.NVM_INSTALL_DIR }}"
-        state: directory
-        mode: "0755"
-
-    - name: Set fact 'theia_ide_user' when not defined
-      ansible.builtin.set_fact:
-        theia_ide_user: "{{ ansible_env.SUDO_USER }}"
-      when: theia_ide_user is not defined
-
+      
     - name: Set fact 'theia_ide_workspace' to '${HOME}'
       ansible.builtin.set_fact:
-        theia_ide_workspace: ${HOME}
+        theia_ide_workspace: "/home/{{ theiaide_vars.THEIA_USER }}"
 
-    - name: Install nvm
-      ansible.builtin.shell: |
-        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | NVM_DIR={{ theiaide_vars.NVM_INSTALL_DIR }} /bin/bash
-      args:
-        creates: "{{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh"
 
-    - name: Install node 12 and yarn
+    - name: Install Node.js 22 on Debian/Ubuntu
       ansible.builtin.shell: |
-        source {{ theiaide_vars.NVM_INSTALL_DIR }}/nvm.sh
-        nvm install 22
+        curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+        apt-get install -y nodejs
         npm install -g yarn
       args:
-        executable: bash
+        executable: /bin/bash
+      when: ansible_distribution_file_variety == 'Debian'
 
-    - name: Install prebuild theia
+    - name: Install Node.js 22 on RedHat/CentOS
       ansible.builtin.shell: |
-        curl -o- https://github.com/eclipse-theia/theia-ide/archive/refs/tags/{{ theiaide_vars.THEIA_VERSION }}.tar.gz | tar -xzf -
+        curl -fsSL https://rpm.nodesource.com/setup_22.x | bash -
+        yum install -y nodejs
+        npm install -g yarn
       args:
-        chdir: /opt
-        creates: "{{ theiaide_vars.THEIA_INSTALL_DIR }}"
+        executable: /bin/bash
+      when: ansible_distribution_file_variety == 'RedHat'
 
-    - name: Set facts for templates
-      ansible.builtin.set_fact:
-        theia_ide_install_dir: "{{ theiaide_vars.THEIA_INSTALL_DIR }}"
-        theia_ide_bind_address: "{{ theiaide_vars.THEIA_BIND_ADDRESS }}"
-        theia_ide_bind_port: "{{ theiaide_vars.THEIA_BIND_PORT }}"
-        nvm_install_dir: "{{ theiaide_vars.NVM_INSTALL_DIR }}"
 
-    - name: Generate IDE start skript to /usr/local/bin
-      template:
-        src: "{{ theiaide_vars.templates_path }}theia-ide.sh.j2"
-        dest: "{{ theiaide_vars.THEIA_INSTALL_DIR }}/theia-ide.sh"
+    - name: Create directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ theiaide_vars.THEIA_USER }}"
         mode: "0755"
+      loop:
+        - "{{ theiaide_vars.THEIA_INSTALL_DIR  }}"
 
-    - name: Generate systemd service
-      template:
-        src: "{{ theiaide_vars.templates_path }}theia-ide.service.j2"
-        dest: /etc/systemd/system/theia-ide.service
-        mode: "0644"
+    - name: Clone Theia repository
+      ansible.builtin.git:
+        repo: "{{ theiaide_vars.THEIA_REPO }}"
+        dest: "{{ theiaide_vars.THEIA_INSTALL_DIR  }}"
+        version: "{{ theiaide_vars.THEIA_VERSION }}"
+        force: yes
+        update: yes
+        accept_hostkey: yes
+        clone: yes
+      become_user: "{{ theiaide_vars.THEIA_USER }}"
 
-    - name: Enable and Start service
+    - name: Install Node dependencies
+      ansible.builtin.shell: |
+        export GITHUB_TOKEN="{{ github_token }}"
+        yarn
+        yarn build
+        yarn download:plugins
+      args:
+        chdir: "{{ theiaide_vars.THEIA_INSTALL_DIR  }}"
+        executable: /bin/bash
+      become_user: "{{ theiaide_vars.THEIA_USER }}"
+
+    - name: Create theia systemd service
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/theia.service
+        content: |
+          [Unit]
+          Description=Theia IDE
+          After=network.target
+
+          [Service]
+          User={{ theiaide_vars.THEIA_USER }}
+          WorkingDirectory={{ theiaide_vars.THEIA_INSTALL_DIR}}
+          ExecStart=/usr/bin/yarn browser start --hostname {{ theiaide_vars.THEIA_BIND_ADDRESS }} --port {{ theiaide_vars.THEIA_BIND_PORT }}
+          Restart=always
+          Environment=HOME=/home/{{ theiaide_vars.THEIA_USER }}
+
+          # Hardening
+          NoNewPrivileges=false
+          ProtectSystem=full
+          ProtectHome=falsee
+          PrivateTmp=true
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Enable and start Theia
       ansible.builtin.systemd:
-        name: theia-ide.service
-        enabled: true
-        state: restarted
+        name: theia
+        state: started
+        enabled: yes
+        daemon_reload: yes
+
   when: not theiaide_vars.create_only_backend
