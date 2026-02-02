@@ -2,9 +2,12 @@
 theiaide_vars:
   template_version:
   create_only_backend: false
-  NVM_INSTALL_DIR: /opt/nvm
+  NVM_INSTALL_DIR: /home/ubuntu/.nvm
   THEIA_INSTALL_DIR: /opt/theia-ide
   THEIA_USER: ubuntu
   THEIA_BIND_ADDRESS: 0.0.0.0
   THEIA_BIND_PORT: 8080
   templates_path: ./templates/
+  THEIA_VERSION: v1.67.100
+  THEIA_REPO: "https://github.com/eclipse-theia/theia-ide.git"
+

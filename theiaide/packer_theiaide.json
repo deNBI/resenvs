@@ -8,21 +8,9 @@
       {
          "type":"openstack",
          "image_name":"TheiaIDE-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
-         "source_image_filter":{
-            "filters":{
-               "tags":[
-                  "{{user `base_image_tag`}}"
-               ],
-               "properties":{
-                  "os_distro":"{{user `os_distro`}}",
-                  "os_version":"{{user `os_version`}}",
-                  "image_type":"image"
-               }
-            },
-            "most_recent":true
-         },
+         "source_image_name": "{{ user `source_image_name` }}",
          "networks":"{{user `network`}}",
-         "flavor":"de.NBI tiny",
+         "flavor":"de.NBI small",
          "ssh_username":"ubuntu",
          "ssh_clear_authorized_keys":true,
          "image_tags":[
@@ -61,7 +49,8 @@
          "extra_arguments":[
             "-vv",
             "--extra-vars",
-            "resenv=theiaide"
+            "resenv=theiaide github_token={{user `github_token`}}"
+
          ]
       },
       {
