@@ -18,7 +18,6 @@
       openstack.cloud.image_info:
       register: images
 
-
     - name: Get Latest Master Branch Commit
       ansible.builtin.command: git rev-parse --short --verify origin/master
       register: github_hash
@@ -49,25 +48,23 @@
     - name: Set Base Images
       ansible.builtin.set_fact:
         base_images: "{{ images.images
-                      | selectattr('tags', 'search', base_image_tag)
-                      | selectattr('os_distro', '==', os_distro)
-                      | selectattr('os_version', '==', os_version)
-                      | sort(attribute='created_at') }}"
+          | selectattr('tags', 'search', base_image_tag)
+          | selectattr('os_distro', '==', os_distro)
+          | selectattr('os_version', '==', os_version)
+          | sort(attribute='created_at') }}"
 
     - name: Set latest base image name
       ansible.builtin.set_fact:
         latest_base_image_name: "{{ (base_images | last).name }}"
 
-
     - name: Set Resens Images
       ansible.builtin.set_fact:
         resenv_images: "{{ images.images
-                        | selectattr('tags', 'search', vars[resenv + '_tag'])
-                        | selectattr('os_distro', '==', os_distro)
-                        | selectattr('os_version', '==', os_version)
-                        | rejectattr('tags', 'search', 'cluster')
-                        | sort(attribute='created_at') }}"
-
+          | selectattr('tags', 'search', vars[resenv + '_tag'])
+          | selectattr('os_distro', '==', os_distro)
+          | selectattr('os_version', '==', os_version)
+          | rejectattr('tags', 'search', 'cluster')
+          | sort(attribute='created_at') }}"
 
     - name: Set Update facts
       ansible.builtin.set_fact:
@@ -76,16 +73,16 @@
         - base_images | length > 0
         - resenv_images | length == 0
           or (
-            (
-              (base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
-            ) >
-            (
-              (resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
-            )
+          (
+          (base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
+          ) >
+          (
+          (resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
+          )
           )
           or (
-            resenv_images | length > 0 and
-            ((resenv_images | last).properties.md5_hash | trim | default('undefined')) != (md5_hash.stdout | trim)
+          resenv_images | length > 0 and
+          ((resenv_images | last).properties.md5_hash | trim | default('undefined')) != (md5_hash.stdout | trim)
           )
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}
@@ -98,6 +95,7 @@
           -var "network={{ vars[location + '_' + upload_environment] }}"
           -var "md5_hash={{ md5_hash.stdout }}"
           -var "github_hash={{ github_hash.stdout }}"
+          -var "github_token={{ lookup('env', 'GITHUB_REPO_TOKEN') }}"
           -var "source_image_name={{ latest_base_image_name }}"
           ../{{ resenv }}/packer_{{ vars[resenv + '_tag'] }}.json
       when: update
