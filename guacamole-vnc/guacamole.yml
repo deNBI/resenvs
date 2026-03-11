@@ -1,0 +1,53 @@
+---
+- name: PRE_TASK   Update apt cache
+  become: true
+  ansible.builtin.apt:
+        upgrade: true
+        update_cache: true
+        autoremove: true
+        autoclean: true
+
+
+- name: Pip
+  ansible.builtin.apt:
+        name: python3-pip
+        state: latest
+
+- name: Install guacamole role
+  ansible.builtin.include_role:
+        name: guacamole
+  when: not guacamole_vars.create_only_backend
+
+- name: Flush guacamole handlers
+  ansible.builtin.meta: flush_handlers
+  when: not guacamole_vars.create_only_backend
+
+- name: Setup password  for default ubuntu user - standard
+  become: true
+  ansible.builtin.user:
+        name: "{{ guacamole_vars.default_user }}"
+        password: "{{ guacamole_vars.default_password | password_hash('sha512') }}"
+        update_password: always
+        password_lock: false
+
+- name: Restart xrdp
+  ansible.builtin.systemd:
+        name: xrdp
+        enabled: true
+        state: restarted
+
+- name: Restart guacd
+  ansible.builtin.systemd:
+        name: guacd
+        enabled: true
+        state: restarted
+
+- name: Restart Tomcat
+  ansible.builtin.systemd:
+        name: tomcat9
+        enabled: true
+        state: restarted
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+        daemon_reload: true
