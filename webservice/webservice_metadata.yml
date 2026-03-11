@@ -1,5 +1,5 @@
 ---
-template_name: shiny
+template_name: webservice
 is_maintained: true
 port: 3838
 needs_forc_support: true
@@ -8,11 +8,12 @@ forc_versions:
 incompatible_versions: []
 direction: ingress
 protocol: tcp
-securitygroup_name: _shiny
-securitygroup_description: Shiny
+securitygroup_name: _webservice
+securitygroup_description: Webservice
 securitygroup_ssh: false
-title: Shiny
-description: "Default Shiny Backend (Shiny Application must be configured for Port: 3838"
+create_only_backend: true ### for future use
+title: Webservice
+description: "Default Webservice Backend (Webservice Application must be configured for Port: 3838)"
 logo_url: ""
 info_url: ""
 community_driven: false

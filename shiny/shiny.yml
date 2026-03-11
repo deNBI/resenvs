@@ -1,4 +1,0 @@
----
-- name: Log for shiny backend
-  ansible.builtin.debug:
-    msg: "For shiny backend"
