@@ -3,6 +3,7 @@
   "base_image_build_tag": "image_base_build",
   "base_cluster_tag": "base_cluster",
   "guacamole_tag": "guacamole",
+  "guacamole_vnc_tag": "guacamole_vnc",
   "rstudio_tag": "rstudio",
   "theiaide_tag": "theiaide",
   "vscode_tag": "vscode",

@@ -29,7 +29,7 @@
       "ssh_username": "ubuntu",
       "ssh_clear_authorized_keys": true,
       "image_tags": [
-        "{{user `guacamole_tag`}}",
+        "{{user `guacamole_vnc_tag`}}",
         "cluster",
         "master",
         "deNBI"
