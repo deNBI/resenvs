@@ -11,7 +11,7 @@ protocol: tcp
 securitygroup_name: _webservice
 securitygroup_description: Webservice
 securitygroup_ssh: false
-create_only_backend: true ### for future use
+#create_only_backend: true ### for future use
 title: Webservice
 description: "Default Webservice Backend (Webservice Application must be configured for Port: 3838)"
 logo_url: ""
