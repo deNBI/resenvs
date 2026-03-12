@@ -16,17 +16,17 @@
 - name: Install guacamole role
   ansible.builtin.include_role:
         name: guacamole_vnc
-  when: not guacamole_vars.create_only_backend
+  when: not guacamole_vnc_vars.create_only_backend
 
 - name: Flush guacamole handlers
   ansible.builtin.meta: flush_handlers
-  when: not guacamole_vars.create_only_backend
+  when: not guacamole_vnc_vars.create_only_backend
 
 - name: Setup password  for default ubuntu user - standard
   become: true
   ansible.builtin.user:
-        name: "{{ guacamole_vars.default_user }}"
-        password: "{{ guacamole_vars.default_password | password_hash('sha512') }}"
+        name: "{{ guacamole_vnc_vars.default_user }}"
+        password: "{{ guacamole_vnc_vars.default_password | password_hash('sha512') }}"
         update_password: always
         password_lock: false
 
