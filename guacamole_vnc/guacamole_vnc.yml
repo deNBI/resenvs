@@ -15,7 +15,7 @@
 
 - name: Install guacamole role
   ansible.builtin.include_role:
-        name: guacamole
+        name: guacamole_vnc
   when: not guacamole_vars.create_only_backend
 
 - name: Flush guacamole handlers
@@ -30,11 +30,6 @@
         update_password: always
         password_lock: false
 
-- name: Restart xrdp
-  ansible.builtin.systemd:
-        name: xrdp
-        enabled: true
-        state: restarted
 
 - name: Restart guacd
   ansible.builtin.systemd:
