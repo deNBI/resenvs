@@ -13,7 +13,7 @@
         name: python3-pip
         state: latest
 
-- name: Install guacamole role
+- name: Install guacamole VNC role
   ansible.builtin.include_role:
         name: guacamole_vnc
   when: not guacamole_vnc_vars.create_only_backend

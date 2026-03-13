@@ -64,14 +64,30 @@
 - name: Set VNC password
   ansible.builtin.shell: "echo 'ubuntu' | vncpasswd -f > /home/ubuntu/.vnc/passwd"
 
-- name: Place xstartup file for ubuntu user
+
+- name: Deploy xstartup script for ubuntu user
   copy:
+    src: files/xstartup
     dest: /home/ubuntu/.vnc/xstartup
-    content: |-
-      #!/bin/sh
-      unset SESSION_MANAGER
-      unset DBUS_SESSION_BUS_ADDRESS
-      exec startxfce4
     owner: ubuntu
     group: ubuntu
-    mode: "0755"
+    mode: '0755'
+
+- name: Deploy vnc-server service
+  become: true
+  ansible.builtin.template:
+    src: vncserver@.service.j2
+    dest: /etc/systemd/system/vncserver@.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Reload systemd to pick up new units
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable vncserver@ubuntu.service at boot
+  ansible.builtin.systemd:
+    name: vncserver@ubuntu
+    enabled: yes
+
