@@ -73,6 +73,30 @@
     group: ubuntu
     mode: '0755'
 
+- name: Ensure .vnc directory ownership and permissions
+  file:
+    path: /home/ubuntu/.vnc
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: '0700'
+
+- name: Ensure VNC password file ownership and permissions (safe to run even if it doesn't exist)
+  file:
+    path: /home/ubuntu/.vnc/passwd
+    state: file
+    owner: ubuntu
+    group: ubuntu
+    mode: '0600'
+
+- name: Ensure xstartup file ownership and permissions
+  file:
+    path: /home/ubuntu/.vnc/xstartup
+    state: file
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+
 - name: Deploy vnc-server service
   become: true
   ansible.builtin.template:
