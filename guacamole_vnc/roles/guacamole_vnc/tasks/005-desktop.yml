@@ -80,6 +80,7 @@
     owner: ubuntu
     group: ubuntu
     mode: '0700'
+    become: true
 
 - name: Ensure VNC password file ownership and permissions (safe to run even if it doesn't exist)
   file:
@@ -88,6 +89,7 @@
     owner: ubuntu
     group: ubuntu
     mode: '0600'
+    become: true
 
 - name: Ensure xstartup file ownership and permissions
   file:
@@ -96,6 +98,7 @@
     owner: ubuntu
     group: ubuntu
     mode: '0755'
+    become: true
 
 - name: Deploy vnc-server service
   become: true
