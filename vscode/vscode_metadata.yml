@@ -11,7 +11,7 @@ protocol: tcp
 securitygroup_name: _vscode
 securitygroup_description: VsCode
 securitygroup_ssh: false
-create_only_backend: true
+create_only_backend: false
 title: Visual Studio Code
 description: Visual Studio Code with Common Workflow Language, Snakemake and Nextflow development tools preinstalled.
 community_driven: false
