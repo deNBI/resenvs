@@ -1,4 +1,4 @@
 ---
 template_name: conda
 needs_forc_support: false
-create_only_backend: false @reviewer: necessary?
+create_only_backend: true
