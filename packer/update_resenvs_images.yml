@@ -57,15 +57,14 @@
       ansible.builtin.set_fact:
         latest_base_image_name: "{{ (base_images | last).name }}"
 
-    - name: Set Resens Images
+    - name: Set Resenv Images
       ansible.builtin.set_fact:
         resenv_images: "{{ images.images
-          | selectattr('tags', 'search', vars[resenv + '_tag'])
+          | selectattr('tags', 'search', lookup('vars', resenv + '_tag'))
           | selectattr('os_distro', '==', os_distro)
           | selectattr('os_version', '==', os_version)
           | rejectattr('tags', 'search', 'cluster')
           | sort(attribute='created_at') }}"
-
     - name: Set Update facts
       ansible.builtin.set_fact:
         update: true
