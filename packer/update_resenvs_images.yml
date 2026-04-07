@@ -92,11 +92,11 @@
           -var-file=./{{ resenv }}_metadata.json
           -var "os_distro={{ os_distro }}"
           -var "os_version={{ os_version }}"
-          -var "network={{ vars[location + '_' + upload_environment] }}"
+          -var "network={{ lookup('vars', location + '_' + upload_environment) }}"
           -var "md5_hash={{ md5_hash.stdout }}"
           -var "github_hash={{ github_hash.stdout }}"
           -var "github_token={{ lookup('env', 'GITHUB_REPO_TOKEN') }}"
           -var "source_image_name={{ latest_base_image_name }}"
-          ../{{ resenv }}/packer_{{ vars[resenv + '_tag'] }}.json
+          ../{{ resenv }}/packer_{{ lookup('vars', resenv + '_tag') }}.json
       when: update
       changed_when: false
