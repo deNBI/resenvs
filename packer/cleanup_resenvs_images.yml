@@ -49,7 +49,47 @@
       loop_control:
         index_var: index
       when: resenv_images | length > limit | int and index >= limit | int
-
+  
+    - name: Retrieve list of all {{ resenv }} base images
+      ansible.builtin.shell: >
+        openstack image list
+        --private
+        --tag {{ lookup('vars', resenv + '_tag') }}
+        --tag cluster
+        --tag master
+        --property image_type=image
+        --property os_version={{ os_version }}
+        --property os_distro={{ os_distro }}
+        --sort created_at:desc
+        --long
+        -f json
+      register: resenv_master_images_command
+      changed_when: false
+    
+    - name: Parse images JSON into a list
+      ansible.builtin.set_fact:
+        resenv_master_images: "{{ resenv_master_images_command.stdout | from_json }}"
+    
+    - name: Echo number of Ubuntu images found
+      ansible.builtin.debug:
+        msg: "Found {{ resenv_master_images | length }} images for {{ os_version }}"
+    
+    - name: Print Ubuntu image names
+      ansible.builtin.debug:
+        var: item.Name
+      loop: "{{ resenv_master_images }}"
+      when: resenv_master_images | length > 0
+    
+    - name: Clean up old Ubuntu {{ os_version }} images beyond limit
+      openstack.cloud.image:
+        name: "{{ item.ID }}"
+        state: absent
+      loop: "{{ resenv_master_images }}"
+      loop_control:
+        index_var: index
+      when: 
+        - resenv_master_images | length > limit | int
+        - index >= limit | int
 
     - name: Retrieve list of all {{ resenv }} base image
       ansible.builtin.shell: >
