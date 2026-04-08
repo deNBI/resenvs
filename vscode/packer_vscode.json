@@ -10,6 +10,7 @@
          "image_name":"VSCode-{{user `os_distro`}}{{user `os_version`}} de.NBI ({{isotime `2006-01-02`}})",
          "source_image_name": "{{ user `source_image_name` }}",
          "networks":"{{user `network`}}",
+         "use_blockstorage_volume": false,
          "flavor":"de.NBI tiny",
          "ssh_username":"ubuntu",
          "ssh_clear_authorized_keys":true,
@@ -54,20 +55,29 @@
       },
       {
          "type":"shell",
-         "inline":[
-            "echo 'Cleaning cloud-init and OS cache...'",
-            "> /home/ubuntu/.ssh/authorized_keys",
-            "sudo cloud-init clean --logs",
-            "sudo truncate -s 0 /etc/machine-id",
-            "sudo apt-get clean",
-            "sudo rm -rf /var/lib/cloud/* /var/lib/apt/lists/* /tmp/* /var/tmp/*",
-            "sudo find /var/log -type f -exec truncate -s 0 {} +",
-            "sync",
-            "echo 'Zeroing free space for compression...'",
-            "sudo dd if=/dev/zero of=/EMPTY bs=1M || true",
-            "sudo rm -f /EMPTY",
-            "sync",
-            "echo 'Cleanup and shrink step completed.'"
+          "inline": [
+           "echo '--- Cleaning package cache and cloud-init ---'",
+           "sudo apt-get clean",
+           "sudo rm -rf /var/lib/apt/lists/* /var/lib/cloud/* /tmp/* /var/tmp/*",
+           "sudo cloud-init clean --logs",
+           "sudo truncate -s 0 /etc/machine-id",
+           
+           "echo '--- Truncating log files ---'",
+           "sudo find /var/log -type f -exec truncate -s 0 {} +",
+           
+           "echo '--- Setting ext4 reserved blocks to 0 ---'",
+           "sudo tune2fs -m 0 $(df --output=source / | tail -1)",
+           
+           "echo '--- Fstrim to mark free space ---'",
+           "sudo fstrim -av || true",
+           
+           "echo '--- Zeroing free space (sparse friendly) ---'",
+           "sudo dd if=/dev/zero of=/EMPTY bs=64M oflag=direct || true",
+           "sudo rm -f /EMPTY",
+           
+           "echo '--- Final sync ---'",
+           "sync",
+           "echo '--- Shrink-ready cleanup completed ---'"
          ]
       }
    ]

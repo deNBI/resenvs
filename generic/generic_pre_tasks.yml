@@ -1,6 +1,7 @@
 ---
 - name: Populate service facts
   ansible.builtin.service_facts:
+
 - name: Wait till Apt_Mirror de.NBI Bielefeld Service is done
   ansible.builtin.service_facts:
   until: services['de.NBI_Bielefeld_environment.service'].state == 'stopped'
@@ -14,26 +15,31 @@
     regexp: ^APT::Periodic::Unattended-Upgrade
     line: APT::Periodic::Unattended-Upgrade "0";
     create: true
-- name: PRE_TASK Stop apt-daily.* systemd services
-  ansible.builtin.service:
+
+- name: PRE_TASK Stop apt-daily services and timers
+  ansible.builtin.systemd:
     name: "{{ item }}"
     state: stopped
-  with_items:
+    enabled: no
+  loop:
     - unattended-upgrades
     - apt-daily
     - apt-daily.timer
     - apt-daily-upgrade
     - apt-daily-upgrade.timer
 
-- name: PRE_TASK   Wait for automatic system updates 1
-  ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done;
+- name: PRE_TASK Wait for any running apt/dpkg processes to finish
+  ansible.builtin.shell: |
+    while pgrep -x apt >/dev/null || pgrep -x apt-get >/dev/null; do
+      sleep 1
+    done
+  retries: 20
+  delay: 3
+  register: apt_wait
+  until: apt_wait.rc == 0
   changed_when: false
 
-- name: PRE_TASK  Wait for automatic system updates 2
-  ansible.builtin.shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done;
-  changed_when: false
-
-- name: PRE_TASK   Update apt cache
+- name: PRE_TASK Update apt cache and upgrade packages
   become: true
   ansible.builtin.apt:
     upgrade: true
@@ -48,11 +54,11 @@
 
 - name: Install monitoring denbi telegraf
   ansible.builtin.apt:
-    name: denbi-monitoring-conf 
+    name: denbi-monitoring-conf
     state: latest
+
 - name: Setup Docker
   ansible.builtin.import_tasks: ../generic/setup_docker.yml
 
 - name: PRE_TASK Install Metadata-Service
   ansible.builtin.import_tasks: ../generic/install_metadata_service.yml
-

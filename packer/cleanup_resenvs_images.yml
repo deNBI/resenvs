@@ -18,7 +18,7 @@
       ansible.builtin.shell: >
         openstack image list
         --private
-        --tag {{ vars[resenv + '_tag'] }}
+        --tag {{ lookup('vars', resenv + '_tag') }}
         --property image_type=image
         --property os_version={{ os_version }}
         --property os_distro={{ os_distro }}
@@ -54,7 +54,7 @@
       ansible.builtin.shell: >
         openstack image list
         --private
-        --tag {{ vars[resenv + '_tag'] }}
+        --tag {{ lookup('vars', resenv + '_tag') }}
         --tag cluster
         --tag master
         --property image_type=image
@@ -93,7 +93,7 @@
       ansible.builtin.shell: >
         openstack image list
         --private
-        --tag {{ vars[resenv + '_tag'] }}
+        --tag {{ lookup('vars', resenv + '_tag') }}
         --tag cluster
         --tag worker
         --property image_type=image
