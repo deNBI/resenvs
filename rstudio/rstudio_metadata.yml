@@ -14,7 +14,9 @@ protocol: tcp
 securitygroup_name: _rstudio
 securitygroup_description: Rstudio
 securitygroup_ssh: false
-create_only_backend: true
+create_only_backend: false
+allow_disable_auth: false
+
 title: RStudio
 description: RStudio is an integrated development environment for R.
 logo_url: https://cloud.denbi.de/static/images/rstudio.png

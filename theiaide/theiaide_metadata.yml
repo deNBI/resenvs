@@ -13,7 +13,9 @@ protocol: tcp
 securitygroup_name: _theaide
 securitygroup_description: Theaide
 securitygroup_ssh: false
-create_only_backend: true
+create_only_backend: false
+allow_disable_auth: false
+
 title: Theia - Cloud and Desktop IDE
 description: Browser based IDE that offers among others a terminal, editor and a file browser.
 logo_url: https://cloud.denbi.de/static/images/theia.png
