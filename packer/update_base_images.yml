@@ -160,3 +160,94 @@
       when: update
       changed_when: false
 
+    - name: Refresh image list after build
+        openstack.cloud.image_info:
+        register: images_after_build
+        when: update
+
+    - name: Determine newest base image
+      ansible.builtin.set_fact:
+        newest_base_image: >-
+          {{
+            images_after_build.images
+            | selectattr('tags','contains', base_image_tag)
+            | selectattr('os_distro','==', os_distro)
+            | selectattr('os_version','==', os_version)
+            | sort(attribute='created_at')
+            | last
+          }}
+      when: update
+
+    - name: Check if image is RAW
+      ansible.builtin.set_fact:
+        image_is_raw: "{{ newest_base_image.disk_format == 'raw' }}"
+      when: update
+
+    - name: Set paths
+      ansible.builtin.set_fact:
+        raw_image_path: "/vol/{{ newest_base_image.name }}.raw"
+        qcow_image_path: "/vol/{{ newest_base_image.name }}.qcow2"
+      when: update and image_is_raw
+
+    - name: Get free space in /vol
+      ansible.builtin.command: df --output=avail -B1 /vol | tail -1
+      register: vol_free
+      changed_when: false
+      when: update and image_is_raw
+
+    - name: Set free space fact
+      ansible.builtin.set_fact:
+        vol_free_bytes: "{{ vol_free.stdout | trim | int }}"
+      when: update and image_is_raw
+
+    - name: Ensure enough space for image download
+      ansible.builtin.assert:
+        that:
+          - vol_free_bytes > (newest_base_image.size | int)
+        fail_msg: >
+          Not enough space in /vol to download image.
+          Required: {{ newest_base_image.size }}
+          Available: {{ vol_free_bytes }}
+      when: update and image_is_raw
+
+    - name: Download RAW image to /vol
+      ansible.builtin.command: >
+        openstack image save
+        --file {{ raw_image_path }}
+        {{ newest_base_image.id }}
+      changed_when: true
+      when: update and image_is_raw
+
+    - name: Convert RAW to QCOW2
+      ansible.builtin.command: >
+        qemu-img convert -f raw -O qcow2
+        {{ raw_image_path }}
+        {{ qcow_image_path }}
+      changed_when: true
+      when: update and image_is_raw
+
+    - name: Upload QCOW2 image (same name)
+      openstack.cloud.image:
+        name: "{{ newest_base_image.name }}"
+        filename: "{{ qcow_image_path }}"
+        disk_format: qcow2
+        container_format: bare
+        tags: "{{ newest_base_image.tags }}"
+        properties: "{{ newest_base_image.properties }}"
+        state: present
+      when: update and image_is_raw
+
+    - name: Delete RAW image from OpenStack
+      openstack.cloud.image:
+        name: "{{ newest_base_image.name }}"
+        state: absent
+      when: update and image_is_raw
+
+    - name: Cleanup local images
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ raw_image_path }}"
+        - "{{ qcow_image_path }}"
+      when: update and image_is_raw
