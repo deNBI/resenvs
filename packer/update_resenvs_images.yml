@@ -125,7 +125,6 @@
       ansible.builtin.file:
         path: /vol
         state: directory
-        mode: "0755"
       when: update
 
     - name: Get free space on /vol
@@ -146,7 +145,7 @@
     - name: Ensure enough disk space for download
       ansible.builtin.assert:
         that:
-          - vol_free_bytes > newest_resenv_image.size
+          - (vol_free_bytes | int) > (newest_resenv_image.size | int)
         fail_msg: >
           Not enough space in /vol to download image.
           Required: {{ newest_resenv_image.size }} bytes
