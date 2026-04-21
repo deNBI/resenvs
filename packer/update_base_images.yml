@@ -160,10 +160,11 @@
       when: update
       changed_when: false
 
+
     - name: Refresh image list after build
-        openstack.cloud.image_info:
-        register: images_after_build
-        when: update
+      openstack.cloud.image_info:
+      register: images_after_build
+      when: update
 
     - name: Determine newest base image
       ansible.builtin.set_fact:
