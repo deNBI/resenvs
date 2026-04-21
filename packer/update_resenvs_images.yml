@@ -99,3 +99,92 @@
           ../{{ resenv }}/packer_{{ lookup('vars', resenv + '_tag') }}.json
       when: update
       changed_when: false
+
+    - name: Refresh image list after build
+      openstack.cloud.image_info:
+      register: images_after_build
+      when: update
+
+    - name: Get newest resenv image
+      ansible.builtin.set_fact:
+        newest_resenv_image: "{{ images_after_build.images
+          | selectattr('tags', 'search', lookup('vars', resenv + '_tag'))
+          | selectattr('os_distro', '==', os_distro)
+          | selectattr('os_version', '==', os_version)
+          | rejectattr('tags', 'search', 'cluster')
+          | sort(attribute='created_at')
+          | last }}"
+      when: update
+
+    - name: Check image format (qcow2 or raw)
+      ansible.builtin.set_fact:
+        is_qcow2: "{{ newest_resenv_image.disk_format == 'qcow2' }}"
+      when: update
+
+    - name: Ensure /vol directory exists
+      ansible.builtin.file:
+        path: /vol
+        state: directory
+        mode: "0755"
+      when: update
+
+    # ----------------------------
+    # DOWNLOAD ONLY IF RAW
+    # ----------------------------
+    - name: Download RAW image (only if not qcow2)
+      ansible.builtin.command: >
+        openstack image save {{ newest_resenv_image.id }}
+        --file /vol/{{ newest_resenv_image.id }}.raw
+      when:
+        - update
+        - not is_qcow2
+
+    # ----------------------------
+    # CONVERT ONLY IF RAW
+    # ----------------------------
+    - name: Convert RAW to QCOW2
+      ansible.builtin.command: >
+        qemu-img convert -f raw -O qcow2
+        /vol/{{ newest_resenv_image.id }}.raw
+        /vol/{{ newest_resenv_image.id }}.qcow2
+      when:
+        - update
+        - not is_qcow2
+
+    # ----------------------------
+    # UPLOAD ONLY IF RAW
+    # ----------------------------
+    - name: Upload QCOW2 image
+      ansible.builtin.command: >
+        openstack image create "{{ newest_resenv_image.name }}-qcow2"
+        --disk-format qcow2
+        --container-format bare
+        --file /vol/{{ newest_resenv_image.id }}.qcow2
+        --private
+      when:
+        - update
+        - not is_qcow2
+
+    # ----------------------------
+    # DELETE OLD RAW ONLY IF CONVERTED
+    # ----------------------------
+    - name: Delete original RAW image from Glance
+      ansible.builtin.command: >
+        openstack image delete {{ newest_resenv_image.id }}
+      when:
+        - update
+        - not is_qcow2
+
+    # ----------------------------
+    # CLEANUP LOCAL FILES
+    # ----------------------------
+    - name: Cleanup /vol artifacts
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/vol/{{ newest_resenv_image.id }}.raw"
+        - "/vol/{{ newest_resenv_image.id }}.qcow2"
+      when:
+        - update
+        - not is_qcow2
