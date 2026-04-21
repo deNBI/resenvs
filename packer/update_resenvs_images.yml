@@ -200,7 +200,7 @@
 
     - name: Apply original metadata
       ansible.builtin.command: >
-        openstack image set --property {{ item.key }}="{{ item.value }}" {{ new_image_id }}
+        openstack image set  {{ new_image_id }} --property {{ item.key }}="{{ item.value }}"
       loop: "{{ newest_resenv_image.properties | dict2items }}"
       when:
         - update
