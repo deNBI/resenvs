@@ -163,7 +163,7 @@
           - --file
           - /vol/{{ newest_resenv_image.id }}.raw
           - "{{ newest_resenv_image.id }}"
-       when:
+      when:
         - update
         - not is_qcow2     
         
