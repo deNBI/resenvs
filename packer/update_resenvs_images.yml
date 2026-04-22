@@ -154,7 +154,6 @@
         - update
         - not is_qcow2
 
-
     - name: Download RAW image to /vol
       ansible.builtin.command:
         argv:
@@ -168,7 +167,6 @@
         - update
         - not is_qcow2     
         
-
 
     - name: Convert RAW to QCOW2
       ansible.builtin.command:
