@@ -127,17 +127,17 @@
         state: directory
       when: update
 
-    - name: Get free space on /vol
-      ansible.builtin.command: df -B1 --output=avail /vol
-      register: vol_space
+    - name: Get free space in /vol
+      ansible.builtin.shell: df --output=avail -B1 /vol | tail -1
+      register: vol_free
       changed_when: false
       when:
         - update
         - not is_qcow2
-
-    - name: Parse free space
+        
+    - name: Set free space fact
       ansible.builtin.set_fact:
-        vol_free_bytes: "{{ (vol_space.stdout_lines[1] | trim) | int }}"
+        vol_free_bytes: "{{ vol_free.stdout | trim | int }}"
       when:
         - update
         - not is_qcow2
@@ -154,57 +154,36 @@
         - update
         - not is_qcow2
 
+
     - name: Download RAW image to /vol
-      ansible.builtin.command: >
-        openstack image save {{ newest_resenv_image.id }}
-        --file /vol/{{ newest_resenv_image.id }}.raw
-      when:
+      ansible.builtin.command:
+        argv:
+          - openstack
+          - image
+          - save
+          - --file
+          - /vol/{{ newest_resenv_image.id }}.raw
+          - {{ newest_resenv_image.id }}
+       when:
         - update
-        - not is_qcow2
+        - not is_qcow2     
+        
+
 
     - name: Convert RAW to QCOW2
-      ansible.builtin.command: >
-        qemu-img convert -f raw -O qcow2
-        /vol/{{ newest_resenv_image.id }}.raw
-        /vol/{{ newest_resenv_image.id }}.qcow2
+      ansible.builtin.command:
+        argv:
+          - qemu-img
+          - convert
+          - -f
+          - raw
+          - -O
+          - qcow2
+          - /vol/{{ newest_resenv_image.id }}.raw
+          - /vol/{{ newest_resenv_image.id }}.qcow2
       when:
         - update
-        - not is_qcow2
-
-    - name: Upload QCOW2 image with same name
-      ansible.builtin.command: >
-        openstack image create "{{ newest_resenv_image.name }}"
-        --disk-format qcow2
-        --container-format bare
-        --file /vol/{{ newest_resenv_image.id }}.qcow2
-        --private
-      register: qcow_upload
-      when:
-        - update
-        - not is_qcow2
-
-    - name: Extract new image id
-      ansible.builtin.set_fact:
-        new_image_id: "{{ qcow_upload.stdout | regex_search('[0-9a-f-]{36}') }}"
-      when:
-        - update
-        - not is_qcow2
-
-    - name: Apply original tags
-      ansible.builtin.command: >
-        openstack image set --tag {{ item }} {{ new_image_id }}
-      loop: "{{ newest_resenv_image.tags }}"
-      when:
-        - update
-        - not is_qcow2
-
-    - name: Apply original metadata
-      ansible.builtin.command: >
-        openstack image set  {{ new_image_id }} --property {{ item.key }}="{{ item.value }}"
-      loop: "{{ newest_resenv_image.properties | dict2items }}"
-      when:
-        - update
-        - not is_qcow2
+        - not is_qcow2          
 
     - name: Delete original RAW image
       ansible.builtin.command: >
@@ -212,6 +191,21 @@
       when:
         - update
         - not is_qcow2
+        
+    - name: Upload QCOW2 image with same name
+      openstack.cloud.image:
+        name: "{{ newest_resenv_image.name }}"
+        filename: /vol/{{ newest_resenv_image.id }}.qcow2
+        disk_format: qcow2
+        container_format: bare
+        tags: "{{ newest_resenv_image.tags }}"
+        properties: "{{ newest_resenv_image.properties }}"
+        state: present
+      register: qcow_upload
+      when:
+        - update
+        - not is_qcow2
+
 
     - name: Cleanup /vol files
       ansible.builtin.file:
