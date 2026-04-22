@@ -200,11 +200,11 @@
       ansible.builtin.set_fact:
         vol_free_bytes: "{{ vol_free.stdout | trim | int }}"
       when: update and image_is_raw
-
+      
     - name: Ensure enough space for image download
       ansible.builtin.assert:
         that:
-          - vol_free_bytes > (newest_base_image.size | int)
+          - (vol_free_bytes|int) > (newest_base_image.size | int)
         fail_msg: >
           Not enough space in /vol to download image.
           Required: {{ newest_base_image.size }}
@@ -212,10 +212,14 @@
       when: update and image_is_raw
 
     - name: Download RAW image to /vol
-      ansible.builtin.command: >
-        openstack image save
-        --file {{ raw_image_path }}
-        {{ newest_base_image.id }}
+      ansible.builtin.command:
+        argv:
+          - openstack
+          - image
+          - save
+          - --file
+          - "{{ raw_image_path }}"
+          - "{{ newest_base_image.id }}"
       changed_when: true
       when: update and image_is_raw
 
