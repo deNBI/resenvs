@@ -250,10 +250,9 @@
 
     - name: Delete RAW image from OpenStack
       openstack.cloud.image:
-        name: "{{ newest_base_image.name }}"
+        image: "{{ newest_base_image.id }}"
         state: absent
       when: update and image_is_raw
-
     - name: Cleanup local images
       ansible.builtin.file:
         path: "{{ item }}"
