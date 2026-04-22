@@ -191,7 +191,7 @@
       when: update and image_is_raw
 
     - name: Get free space in /vol
-      ansible.builtin.command: df --output=avail -B1 /vol | tail -1
+      ansible.builtin.shell: df --output=avail -B1 /vol | tail -1
       register: vol_free
       changed_when: false
       when: update and image_is_raw
