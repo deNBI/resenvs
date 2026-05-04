@@ -43,11 +43,11 @@
         enabled: true
         state: restarted
 
-- name: Restart VNCTiger Server
-  ansible.builtin.systemd:
-    name: vncserver@ubuntu
-    enabled: true
-    state: restarted
+#- name: Restart VNCTiger Server
+ # ansible.builtin.systemd:
+  #  name: vncserver@ubuntu
+   # enabled: true
+   # state: restarted
 
 - name: Reload systemd
   ansible.builtin.systemd:
