@@ -5,7 +5,6 @@ After=syslog.target network.target
 [Service]
 Type=simple
 User=%i
-PAMName=login
 ExecStartPre=/usr/bin/vncserver -kill :1 > /dev/null 2>&1 || true
 ExecStart=/usr/bin/vncserver -fg :1 -geometry 1440x900 -alwaysshared
 ExecStop=/usr/bin/vncserver -kill :1

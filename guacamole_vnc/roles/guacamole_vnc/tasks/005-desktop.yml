@@ -63,6 +63,7 @@
 
 - name: Set VNC password
   ansible.builtin.shell: "echo 'ubuntu' | vncpasswd -f > /home/ubuntu/.vnc/passwd"
+  become: true
 
 
 - name: Deploy xstartup script for ubuntu user

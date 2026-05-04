@@ -1,4 +1,14 @@
 #!/bin/sh
+
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
+
+# Source default TigerVNC startup
+if [ -d /etc/vnc/xstartup.d ]; then
+    for f in /etc/vnc/xstartup.d/?*.sh; do
+        [ -r "$f" ] && . "$f"
+    done
+    unset f
+fi
+
 exec startxfce4
