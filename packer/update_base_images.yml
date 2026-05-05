@@ -61,7 +61,7 @@
 
     - name: Upload image to Openstack
       openstack.cloud.image:
-        name: "{{ name + ' de.NBI BUILD (' + date_time + ')' }}"
+        name: "{{ name + ' de.NBI BUILD (' + (date_time | string) + ')' }}"
         state: present
         filename: "{{ downloaded_filename }}"
         tags:
