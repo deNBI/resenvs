@@ -4,10 +4,18 @@
     upgrade: true
     update_cache: true
 
-- name: Install xfce4
+- name: Install XFCE desktop and required X helpers
   ansible.builtin.apt:
-    name: xfce4*
+    name:
+      - xfce4
+      - xfce4-goodies
+      - xfce4-session
+      - dbus-x11
+      - xterm
+      - xauth
+      - x11-xserver-utils
     state: present
+    install_recommends: true
 
 - name: Remove snap Firefox
   become: true
@@ -54,51 +62,37 @@
     update_cache: true
 
 - name: Ensure .vnc directory exists for ubuntu user
-  file:
+  ansible.builtin.file:
     path: /home/ubuntu/.vnc
     state: directory
     owner: ubuntu
     group: ubuntu
     mode: "0700"
+  become: true
 
 - name: Set VNC password
   ansible.builtin.shell: "echo 'ubuntu' | vncpasswd -f > /home/ubuntu/.vnc/passwd"
   become: true
-
+  become_user: ubuntu
+  args:
+    creates: /home/ubuntu/.vnc/passwd
 
 - name: Deploy xstartup script for ubuntu user
-  copy:
+  ansible.builtin.copy:
     src: files/xstartup
     dest: /home/ubuntu/.vnc/xstartup
     owner: ubuntu
     group: ubuntu
-    mode: '0755'
-
-- name: Ensure .vnc directory ownership and permissions
-  file:
-    path: /home/ubuntu/.vnc
-    state: directory
-    owner: ubuntu
-    group: ubuntu
-    mode: '0700'
+    mode: "0755"
   become: true
 
-- name: Ensure VNC password file ownership and permissions (safe to run even if it doesn't exist)
-  file:
+- name: Ensure VNC password file ownership and permissions
+  ansible.builtin.file:
     path: /home/ubuntu/.vnc/passwd
     state: file
     owner: ubuntu
     group: ubuntu
-    mode: '0600'
-  become: true
-
-- name: Ensure xstartup file ownership and permissions
-  file:
-    path: /home/ubuntu/.vnc/xstartup
-    state: file
-    owner: ubuntu
-    group: ubuntu
-    mode: '0755'
+    mode: "0600"
   become: true
 
 - name: Deploy vnc-server service
@@ -108,14 +102,15 @@
     dest: /etc/systemd/system/vncserver@.service
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
 
 - name: Reload systemd to pick up new units
   ansible.builtin.systemd:
-    daemon_reload: yes
+    daemon_reload: true
+  become: true
 
 - name: Enable vncserver@ubuntu.service at boot
   ansible.builtin.systemd:
-    name: vncserver@ubuntu
-    enabled: yes
-
+    name: vncserver@ubuntu.service
+    enabled: true
+  become: true
