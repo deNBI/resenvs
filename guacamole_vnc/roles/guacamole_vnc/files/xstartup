@@ -1,0 +1,21 @@
+#!/bin/sh
+
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+
+export XKL_XMODMAP_DISABLE=1
+export XDG_CURRENT_DESKTOP=XFCE
+export XDG_SESSION_DESKTOP=xfce
+export XDG_SESSION_TYPE=x11
+
+# Source default TigerVNC startup
+if [ -d /etc/vnc/xstartup.d ]; then
+    for f in /etc/vnc/xstartup.d/?*.sh; do
+        [ -r "$f" ] && . "$f"
+    done
+    unset f
+fi
+
+[ -r "$HOME/.profile" ] && . "$HOME/.profile"
+
+exec dbus-launch --exit-with-session startxfce4
