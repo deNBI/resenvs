@@ -65,6 +65,8 @@
       {
         "mtu": {{ ansible_default_ipv4.mtu }}
       }
+
+- name: Restart Docker
   ansible.builtin.systemd:
     name: docker
     state: restarted
