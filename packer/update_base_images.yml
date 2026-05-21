@@ -154,7 +154,7 @@
           -var "os_version={{ os_version }}"
           -var "md5_hash={{ md5_hash.stdout }}"
           -var "github_hash={{ github_hash.stdout }}"
-          -var "network={{ vars[location + '_' + upload_environment] }}"
+          -var "network={{ lookup('vars', location + '_' + upload_environment) }}"
           -var "location={{ location }}"
           -var "source_image_name={{ latest_base_image_name }}"
           ../base/packer_base.json
