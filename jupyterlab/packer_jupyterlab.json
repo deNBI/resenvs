@@ -2,7 +2,8 @@
    "variables":{
       "network":"",
       "os_distro":"",
-      "os_version":""
+      "os_version":"",
+      "location":""
    },
    "builders":[
       {
@@ -49,7 +50,8 @@
          "extra_arguments":[
             "-vv",
             "--extra-vars",
-            "@../jupyterlab/packer_jupyterlab_extra_vars.json"
+            "@../jupyterlab/packer_jupyterlab_extra_vars.json",
+            "location={{user `location`}}"
          ]
       },
       {
