@@ -92,6 +92,7 @@
           -var "os_distro={{ os_distro }}"
           -var "os_version={{ os_version }}"
           -var "network={{ lookup('vars', location + '_' + upload_environment) }}"
+          -var "location={{ location }}"
           -var "md5_hash={{ md5_hash.stdout }}"
           -var "github_hash={{ github_hash.stdout }}"
           -var "github_token={{ lookup('env', 'GITHUB_REPO_TOKEN') }}"
