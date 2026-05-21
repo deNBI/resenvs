@@ -2,7 +2,8 @@
    "variables":{
       "network":"",
       "os_distro":"",
-      "os_version":""
+      "os_version":"",
+      "location":""
    },
    "builders":[
       {
@@ -31,7 +32,9 @@
       "playbook_file": "../base/base.yml",
       "use_proxy": false,
       "extra_arguments": [
-        "-vv"
+        "-vv",
+        "--extra-vars",
+        "location={{user `location`}}"
       ]
     },
     {
