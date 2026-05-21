@@ -2,7 +2,8 @@
   "variables": {
     "network": "",
     "os_distro": "",
-    "os_version": ""
+    "os_version": "",
+    "location": ""
   },
   "builders": [
     {
@@ -66,7 +67,7 @@
       "extra_arguments": [
         "-vv",
         "--extra-vars",
-        "resenv=theiaide github_token={{user `github_token`}}"
+        "resenv=theiaide github_token={{user `github_token`}} location={{user `location`}}"
       ]
     }
   ]
