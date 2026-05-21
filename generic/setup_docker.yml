@@ -65,7 +65,10 @@
       {
         "mtu": {{ ansible_default_ipv4.mtu }}
       }
-  notify: Restart Docker
+  ansible.builtin.systemd:
+    name: docker
+    state: restarted
+    daemon_reload: true
 
 - name: Ensure docker group exists
   ansible.builtin.group:
@@ -78,11 +81,3 @@
     name: ubuntu
     groups: docker
     append: true
-
----
-- name: Restart Docker
-  ansible.builtin.systemd:
-    name: docker
-    state: restarted
-    listen: "Restart Docker"
-    daemon_reload: true
