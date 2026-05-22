@@ -1,0 +1,23 @@
+---
+template_name: webservice
+is_maintained: true
+port: 3838
+needs_forc_support: true
+forc_versions:
+  - v01
+incompatible_versions: []
+direction: ingress
+protocol: tcp
+securitygroup_name: _webservice
+securitygroup_description: Webservice
+securitygroup_ssh: false
+create_only_backend: true
+allow_disable_auth: true
+title: Webservice
+description: "Default Webservice Backend (Webservice Application must be configured for Port: 3838)"
+logo_url: ""
+info_url: ""
+community_driven: false
+wiki_link: ""
+information_for_display:
+  version: ""

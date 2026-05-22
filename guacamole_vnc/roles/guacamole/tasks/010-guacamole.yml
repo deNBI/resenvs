@@ -1,0 +1,150 @@
+---
+- name: Add Jammy repository for ubuntu 24
+  ansible.builtin.apt_repository:
+    repo: "deb http://archive.ubuntu.com/ubuntu/ jammy main universe"
+    state: present
+- name: Install needed libraries and tools
+  ansible.builtin.apt:
+    update_cache: true
+    autoremove: true
+    autoclean: true
+    name:
+      - make
+      - gcc
+      - vim
+      - curl
+      - wget
+      - g++
+      - libcairo2-dev
+      - libjpeg-turbo8-dev
+      - libpng-dev
+      - libtool-bin
+      - libossp-uuid-dev
+      - libavcodec-dev
+      - libavutil-dev
+      - libswscale-dev
+      - build-essential
+      - libpango1.0-dev
+      - libssh2-1-dev
+      - libvncserver-dev
+      - libtelnet-dev
+      - freerdp2-dev
+      - libwebsockets-dev
+      - libssl-dev
+      - libvorbis-dev
+      - libwebp-dev
+      - tomcat9
+      - tomcat9-admin
+      - tomcat9-user
+    state: present
+
+- name: Download guacamole src
+  ansible.builtin.get_url:
+    url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/{{ guacamole_version }}/source/guacamole-server-{{ guacamole_version }}.tar.gz
+    dest: /usr/share/guacamole.tar.gz
+    mode: "0777"
+
+- name: Download guacamole war file
+  ansible.builtin.get_url:
+    url: http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/{{ guacamole_version }}/binary/guacamole-{{ guacamole_version }}.war
+    dest: /usr/share/guacamole.war
+    mode: "0777"
+
+- name: Prepare build directory
+  ansible.builtin.file:
+    state: directory
+    path: /usr/share/guacamole/
+    mode: "0777"
+
+- name: Unarchive source files
+  ansible.builtin.unarchive:
+    remote_src: true
+    src: /usr/share/guacamole.tar.gz
+    dest: /usr/share/guacamole
+    mode: "0777"
+
+- name: Configure systemd unit
+  ansible.builtin.command: ./configure --with-systemd-dir=/etc/systemd/system
+  become: true
+  args:
+    chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
+    creates: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/Makefile
+  environment:
+    LDFLAGS: "-lrt"
+
+- name: Ignore depcreated warnings Ubuntu 22
+  ansible.builtin.lineinfile:
+    path: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/src/common-ssh/Makefile
+    search_string: CFLAGS = -g -O2
+    line: CFLAGS = -g -O2 -Wno-error=deprecated-declarations
+    state: present
+    firstmatch: true
+
+- name: Compile guacamole
+  community.general.make:
+    chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
+
+- name: Make install
+  community.general.make:
+    chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
+    target: install
+
+- name: Link libraries
+  ansible.builtin.command: ldconfig
+  args:
+    chdir: /usr/share/guacamole/guacamole-server-{{ guacamole_version }}/
+  changed_when: false
+
+- name: Enable guacamole daemon
+  ansible.builtin.systemd:
+    name: guacd
+    enabled: true
+
+- name: Create guacamole config folder
+  ansible.builtin.file:
+    state: directory
+    path: /etc/guacamole
+    mode: "0777"
+
+- name: Create guacamole.properties
+  ansible.builtin.copy:
+    src: guacamole.properties
+    dest: /etc/guacamole/guacamole.properties
+    mode: "0777"
+  notify: Restart guacd
+
+- name: Generate guacamole mapping
+  ansible.builtin.template:
+    src: user-mapping.xml.j2
+    dest: /etc/guacamole/user-mapping.xml
+    mode: "0777"
+  notify: Restart guacd
+
+- name: Register path in env
+  ansible.builtin.lineinfile:
+    path: /etc/environment
+    line: GUACAMOLE_HOME="/etc/guacamole"
+    state: present
+
+- name: Stop Tomcat
+  ansible.builtin.systemd:
+    name: tomcat9
+    state: stopped
+
+- name: Copy tomcat guacamole client
+  ansible.builtin.copy:
+    remote_src: true
+    src: /usr/share/guacamole.war
+    dest: /var/lib/tomcat9/webapps/guacamole.war
+    mode: "0644"
+    owner: tomcat
+    group: tomcat
+  notify: Restart Tomcat
+
+- name: Link configuration directory to tomcat
+  ansible.builtin.file:
+    state: link
+    src: /etc/guacamole
+    dest: /usr/share/tomcat9/.guacamole
+    mode: "0777"
+  notify: Reload systemd
