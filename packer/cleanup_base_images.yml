@@ -32,23 +32,23 @@
 
     - name: Echo Ubuntu images length
       ansible.builtin.debug:
-        var: ubuntu_images | length
+        var: (ubuntu_images | from_json) | length
     - name: Echo Ubuntu images
       ansible.builtin.debug:
-        var: ubuntu_images
+        var: (ubuntu_images | from_json)
     - name: Print Ubuntu image names
       ansible.builtin.debug:
         var: item.Name
-      loop: "{{ ubuntu_images }}"
+      loop: "{{ ubuntu_images | from_json }}"
 
     - name: Clean up old Ubuntu {{ os_version }} images
       openstack.cloud.image:
         name: "{{ item.ID }}"
         state: absent
-      loop: "{{ ubuntu_images }}"
+      loop: "{{ ubuntu_images | from_json }}"
       loop_control:
         index_var: index
-      when: ubuntu_images | length > limit | int and index >= limit | int
+      when: (ubuntu_images | from_json | length) > limit | int and index >= limit | int
 
     - name: Retrieve list of all images base build
       ansible.builtin.shell: >
@@ -69,20 +69,20 @@
 
     - name: Echo Ubuntu images length
       ansible.builtin.debug:
-        var: ubuntu_build_images | length
+        var: (ubuntu_build_images | from_json) | length
     - name: Echo Ubuntu images
       ansible.builtin.debug:
-        var: ubuntu_build_images
+        var: (ubuntu_build_images | from_json)
     - name: Print Ubuntu image names
       ansible.builtin.debug:
         var: item.Name
-      loop: "{{ ubuntu_build_images }}"
+      loop: "{{ ubuntu_build_images | from_json }}"
 
     - name: Clean up old Ubuntu BULD{{ os_version }} images
       openstack.cloud.image:
         name: "{{ item.ID }}"
         state: absent
-      loop: "{{ ubuntu_build_images }}"
+      loop: "{{ ubuntu_build_images | from_json }}"
       loop_control:
         index_var: index
-      when: ubuntu_build_images | length > limit | int and index >= limit | int
+      when: (ubuntu_build_images | from_json | length) > limit | int and index >= limit | int
