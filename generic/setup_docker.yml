@@ -29,7 +29,6 @@
     name:
       - docker.io
       - python3-docker
-      - docker-compose
       - docker-compose-plugin
     state: present
   tags: install
@@ -44,7 +43,6 @@
     owner: root
     group: root
     mode: "0o644"
-  notify: Docker
 
 - name: Create docker group and change GID
   group:
