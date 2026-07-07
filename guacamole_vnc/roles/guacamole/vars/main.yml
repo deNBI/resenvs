@@ -1,0 +1,8 @@
+---
+# vars file for guacamolerdp-ansible
+default_user: ubuntu
+default_password: ubuntu
+
+guac_user: denbi
+guac_password: denbi
+guacamole_version: 1.6.0

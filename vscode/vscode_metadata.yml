@@ -11,6 +11,9 @@ protocol: tcp
 securitygroup_name: _vscode
 securitygroup_description: VsCode
 securitygroup_ssh: false
+create_only_backend: false
+allow_disable_auth: false
+
 title: Visual Studio Code
 description: Visual Studio Code with Common Workflow Language, Snakemake and Nextflow development tools preinstalled.
 community_driven: false
@@ -18,4 +21,4 @@ wiki_link: ""
 logo_url: "https://cloud.denbi.de/static/images/vscode.png"
 info_url: ""
 information_for_display:
-  version: v4.121.0
+  version: v4.127.0
