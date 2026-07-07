@@ -1,0 +1,25 @@
+---
+# handlers file for guacamole-vnc-ansible
+
+# No need for xrdp?
+# - name: Restart xrdp
+#  ansible.builtin.systemd:
+#    name: xrdp
+#    state: restarted
+#    enabled: true
+
+- name: Restart guacd
+  ansible.builtin.systemd:
+    name: guacd
+    state: restarted
+    enabled: true
+
+- name: Restart Tomcat
+  ansible.builtin.systemd:
+    name: tomcat9
+    state: restarted
+    enabled: true
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
