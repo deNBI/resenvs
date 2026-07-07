@@ -64,9 +64,6 @@
   ansible.builtin.apt:
     upgrade: dist
     lock_timeout: 300
-    dpkg_options:
-      - force-confdef
-      - force-confold
 
 - name: PRE_TASK Remove unused packages
   become: true
