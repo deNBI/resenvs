@@ -30,12 +30,6 @@
                       | selectattr('os_distro', '==', os_distro)
                       | selectattr('os_version', '==', os_version)
                       | sort(attribute='created_at') }}"
-
-
-    - name: Set latest base image name
-      ansible.builtin.set_fact:
-        latest_base_image_name: "{{ (base_images | last).name }}"
-      when: base_images | length > 0
       
     - name: Set Update Fact
       ansible.builtin.set_fact:
@@ -128,6 +122,11 @@
             | sort(attribute='created_at')
           }}
 
+    - name: Set latest base image name
+      ansible.builtin.set_fact:
+        latest_base_image_name: "{{ (base_images | last).name }}"
+        
+      when: base_images | length > 0
     - name: Extract GitHub Hash
       ansible.builtin.set_fact:
         github_hash_from_image: "{{ (base_images | last).github_hash | default((base_images | last).properties.github_hash | default('undefined')) | trim }}"
