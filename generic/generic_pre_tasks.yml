@@ -11,6 +11,19 @@
   delay: 10
   when: "'de.NBI_Bielefeld_environment.service' in ansible_facts.services"
 
+- name: PRE_TASK Configure apt non interactive mode
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/99noninteractive
+    content: |
+      Dpkg::Options {
+        "--force-confdef";
+        "--force-confold";
+      };
+      APT::Get::Assume-Yes "true";
+      APT::Get::AutomaticRemove "true";
+    mode: "0644"
+
 - name: PRE_TASK Disable unattended upgrades
   become: true
   ansible.builtin.lineinfile:
@@ -60,39 +73,53 @@
   become: true
   ansible.builtin.command:
     cmd: dpkg --configure -a
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
 - name: PRE_TASK Update apt cache
   become: true
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
 - name: PRE_TASK Upgrade packages
   become: true
   ansible.builtin.apt:
     upgrade: dist
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
 - name: PRE_TASK Remove unused packages
   become: true
   ansible.builtin.apt:
     autoremove: true
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
 - name: PRE_TASK Clean apt cache
   become: true
   ansible.builtin.apt:
     autoclean: true
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
 - name: Install Python pip
   become: true
   ansible.builtin.apt:
     name: python3-pip
     state: present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
 - name: Install monitoring denbi telegraf
   become: true
   ansible.builtin.apt:
     name: denbi-monitoring-conf
     state: latest
+  environment:
+    DEBIAN_FRONTEND: noninteractive
   when:
     - location is defined
     - location == "bielefeld"
