@@ -28,48 +28,54 @@
   loop:
     - unattended-upgrades.service
     - apt-daily.service
-    - apt-daily.timer
     - apt-daily-upgrade.service
+    - apt-daily.timer
     - apt-daily-upgrade.timer
   failed_when: false
 
-- name: PRE_TASK Wait for apt and dpkg processes
+- name: PRE_TASK Mask apt background timers
+  become: true
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    masked: true
+  loop:
+    - apt-daily.timer
+    - apt-daily-upgrade.timer
+  failed_when: false
+
+- name: PRE_TASK Wait for apt and dpkg locks
   become: true
   ansible.builtin.shell: |
-    while pgrep -x apt >/dev/null \
-       || pgrep -x apt-get >/dev/null \
-       || pgrep -x dpkg >/dev/null \
-       || pgrep -x unattended-upgr >/dev/null; do
+    while \
+      fuser /var/lib/dpkg/lock >/dev/null 2>&1 || \
+      fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1 || \
+      fuser /var/lib/apt/lists/lock >/dev/null 2>&1 || \
+      fuser /var/cache/apt/archives/lock >/dev/null 2>&1
+    do
       sleep 5
     done
   changed_when: false
-  retries: 60
-  delay: 5
 
 - name: PRE_TASK Configure pending dpkg packages
   become: true
   ansible.builtin.command:
     cmd: dpkg --configure -a
-  changed_when: false
 
 - name: PRE_TASK Update apt cache
   become: true
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
-    lock_timeout: 300
 
 - name: PRE_TASK Upgrade packages
   become: true
   ansible.builtin.apt:
     upgrade: dist
-    lock_timeout: 300
 
 - name: PRE_TASK Remove unused packages
   become: true
   ansible.builtin.apt:
     autoremove: true
-    lock_timeout: 300
 
 - name: PRE_TASK Clean apt cache
   become: true
