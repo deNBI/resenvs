@@ -2,66 +2,130 @@
 - name: Populate service facts
   ansible.builtin.service_facts:
 
-- name: Wait till Apt_Mirror de.NBI Bielefeld Service is done
-  ansible.builtin.service_facts:
-  until: ansible_facts.services['de.NBI_Bielefeld_environment.service'].state == 'stopped'
+- name: Wait until Apt_Mirror de.NBI Bielefeld Service is done
+  ansible.builtin.systemd:
+    name: de.NBI_Bielefeld_environment.service
+  register: denbi_environment_service
+  until: denbi_environment_service.status.ActiveState == "inactive"
   retries: 35
   delay: 10
-  when: ansible_facts.services['de.NBI_Bielefeld_environment.service'] is defined
+  when: "'de.NBI_Bielefeld_environment.service' in ansible_facts.services"
+
+- name: PRE_TASK Configure apt non interactive mode
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/99noninteractive
+    content: |
+      Dpkg::Options {
+        "--force-confdef";
+        "--force-confold";
+      };
+      APT::Get::Assume-Yes "true";
+      APT::Get::AutomaticRemove "true";
+    mode: "0644"
 
 - name: PRE_TASK Disable unattended upgrades
+  become: true
   ansible.builtin.lineinfile:
     path: /etc/apt/apt.conf.d/10periodic
-    regexp: ^APT::Periodic::Unattended-Upgrade
-    line: APT::Periodic::Unattended-Upgrade "0";
+    regexp: '^APT::Periodic::Unattended-Upgrade'
+    line: 'APT::Periodic::Unattended-Upgrade "0";'
     create: true
 
-- name: PRE_TASK Stop apt-daily services and timers
+- name: PRE_TASK Stop apt background services
+  become: true
   ansible.builtin.systemd:
     name: "{{ item }}"
     state: stopped
-    enabled: no
+    enabled: false
   loop:
-    - unattended-upgrades
-    - apt-daily
+    - unattended-upgrades.service
+    - apt-daily.service
+    - apt-daily-upgrade.service
     - apt-daily.timer
-    - apt-daily-upgrade
     - apt-daily-upgrade.timer
+  failed_when: false
 
-- name: PRE_TASK Wait for any running apt/dpkg processes to finish
+- name: PRE_TASK Mask apt background timers
+  become: true
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    masked: true
+  loop:
+    - apt-daily.timer
+    - apt-daily-upgrade.timer
+  failed_when: false
+
+- name: PRE_TASK Wait for apt and dpkg locks
+  become: true
   ansible.builtin.shell: |
-    while pgrep -x apt >/dev/null || pgrep -x apt-get >/dev/null; do
-      sleep 1
+    while \
+      fuser /var/lib/dpkg/lock >/dev/null 2>&1 || \
+      fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1 || \
+      fuser /var/lib/apt/lists/lock >/dev/null 2>&1 || \
+      fuser /var/cache/apt/archives/lock >/dev/null 2>&1
+    do
+      sleep 5
     done
-  retries: 20
-  delay: 3
-  register: apt_wait
-  until: apt_wait.rc == 0
   changed_when: false
 
-- name: PRE_TASK Update apt cache and upgrade packages
+- name: PRE_TASK Configure pending dpkg packages
+  become: true
+  ansible.builtin.command:
+    cmd: dpkg --configure -a
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: PRE_TASK Update apt cache
   become: true
   ansible.builtin.apt:
-    upgrade: true
     update_cache: true
-    autoremove: true
-    autoclean: true
+    cache_valid_time: 3600
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
-- name: Pip
+- name: PRE_TASK Upgrade packages
+  become: true
+  ansible.builtin.apt:
+    upgrade: dist
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: PRE_TASK Remove unused packages
+  become: true
+  ansible.builtin.apt:
+    autoremove: true
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: PRE_TASK Clean apt cache
+  become: true
+  ansible.builtin.apt:
+    autoclean: true
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Install Python pip
+  become: true
   ansible.builtin.apt:
     name: python3-pip
-    state: latest
+    state: present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
 - name: Install monitoring denbi telegraf
+  become: true
   ansible.builtin.apt:
     name: denbi-monitoring-conf
     state: latest
+  environment:
+    DEBIAN_FRONTEND: noninteractive
   when:
     - location is defined
-    - location == 'bielefeld'
-    
+    - location == "bielefeld"
+
 - name: Setup Docker
   ansible.builtin.import_tasks: ../generic/setup_docker.yml
 
-- name: PRE_TASK Install Metadata-Service
+- name: Install Metadata-Service
   ansible.builtin.import_tasks: ../generic/install_metadata_service.yml
