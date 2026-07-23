@@ -1,5 +1,5 @@
 ---
-guacamole_vars:
+guacamole_vnc_vars:
   template_version:
   create_only_backend: false
   default_user: ubuntu
