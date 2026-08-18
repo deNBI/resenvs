@@ -10,12 +10,14 @@ WorkingDirectory=/home/%i
 Environment=HOME=/home/%i
 Environment=USER=%i
 PIDFile=/home/%i/.vnc/%H:1.pid
-ExecStartPre=-/usr/bin/vncserver -kill :1 > /dev/null 2>&1
+ExecStartPre=-/usr/bin/vncserver -kill :1
 ExecStartPre=-/bin/rm -f /tmp/.X1-lock /tmp/.X11-unix/X1
-ExecStart=/usr/bin/vncserver :1 -geometry 1440x900 -alwaysshared -localhost yes
+ExecStart=/usr/bin/vncserver :1 -geometry {{ vnc_geometry }} -depth {{ vnc_color_depth }} -alwaysshared -localhost yes -AcceptSetDesktopSize=1
 ExecStop=/usr/bin/vncserver -kill :1
 Restart=on-failure
-RestartSec=5
+RestartSec=30
+StartLimitIntervalSec=300
+StartLimitBurst=3
 
 [Install]
 WantedBy=multi-user.target

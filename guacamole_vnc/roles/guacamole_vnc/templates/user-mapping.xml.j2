@@ -1,15 +1,15 @@
 <user-mapping>
 
-<authorize username="denbi" password="denbi">
+<authorize username="{{ guac_user }}" password="{{ guac_password }}">
     <connection name="TigerVNC :1">
         <protocol>vnc</protocol>
         <param name="hostname">127.0.0.1</param>
         <param name="port">5901</param>
-        <param name="username">ubuntu</param>
-        <param name="password">ubuntu</param>
+        <param name="username">{{ default_user }}</param>
+        <param name="password">{{ default_password }}</param>
+        <param name="color-depth">{{ vnc_color_depth }}</param>
+        <param name="resize-method">{{ vnc_resize_method }}</param>
     </connection>
 </authorize>
-
-
 
 </user-mapping>

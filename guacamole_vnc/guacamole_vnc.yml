@@ -7,7 +7,6 @@
         autoremove: true
         autoclean: true
 
-
 - name: Pip
   ansible.builtin.apt:
         name: python3-pip
@@ -30,7 +29,6 @@
         update_password: always
         password_lock: false
 
-
 - name: Restart guacd
   ansible.builtin.systemd:
         name: guacd
@@ -42,12 +40,6 @@
         name: tomcat9
         enabled: true
         state: restarted
-
-#- name: Restart VNCTiger Server
- # ansible.builtin.systemd:
-  #  name: vncserver@ubuntu
-   # enabled: true
-   # state: restarted
 
 - name: Reload systemd
   ansible.builtin.systemd:
