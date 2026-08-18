@@ -56,8 +56,11 @@
       - x11-xserver-utils
     state: present
 
-- name: Config xrdp to start xfce4
-  ansible.builtin.lineinfile:
-    path: /etc/xrdp/xrdp.ini
-    line: exec startxfce4
+- name: Deploy xrdp startwm.sh for XFCE
+  ansible.builtin.copy:
+    src: startwm.sh
+    dest: /etc/xrdp/startwm.sh
+    owner: root
+    group: root
+    mode: "0755"
   notify: Restart xrdp
