@@ -88,6 +88,7 @@
                                -var 'os_distro={{ os_distro }}' -var 'github_hash={{ github_hash.stdout }}'
                                -var 'md5_hash={{ md5_hash.stdout }}' -var 'os_version={{ os_version }}'
                                -var 'network={{ vars[location + '_' + upload_environment] }}'
+                               -var 'location={{ location }}'
                                 ../{{ resenv }}/packer_cluster_{{ vars[resenv + '_tag'] }}.json
       when: update
       changed_when: false

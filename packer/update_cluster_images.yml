@@ -64,6 +64,7 @@
       ansible.builtin.command: packer build -var-file=tags.json -var 'os_distro={{ os_distro }}'
                                -var 'github_hash={{ github_hash.stdout }}' -var 'os_version={{ os_version }}'
                                -var 'network={{ vars[location + '_' + upload_environment] }}'
+                               -var 'location={{ location }}'
                                ../cluster/packer_{{ cluster_type }}.json
       when: update
       changed_when: false

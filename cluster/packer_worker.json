@@ -2,7 +2,8 @@
   "variables": {
     "network": "",
     "os_distro": "",
-    "os_version": ""
+    "os_version": "",
+    "location": ""
   },
   "builders": [
     {

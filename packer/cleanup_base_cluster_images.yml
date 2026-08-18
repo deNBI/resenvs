@@ -1,12 +1,13 @@
 ---
 - name: Clean up base cluster images
   hosts: localhost
+  vars_files:
+    - tags.json
   vars:
+    keep: 1
     limit: 1
     os_distro: ubuntu
     os_version: 20.04
-  vars_files:
-    - tags.json
 
   tasks:
     - ansible.builtin.set_fact:
@@ -30,7 +31,7 @@
 
     - name: Set master image fact
       ansible.builtin.set_fact:
-        ubuntu_master_images: "{{ ubuntu_master_images_command.stdout }}"
+        ubuntu_master_images: "{{ ubuntu_master_images_command.stdout | from_json }}"
 
     - name: Echo Ubuntu images length
       ansible.builtin.debug:
@@ -66,7 +67,7 @@
 
     - name: Set worker image fact
       ansible.builtin.set_fact:
-        ubuntu_worker_images: "{{ ubuntu_worker_images_command.stdout }}"
+        ubuntu_worker_images: "{{ ubuntu_worker_images_command.stdout | from_json }}"
 
     - name: Echo Ubuntu images length
       ansible.builtin.debug:

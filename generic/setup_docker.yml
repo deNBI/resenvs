@@ -1,24 +1,9 @@
 ---
-- name: Update and upgrade all packages to the latest version
+- name: Update and upgrade all packages
   ansible.builtin.apt:
     update_cache: true
     upgrade: dist
     cache_valid_time: 3600
-
-- name: Install required packages
-  ansible.builtin.apt:
-    pkg:
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - gnupg
-      - software-properties-common
-
-- name: Create directory for Docker's GPG key
-  ansible.builtin.file:
-    path: /etc/apt/keyrings
-    state: directory
-    mode: "0755"
 
 - name: Add Docker's official GPG key
   ansible.builtin.apt_key:
@@ -26,9 +11,6 @@
     keyring: /etc/apt/keyrings/docker.gpg
     state: present
 
-- name: Print architecture variables
-  ansible.builtin.debug:
-    msg: "Architecture: {{ ansible_architecture }}, Codename: {{ ansible_lsb.codename }}"
 
 - name: Add Docker repository
   ansible.builtin.apt_repository:
@@ -42,36 +24,25 @@
     arch_mapping:
       x86_64: amd64
 
-- name: Install Docker and related packages
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    state: present
-    update_cache: true
-  with_items:
-    - docker-buildx-plugin
-    - docker-compose-plugin
-
 - name: Install Docker
   apt:
-    name: docker.io
+    name:
+      - docker.io
+      - python3-docker
+      - docker-compose-plugin
     state: present
   tags: install
 
 - name: Configure Docker
   copy:
     content: |-
-             {
-                "mtu":{{ ansible_default_ipv4.mtu }}
-             }
+      {
+         "mtu":{{ ansible_default_ipv4.mtu }}
+      }
     dest: /etc/docker/daemon.json
     owner: root
     group: root
     mode: "0o644"
-
-- name: Restart Docker Service
-  systemd:
-    name: docker
-    state: restarted
 
 - name: Create docker group and change GID
   group:
@@ -84,8 +55,20 @@
     name: ubuntu
     append: true
     groups: docker
-
-- name: (Re-)start docker socket
-  systemd:
-    name: docker.socket
+- name: Restart Docker
+  ansible.builtin.systemd:
+    name: docker
     state: restarted
+    daemon_reload: true
+
+- name: Ensure docker group exists
+  ansible.builtin.group:
+    name: docker
+    gid: 1234
+    state: present
+
+- name: Add ubuntu user to docker group
+  ansible.builtin.user:
+    name: ubuntu
+    groups: docker
+    append: true

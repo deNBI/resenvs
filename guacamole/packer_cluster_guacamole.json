@@ -2,7 +2,8 @@
   "variables": {
     "network": "",
     "os_distro": "",
-    "os_version": ""
+    "os_version": "",
+    "location": ""
   },
   "builders": [
     {
@@ -65,7 +66,7 @@
       "extra_arguments": [
         "-vv",
         "--extra-vars",
-        "resenv=guacamole"
+        "resenv=guacamole location={{user `location`}}"
       ]
     }
   ]

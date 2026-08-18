@@ -71,15 +71,13 @@
   become: true
 
 - name: Set VNC password
-  ansible.builtin.shell: "echo 'ubuntu' | vncpasswd -f > /home/ubuntu/.vnc/passwd"
-  become: true
-  become_user: ubuntu
+  ansible.builtin.shell: "set -o pipefail && echo 'ubuntu' | vncpasswd -f > /home/ubuntu/.vnc/passwd"
   args:
     creates: /home/ubuntu/.vnc/passwd
+  changed_when: false
 
-- name: Deploy xstartup script for ubuntu user
+- name: Place xstartup file for ubuntu user
   ansible.builtin.copy:
-    src: files/xstartup
     dest: /home/ubuntu/.vnc/xstartup
     owner: ubuntu
     group: ubuntu
