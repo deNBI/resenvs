@@ -148,3 +148,27 @@
     dest: /usr/share/tomcat9/.guacamole
     mode: "0777"
   notify: Reload systemd
+
+- name: Create systemd override directories
+  ansible.builtin.file:
+    path: "/etc/systemd/system/{{ item }}.service.d"
+    state: directory
+    mode: "0755"
+  loop:
+    - guacd
+    - tomcat9
+    - xrdp
+
+- name: Create systemd overrides for restart policy
+  ansible.builtin.copy:
+    dest: "/etc/systemd/system/{{ item }}.service.d/override.conf"
+    content: |
+      [Service]
+      Restart=always
+      RestartSec=10s
+    mode: "0644"
+  loop:
+    - guacd
+    - tomcat9
+    - xrdp
+  notify: Reload systemd
