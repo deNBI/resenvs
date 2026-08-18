@@ -151,17 +151,18 @@
 
 - name: Create systemd override directories
   ansible.builtin.file:
-    path: "/etc/systemd/system/{{ item }}.service.d"
+    path: "/etc/systemd/system/{{ service_name }}.service.d"
     state: directory
     mode: "0755"
   loop:
     - guacd
     - tomcat9
     - xrdp
-
+  loop_control:
+    loop_var: service_name
 - name: Create systemd overrides for restart policy
   ansible.builtin.copy:
-    dest: "/etc/systemd/system/{{ item }}.service.d/override.conf"
+    dest: "/etc/systemd/system/{{ service_name }}.service.d/override.conf"
     content: |
       [Service]
       Restart=always
@@ -171,4 +172,6 @@
     - guacd
     - tomcat9
     - xrdp
+  loop_control:
+    loop_var: service_name   
   notify: Reload systemd
