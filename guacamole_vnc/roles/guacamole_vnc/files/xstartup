@@ -2,11 +2,13 @@
 
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
+unset XDG_RUNTIME_DIR
 
 export XKL_XMODMAP_DISABLE=1
 export XDG_CURRENT_DESKTOP=XFCE
 export XDG_SESSION_DESKTOP=xfce
 export XDG_SESSION_TYPE=x11
+export XDG_DATA_DIRS=/usr/share/xfce4:/usr/local/share:/usr/share
 
 # Source default TigerVNC startup
 if [ -d /etc/vnc/xstartup.d ]; then
@@ -18,4 +20,8 @@ fi
 
 [ -r "$HOME/.profile" ] && . "$HOME/.profile"
 
-exec dbus-launch --exit-with-session startxfce4
+# Prevent session disconnects by disabling screen locker and power manager
+/usr/bin/light-locker --quit 2>/dev/null
+/usr/bin/xfce4-power-manager --quit 2>/dev/null
+
+exec dbus-run-session startxfce4
