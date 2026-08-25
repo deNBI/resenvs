@@ -79,6 +79,7 @@
 
 - name: Place xstartup file for ubuntu user
   ansible.builtin.copy:
+    src: xstartup
     dest: /home/ubuntu/.vnc/xstartup
     owner: ubuntu
     group: ubuntu
