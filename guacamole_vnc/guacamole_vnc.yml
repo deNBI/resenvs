@@ -44,3 +44,27 @@
 - name: Reload systemd
   ansible.builtin.systemd:
         daemon_reload: true
+
+- name: Ensure PAM systemd links for cgroups are present
+  ansible.builtin.apt:
+    name:
+      - libpam-systemd
+      - dbus
+    state: present
+    update_cache: true
+
+- name: Reset Snap seed state before image finalization
+  block:
+    - name: Stop snapd services
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: stopped
+      loop:
+        - snapd.service
+        - snapd.socket
+
+    - name: Remove build-time cgroup remnants and state
+      ansible.builtin.file:
+        path: /var/lib/snapd/state.json
+        state: absent
+
