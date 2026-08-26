@@ -47,7 +47,7 @@
          "extra_arguments":[
             "-vv",
             "--extra-vars",
-            "resenv=guacamole"
+            "resenv=guacamole_vnc"
          ]
       },
       {

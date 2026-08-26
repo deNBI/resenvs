@@ -1,0 +1,16 @@
+---
+# vars file for guacamolerdp-ansible
+default_user: ubuntu
+default_password: ubuntu
+
+guac_user: denbi
+guac_password: denbi
+guacamole_version: 1.6.0
+
+# VNC session defaults.
+# vnc_geometry is only the *initial* size; with resize-method=display-update
+# the Guacamole client asks Xvnc to resize on-the-fly to match the browser
+# window (Xvnc allows this by default via AcceptSetDesktopSize).
+vnc_geometry: "1920x1080"
+vnc_color_depth: 24
+vnc_resize_method: "display-update"
