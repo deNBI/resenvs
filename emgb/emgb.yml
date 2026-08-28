@@ -1,10 +1,12 @@
 ---
 
-- name: Ensure python-is-python3 is installed
+- name: Ensure /usr/bin/python is a symlink to /usr/bin/python3
   become: true
-  package:
-    name: python-is-python3
-    state: present
+  ansible.builtin.file:
+    src: /usr/bin/python3
+    dest: /usr/bin/python
+    state: link
+    force: yes
 
 
 - name: Install yq
