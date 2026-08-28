@@ -51,6 +51,7 @@
             "-vv",
             "--extra-vars",
             "@../jupyterlab/packer_jupyterlab_extra_vars.json",
+            "-e",
             "location={{user `location`}}"
          ]
       },

@@ -109,7 +109,7 @@
 
     - name: Set image fact
       ansible.builtin.set_fact:
-        resenv_worker_images: "{{ resenv_worker_images_command.stdout }}"
+        resenv_worker_images: "{{ resenv_worker_images_command.stdout | from_json }}"
 
     - name: Echo Ubuntu images length
       ansible.builtin.debug:
