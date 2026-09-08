@@ -112,12 +112,6 @@
         "pin"
       ],
       "enabled": false
-    },
-    {
-      "matchLabels": [
-        "security"
-      ],
-      "minimumReleaseAge": null
     }
   ],
   "vulnerabilityAlerts": {
