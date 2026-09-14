@@ -113,8 +113,8 @@
 
           # Hardening
           NoNewPrivileges=false
-          ProtectSystem=full
-          ProtectHome=falsee
+          ProtectSystem=false
+          ProtectHome=false
           PrivateTmp=true
 
           [Install]
