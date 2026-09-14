@@ -1,5 +1,6 @@
 ---
 template_name: guacamole
+disabled: true
 is_maintained: true
 port: 8080
 needs_forc_support: true
