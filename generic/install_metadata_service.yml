@@ -1,13 +1,20 @@
 ---
+- name: Check if apt.bi.denbi.de repository is already configured
+  ansible.builtin.shell: grep -rq "apt.bi.denbi.de" /etc/apt/sources.list.d/
+  register: repo_exists
+  failed_when: false
+  changed_when: false
+
 - name: Add apt.bi.denbi.de repository key
   ansible.builtin.apt_key:
     url: https://apt.bi.denbi.de/repo_key.key
     state: present
-
+  when: repo_exists.rc != 0
 
 - name: Add apt.bi.denbi.de repository
   ansible.builtin.apt_repository:
     repo: deb https://apt.bi.denbi.de/repos/apt/{{ ansible_distribution_release | lower }} {{ ansible_distribution_release | lower }} main
+  when: repo_exists.rc != 0
 
 
 - name: Update and upgrade all packages to the latest version
