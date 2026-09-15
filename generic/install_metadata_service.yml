@@ -1,20 +1,36 @@
 ---
-- name: Check if apt.bi.denbi.de repository is already configured
-  ansible.builtin.shell: grep -rq "apt.bi.denbi.de" /etc/apt/sources.list.d/
-  register: repo_exists
-  failed_when: false
-  changed_when: false
+- name: Check if bidenbide.sources already exists
+  ansible.builtin.stat:
+    path: /etc/apt/sources.list.d/bidenbide.sources
+  register: bidenbide_sources
 
-- name: Add apt.bi.denbi.de repository key
-  ansible.builtin.apt_key:
+- name: Create keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  when: not bidenbide_sources.stat.exists
+
+- name: Download apt.bi.denbi.de repository key
+  ansible.builtin.get_url:
     url: https://apt.bi.denbi.de/repo_key.key
-    state: present
-  when: repo_exists.rc != 0
+    dest: /etc/apt/keyrings/bidenbide.asc
+    mode: '0644'
+  when: not bidenbide_sources.stat.exists
 
-- name: Add apt.bi.denbi.de repository
-  ansible.builtin.apt_repository:
-    repo: deb https://apt.bi.denbi.de/repos/apt/{{ ansible_distribution_release | lower }} {{ ansible_distribution_release | lower }} main
-  when: repo_exists.rc != 0
+- name: Add apt.bi.denbi.de repository in DEB822 format
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/bidenbide.sources
+    content: |
+      Architectures: amd64
+      Components: main
+      X-Repolib-Name: bidenbide
+      Signed-By: /etc/apt/keyrings/bidenbide.asc
+      Suites: {{ ansible_distribution_release | lower }}
+      Types: deb
+      URIs: https://apt.bi.denbi.de/repos/apt/{{ ansible_distribution_release | lower }}
+    mode: '0644'
+  when: not bidenbide_sources.stat.exists
 
 
 - name: Update and upgrade all packages to the latest version
