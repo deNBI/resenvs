@@ -96,6 +96,11 @@
     state: present
   when: mode == "openstack"
 
+- name: Remove legacy apt.bi.denbi.de list file
+  ansible.builtin.file:
+    path: "/etc/apt/sources.list.d/apt_bi_denbi_de_repos_apt_{{ ansible_distribution_release | lower }}.list"
+    state: absent
+
 - name: Check if bidenbide.sources already exists
   ansible.builtin.stat:
     path: /etc/apt/sources.list.d/bidenbide.sources
