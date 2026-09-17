@@ -89,7 +89,8 @@
         export GITHUB_TOKEN="{{ github_token }}"
         yarn
         yarn build
-        yarn download:plugins
+        yarn download:plugins --ignore-errors
+
       args:
         chdir: "{{ theiaide_vars.THEIA_INSTALL_DIR  }}"
         executable: /bin/bash
