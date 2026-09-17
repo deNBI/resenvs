@@ -44,27 +44,25 @@
     - name: Set fact 'theia_ide_workspace' to '${HOME}'
       ansible.builtin.set_fact:
         theia_ide_workspace: "/home/{{ theiaide_vars.THEIA_USER }}"
-
-
-    - name: Install Node.js 22 on Debian/Ubuntu
+        
+    - name: Install Node.js 24 on Debian/Ubuntu
       ansible.builtin.shell: |
-        curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+        curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
         apt-get install -y nodejs
         npm install -g yarn
       args:
         executable: /bin/bash
       when: ansible_distribution_file_variety == 'Debian'
-
-    - name: Install Node.js 22 on RedHat/CentOS
+    
+    - name: Install Node.js 24 on RedHat/CentOS
       ansible.builtin.shell: |
-        curl -fsSL https://rpm.nodesource.com/setup_22.x | bash -
+        curl -fsSL https://rpm.nodesource.com/setup_24.x | bash -
         yum install -y nodejs
         npm install -g yarn
       args:
         executable: /bin/bash
       when: ansible_distribution_file_variety == 'RedHat'
-
-
+      
     - name: Create directories
       ansible.builtin.file:
         path: "{{ item }}"
