@@ -18,6 +18,7 @@
           - libnss3-dev
           - libasound2-dev
           - libxss1
+          - unzip
         state: present
         update_cache: yes
       when: ansible_distribution_file_variety == 'Debian'
