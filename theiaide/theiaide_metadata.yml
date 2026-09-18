@@ -24,4 +24,4 @@ min_ram: 4
 community_driven: false
 wiki_link: "https://cloud.denbi.de/wiki/simple_vm/customization/#theiaide"
 information_for_display:
-  version: "v1.67.100"
+  version: "v1.75.0"
