@@ -73,12 +73,12 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/theia/theiaide_vars_file\\.yml/",
-        "/theia/theiaide_metadata\\.yml/"
+        "theiaide/theiaide_vars_file\\.yml",
+        "theiaide/theiaide_metadata\\.yml"
       ],
       "matchStrings": [
-        "THEIA_VERSION: \\s*(v)?(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "version: \\s*(v)?(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)"
+        "THEIA_VERSION:\\s*\"?(?<currentValue>v?[0-9]+\\.[0-9]+\\.[0-9]+)\"?",
+        "version:\\s*\"?(?<currentValue>v?[0-9]+\\.[0-9]+\\.[0-9]+)\"?"
       ],
       "depNameTemplate": "eclipse-theia/theia-ide",
       "datasourceTemplate": "github-tags"
