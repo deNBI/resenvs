@@ -10,7 +10,6 @@ Group=%i
 WorkingDirectory=/home/%i
 Environment=HOME=/home/%i
 Environment=USER=%i
-PIDFile=/home/%i/.vnc/%H:1.pid
 TimeoutStartSec=60s
 ExecStartPre=-/usr/bin/vncserver -kill :1
 ExecStartPre=-/bin/rm -f /tmp/.X1-lock /tmp/.X11-unix/X1
