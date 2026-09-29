@@ -1,6 +1,6 @@
 [Unit]
 Description=Start TigerVNC server at startup for user %i (display :1)
-After=syslog.target network.target
+After=syslog.target network.target 
 StartLimitIntervalSec=0
 
 [Service]
@@ -10,8 +10,7 @@ Group=%i
 WorkingDirectory=/home/%i
 Environment=HOME=/home/%i
 Environment=USER=%i
-PIDFile=/home/%i/.vnc/%H:1.pid
-TimeoutStartSec=0
+TimeoutStartSec=60s
 ExecStartPre=-/usr/bin/vncserver -kill :1
 ExecStartPre=-/bin/rm -f /tmp/.X1-lock /tmp/.X11-unix/X1
 ExecStart=/usr/bin/vncserver :1 -geometry {{ vnc_geometry }} -depth {{ vnc_color_depth }} -alwaysshared -localhost yes -AcceptSetDesktopSize=1
