@@ -50,10 +50,16 @@
 
 
     - name: Download new base image
-      ansible.builtin.command: "mc cp '{{ s3_path }}' ."
-      register: download_result
+      become: true
+      become_user: ubuntu
+      ansible.builtin.shell: |
+        source /home/ubuntu/.s3_env
+        s5cmd --endpoint-url "$AWS_ENDPOINT_URL" \
+          cp "s3://cloud-images/{{ s3_path }}" .
+      args:
+        chdir: /tmp
       when: update
-      changed_when: false
+      changed_when: true
 
     - ansible.builtin.set_fact:
         downloaded_filename: "{{ download_result.stdout_lines[0] | regex_replace('^`([^`]+)` -> `(.+)`$', '\\2') }}"
