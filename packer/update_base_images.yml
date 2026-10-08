@@ -39,7 +39,7 @@
 
     - name: Set Date Fact
       ansible.builtin.set_fact:
-        date_time: "{{ (date | to_datetime('%Y/%m/%dZ')).date() }}"
+        date_time: "{{ (date | to_datetime('%Y/%m/%d %H:%M:%SZ')).date() }}"
       when: update
 
     - name: Echo Timestamp
