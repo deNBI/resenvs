@@ -47,24 +47,24 @@
       changed_when: false
       when: update
 
-
     - name: Download new base image
-      become: true
-      become_user: ubuntu
       ansible.builtin.shell: |
         source /home/ubuntu/.s3_env
         s5cmd --endpoint-url "$AWS_ENDPOINT_URL" \
           cp "s3://cloud-images/{{ s3_path }}" .
       args:
         chdir: /tmp
+        executable: /bin/bash
+      register: download_result
       when: update
       changed_when: true
-
-    - ansible.builtin.set_fact:
-        downloaded_filename: "{{ download_result.stdout_lines[0] | regex_replace('^`([^`]+)` -> `(.+)`$', '\\2') }}"
-      when: update and download_result.stdout_lines | length > 0
-
-    - name: Upload image to Openstack
+    
+    - name: Set downloaded filename
+      ansible.builtin.set_fact:
+        downloaded_filename: "/tmp/{{ s3_path | basename }}"
+      when: update
+    
+    - name: Upload image to OpenStack
       openstack.cloud.image:
         name: "{{ name }} de.NBI BUILD ({{ date_time }})"
         state: present
@@ -76,9 +76,9 @@
         properties:
           os_distro: "{{ os_distro }}"
           os_version: "{{ os_version }}"
-          description: Ubuntu is a free and open source operating system and Linux distribution based on Debian.
+          description: Ubuntu is a free and open source operating system and Linux distribution.
           image_type: image
-      when: update and download_result is defined
+      when: update
 
 
     - name: Delete local uploaded file
