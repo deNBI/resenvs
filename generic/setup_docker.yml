@@ -37,7 +37,7 @@
   copy:
     content: |-
       {
-         "mtu":{{ ansible_default_ipv4.mtu }}
+         "mtu": 1440
       }
     dest: /etc/docker/daemon.json
     owner: root
