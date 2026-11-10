@@ -1,0 +1,15 @@
+---
+pulsar_vars:
+  template_version:
+  create_only_backend: false
+  default_user: ubuntu
+
+  # Application source (pulsar-fastapi-resenv repository).
+  app_repo: https://github.com/SimpleVM/pulsar-fastapi-resenv.git
+  app_version: main
+  app_dir: /opt/pulsar-fastapi-resenv
+
+  # Service configuration.
+  service_user: pulsar-resenv
+  service_host: 127.0.0.1
+  service_port: 8080
