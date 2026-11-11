@@ -73,10 +73,15 @@
     virtualenv: "{{ pulsar_vars.app_dir }}/.venv"
     extra_args: --no-cache-dir
 
+# NOTE: this playbook is imported as a task file by the SimpleVM client and run
+# from a flat temp directory. The client copies the whole resenvs tree (including
+# this pulsar/ folder) into that same directory, so external files are addressed
+# with an absolute {{ playbook_dir }} path rather than a relative src.
+
 - name: Ship a placeholder state.json (for testing; real creds are per-user)
   become: true
   ansible.builtin.copy:
-    src: ../pulsar/state.json.placeholder
+    src: "{{ playbook_dir }}/pulsar/state.json.placeholder"
     dest: "{{ pulsar_vars.app_dir }}/app/state.json"
     owner: root
     group: "{{ pulsar_vars.service_user }}"
@@ -85,7 +90,7 @@
 - name: Install the systemd unit
   become: true
   ansible.builtin.template:
-    src: ../pulsar/pulsar-resenv.service.j2
+    src: "{{ playbook_dir }}/pulsar/pulsar-resenv.service.j2"
     dest: /etc/systemd/system/pulsar-resenv.service
     owner: root
     group: root

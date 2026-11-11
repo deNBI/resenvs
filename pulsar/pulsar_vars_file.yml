@@ -11,5 +11,7 @@ pulsar_vars:
 
   # Service configuration.
   service_user: pulsar-resenv
-  service_host: 127.0.0.1
+  # Must be 0.0.0.0 so the FORC/OpenResty gateway (separate host) can reach it.
+  # 127.0.0.1 would be loopback-only and the proxy would get connection refused.
+  service_host: 0.0.0.0
   service_port: 8080
