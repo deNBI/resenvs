@@ -1,7 +1,7 @@
 ---
-# PULSAR BOYC resenv: install the FastAPI information service.
+# PULSAR BYOC resenv: install the FastAPI information service.
 #
-# This resenv is the webservice-style backend for the PULSAR BOYC
+# This resenv is the webservice-style backend for the PULSAR BYOC
 # information service. It deploys the `pulsar-fastapi-resenv` application and
 # runs it as a supervised systemd service on port 8080.
 #
@@ -10,10 +10,10 @@
 # simpleVMWebGateway repository - the app itself performs no authentication.
 #
 # The real Galaxy credentials are per-user and therefore NOT baked into the
-# image. The image ships `state.json.example` (no secrets) plus a placeholder
-# `state.json` so the service is testable. At per-user provisioning time the
-# real `state.json` must be written (mode 0640) before the service is shown
-# as OPERATIONAL.
+# image. The playbook ships a placeholder `state.json` (from
+# state.json.placeholder, mode 0640) so the service is testable. At per-user
+# provisioning time the real `state.json` must be written (mode 0640) before
+# the service is shown as OPERATIONAL.
 
 - name: Ensure /usr/bin/python is a symlink to /usr/bin/python3
   become: true

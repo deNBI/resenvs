@@ -9,13 +9,13 @@ incompatible_versions: []
 direction: ingress
 protocol: tcp
 securitygroup_name: _pulsar
-securitygroup_description: PULSAR BOYC resenv
+securitygroup_description: PULSAR BYOC resenv
 securitygroup_ssh: false
 create_only_backend: false
 allow_disable_auth: false
 
-title: PULSAR BOYC
-description: PULSAR BOYC information service - Galaxy credentials and cluster resource overview
+title: PULSAR BYOC
+description: PULSAR BYOC information service - Galaxy credentials and cluster resource overview
 logo_url: ""
 info_url: ""
 community_driven: false
