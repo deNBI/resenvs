@@ -62,7 +62,7 @@
 - name: Create the virtualenv for the service
   become: true
   ansible.builtin.command:
-    cmd: "{{ ansible_python_executable }} -m venv {{ pulsar_vars.app_dir }}/.venv"
+    cmd: /usr/bin/python3 -m venv {{ pulsar_vars.app_dir }}/.venv
   args:
     creates: "{{ pulsar_vars.app_dir }}/.venv/bin/python"
 
