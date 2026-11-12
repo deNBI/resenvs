@@ -19,7 +19,7 @@
       register: images
 
     - name: Get Latest Master Branch Commit
-      ansible.builtin.command: git rev-parse --short --verify origin/master
+      ansible.builtin.command: git rev-parse --short HEAD
       register: github_hash
       changed_when: false
 
@@ -49,37 +49,39 @@
 
     - name: Set Cluster Base Images
       ansible.builtin.set_fact:
-        cluster_base_images: "{{ images.images | selectattr('tags', 'search', base_cluster_tag)
-                              | selectattr('tags', 'search', 'cluster')
-                              | selectattr('tags', 'search', 'master')
+        cluster_base_images: "{{ images.images | selectattr('tags', 'contains', base_cluster_tag)
+                              | selectattr('tags', 'contains', 'cluster')
+                              | selectattr('tags', 'contains', 'master')
                               | selectattr('os_distro', '==', os_distro)
                               | selectattr('os_version', '==', os_version)
                               | sort(attribute='created_at') }}"
 
     - name: Set Resens Base Cluster Images
       ansible.builtin.set_fact:
-        cluster_resenv_images: "{{ images.images | selectattr('tags', 'search', vars[resenv + '_tag'])
-                                | selectattr('tags', 'search', 'cluster')
-                                | selectattr('tags', 'search', 'master')
+        cluster_resenv_images: "{{ images.images | selectattr('tags', 'contains', vars[resenv + '_tag'])
+                                | selectattr('tags', 'contains', 'cluster')
+                                | selectattr('tags', 'contains', 'master')
                                 | selectattr('os_distro', '==', os_distro)
                                 | selectattr('os_version', '==', os_version)
                                 | sort(attribute='created_at') }}"
 
 
+    # Rebuild if the cluster resenv image is missing, the base image is newer,
+    # or the source changed (md5). Computed as a single quoted expression (no
+    # `when:` list) so the OR/AND semantics and short-circuit evaluation are
+    # unambiguous. Each branch that reads (cluster_resenv_images | last) is
+    # guarded by a length check so an empty list never errors.
     - name: Set Update facts
       ansible.builtin.set_fact:
-        update: true
-      when:
-        - cluster_base_images | length > 0
-        - cluster_resenv_images | length == 0
-          or (
-            (cluster_base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
-            >
-            (cluster_resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
-          )
-          or (
-            (cluster_resenv_images | last).properties.md5_hash | trim | default('undefined')
-            != md5_hash.stdout | trim
+        update: >-
+          (cluster_base_images | length > 0)
+          and (
+            (cluster_resenv_images | length == 0)
+            or ((cluster_base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
+                > (cluster_resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ'))
+            or (cluster_resenv_images | length > 0
+                and ((cluster_resenv_images | last).properties.md5_hash | trim | default('undefined'))
+                    != (md5_hash.stdout | trim))
           )
 
 

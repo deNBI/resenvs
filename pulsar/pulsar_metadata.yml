@@ -1,0 +1,24 @@
+---
+template_name: pulsar
+is_maintained: true
+port: 8080
+needs_forc_support: true
+forc_versions:
+  - v01
+incompatible_versions: []
+direction: ingress
+protocol: tcp
+securitygroup_name: _pulsar
+securitygroup_description: PULSAR BYOC resenv
+securitygroup_ssh: false
+create_only_backend: false
+allow_disable_auth: false
+
+title: PULSAR BYOC
+description: PULSAR BYOC information service - Galaxy credentials and cluster resource overview
+logo_url: ""
+info_url: ""
+community_driven: false
+wiki_link: ""
+information_for_display:
+  version: v1.0.0

@@ -1,0 +1,109 @@
+---
+# PULSAR BYOC resenv: install the FastAPI information service.
+#
+# This resenv is the webservice-style backend for the PULSAR BYOC
+# information service. It deploys the `pulsar-fastapi-resenv` application and
+# runs it as a supervised systemd service on port 8080.
+#
+# Access control (authentication + owner authorization) is provided by the
+# FORC/OpenResty reverse proxy using the pulsar%v01 template in the
+# simpleVMWebGateway repository - the app itself performs no authentication.
+#
+# The real Galaxy credentials are per-user and therefore NOT baked into the
+# image. The playbook ships a placeholder `state.json` (from
+# state.json.placeholder, mode 0640) so the service is testable. At per-user
+# provisioning time the real `state.json` must be written (mode 0640) before
+# the service is shown as OPERATIONAL.
+
+# Base directory for the sibling data files (state.json.placeholder,
+# pulsar-resenv.service.j2). Defaults to the SimpleVM-client layout, where the
+# whole resenvs tree is copied flat next to the playbook (so pulsar/ is a
+# sibling). Packer runs this from the packer/ dir, so packer_resenvs.yml
+# overrides it to ../pulsar.
+- name: Resolve the directory holding the pulsar data files
+  ansible.builtin.set_fact:
+    pulsar_file_dir: "{{ pulsar_file_dir | default(playbook_dir + '/pulsar') }}"
+
+- name: Ensure /usr/bin/python is a symlink to /usr/bin/python3
+  become: true
+  ansible.builtin.file:
+    src: /usr/bin/python3
+    dest: /usr/bin/python
+    state: link
+    force: yes
+
+- name: Install Python venv support
+  become: true
+  ansible.builtin.apt:
+    name:
+      - python3-pip
+      - python3-venv
+      - python3-dev
+    state: present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Create a dedicated unprivileged service account
+  become: true
+  ansible.builtin.user:
+    name: "{{ pulsar_vars.service_user }}"
+    system: true
+    shell: /usr/sbin/nologin
+    home: /nonexistent
+
+- name: Ensure application directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ pulsar_vars.app_dir }}"
+    state: directory
+    owner: root
+    group: "{{ pulsar_vars.service_user }}"
+    mode: "0750"
+
+- name: Clone the PULSAR resenv application
+  become: true
+  ansible.builtin.git:
+    repo: "{{ pulsar_vars.app_repo }}"
+    dest: "{{ pulsar_vars.app_dir }}"
+    version: "{{ pulsar_vars.app_version }}"
+    force: yes
+
+- name: Create the virtualenv for the service
+  become: true
+  ansible.builtin.command:
+    cmd: /usr/bin/python3 -m venv {{ pulsar_vars.app_dir }}/.venv
+  args:
+    creates: "{{ pulsar_vars.app_dir }}/.venv/bin/python"
+
+- name: Install Python dependencies into the virtualenv
+  become: true
+  ansible.builtin.pip:
+    requirements: "{{ pulsar_vars.app_dir }}/requirements.txt"
+    virtualenv: "{{ pulsar_vars.app_dir }}/.venv"
+    extra_args: --no-cache-dir
+
+- name: Ship a placeholder state.json (for testing; real creds are per-user)
+  become: true
+  ansible.builtin.copy:
+    src: "{{ pulsar_file_dir }}/state.json.placeholder"
+    dest: "{{ pulsar_vars.app_dir }}/app/state.json"
+    owner: root
+    group: "{{ pulsar_vars.service_user }}"
+    mode: "0640"
+
+- name: Install the systemd unit
+  become: true
+  ansible.builtin.template:
+    src: "{{ pulsar_file_dir }}/pulsar-resenv.service.j2"
+    dest: /etc/systemd/system/pulsar-resenv.service
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Reload systemd and start/enable the service
+  become: true
+  ansible.builtin.systemd:
+    name: pulsar-resenv
+    daemon_reload: true
+    enabled: true
+    state: started

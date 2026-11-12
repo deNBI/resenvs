@@ -1,0 +1,17 @@
+---
+pulsar_vars:
+  template_version:
+  create_only_backend: false
+  default_user: ubuntu
+
+  # Application source (pulsar-fastapi-resenv repository).
+  app_repo: https://github.com/SimpleVM/pulsar-fastapi-resenv.git
+  app_version: main
+  app_dir: /opt/pulsar-fastapi-resenv
+
+  # Service configuration.
+  service_user: pulsar-resenv
+  # Must be 0.0.0.0 so the FORC/OpenResty gateway (separate host) can reach it.
+  # 127.0.0.1 would be loopback-only and the proxy would get connection refused.
+  service_host: 0.0.0.0
+  service_port: 8080

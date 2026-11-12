@@ -19,7 +19,7 @@
       register: images
 
     - name: Get Latest Master Branch Commit
-      ansible.builtin.command: git rev-parse --short --verify origin/master
+      ansible.builtin.command: git rev-parse --short HEAD
       register: github_hash
       changed_when: false
 
@@ -65,28 +65,38 @@
           | selectattr('os_version', '==', os_version)
           | rejectattr('tags', 'search', 'cluster')
           | sort(attribute='created_at') }}"
+    - name: DEBUG - dump base/resenv image counts and each update condition
+      ansible.builtin.debug:
+        msg:
+          - "total_images={{ images.images | length }}"
+          - "base_images_count={{ base_images | length }}"
+          - "base_images_names={{ base_images | map(attribute='name') | list }}"
+          - "resenv_images_count={{ resenv_images | length }}"
+          - "resenv_images_names={{ resenv_images | map(attribute='name') | list }}"
+          - "os_distro={{ os_distro }} os_version={{ os_version }}"
+          - "COND1_base_images_nonempty={{ base_images | length > 0 }}"
+          - "COND2_resenv_missing_or_base_newer={{ resenv_images | length == 0 or ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ') > (resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) }}"
+          - "COND3_md5_changed={{ resenv_images | length > 0 and ((resenv_images | last).properties.md5_hash | trim | default('undefined')) != (md5_hash.stdout | trim) }}"
+          - "COND4_older_than_7_days={{ resenv_images | length > 0 and (now() - (resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')).days > 7 }}"
+          - "md5_hash={{ md5_hash.stdout }}"
+
+    # Rebuild if the resenv image is missing, the base image is newer, the source
+    # changed (md5), or the image is older than 7 days. Computed as a single
+    # quoted Jinja expression (no `when:` list) so the OR/AND semantics are
+    # unambiguous and short-circuit evaluation works as expected.
     - name: Set Update facts
       ansible.builtin.set_fact:
-        update: true
-      when:
-        - base_images | length > 0
-        - resenv_images | length == 0
-          or (
-          (
-          (base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
-          ) >
-          (
-          (resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
-          )
-          )
-          or (
-          resenv_images | length > 0 and
-          ((resenv_images | last).properties.md5_hash | trim | default('undefined')) != (md5_hash.stdout | trim)
-          )
-          # Rebuild if image is older than 7 days
-          or (
-          resenv_images | length > 0 and
-          (now() - (resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')).days > 7
+        update: >-
+          (base_images | length > 0)
+          and (
+            (resenv_images | length == 0)
+            or ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
+                > (resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ'))
+            or (resenv_images | length > 0
+                and ((resenv_images | last).properties.md5_hash | trim | default('undefined'))
+                    != (md5_hash.stdout | trim))
+            or (resenv_images | length > 0
+                and (now() - (resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')).days > 7)
           )
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}

@@ -1,0 +1,10 @@
+{
+  "pulsar_config": {
+    "username": "REPLACE_ME",
+    "password": "REPLACE_ME",
+    "max_cpus": 0,
+    "max_ram_gib": 0,
+    "max_gpus": 0
+  },
+  "service_state": "INCOMPLETE"
+}
