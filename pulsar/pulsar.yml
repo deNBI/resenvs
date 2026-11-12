@@ -10,16 +10,16 @@
 # simpleVMWebGateway repository - the app itself performs no authentication.
 #
 # The real Galaxy credentials are per-user and therefore NOT baked into the
-# image. The playbook ships a placeholder `state.json` (from
-# state.json.placeholder, mode 0640) so the service is testable. At per-user
-# provisioning time the real `state.json` must be written (mode 0640) before
-# the service is shown as OPERATIONAL.
+# image. The app is stateless: at request time it parses the files the Pulsar
+# BYOC play writes onto the cluster master (/opt/pulsar/byoc-connection.yml
+# and /opt/pulsar/byoc-secrets.yml). Until that play has run (e.g. on a fresh
+# cluster) the service reports UNAVAILABLE. No placeholder state file is
+# shipped - a fresh image correctly shows the "not provisioned yet" view.
 
-# Base directory for the sibling data files (state.json.placeholder,
-# pulsar-resenv.service.j2). Defaults to the SimpleVM-client layout, where the
-# whole resenvs tree is copied flat next to the playbook (so pulsar/ is a
-# sibling). Packer runs this from the packer/ dir, so packer_resenvs.yml
-# overrides it to ../pulsar.
+# Base directory for the sibling data files (pulsar-resenv.service.j2).
+# Defaults to the SimpleVM-client layout, where the whole resenvs tree is
+# copied flat next to the playbook (so pulsar/ is a sibling). Packer runs this
+# from the packer/ dir, so packer_resenvs.yml overrides it to ../pulsar.
 - name: Resolve the directory holding the pulsar data files
   ansible.builtin.set_fact:
     pulsar_file_dir: "{{ pulsar_file_dir | default(playbook_dir + '/pulsar') }}"
@@ -81,15 +81,6 @@
     requirements: "{{ pulsar_vars.app_dir }}/requirements.txt"
     virtualenv: "{{ pulsar_vars.app_dir }}/.venv"
     extra_args: --no-cache-dir
-
-- name: Ship a placeholder state.json (for testing; real creds are per-user)
-  become: true
-  ansible.builtin.copy:
-    src: "{{ pulsar_file_dir }}/state.json.placeholder"
-    dest: "{{ pulsar_vars.app_dir }}/app/state.json"
-    owner: root
-    group: "{{ pulsar_vars.service_user }}"
-    mode: "0640"
 
 - name: Install the systemd unit
   become: true
