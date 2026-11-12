@@ -19,7 +19,7 @@
       register: images
 
     - name: Get Latest Master Branch Commit
-      ansible.builtin.command: git rev-parse --short --verify origin/master
+      ansible.builtin.command: git rev-parse --short --verify HEAD
       register: github_hash
       changed_when: false
 
@@ -70,24 +70,11 @@
         update: true
       when:
         - base_images | length > 0
-        - resenv_images | length == 0
-          or (
-          (
-          (base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
-          ) >
-          (
-          (resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')
-          )
-          )
-          or (
-          resenv_images | length > 0 and
-          ((resenv_images | last).properties.md5_hash | trim | default('undefined')) != (md5_hash.stdout | trim)
-          )
-          # Rebuild if image is older than 7 days
-          or (
-          resenv_images | length > 0 and
-          (now() - (resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')).days > 7
-          )
+        - >-
+          resenv_images | length == 0
+          or ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) > ((resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ'))
+          or (resenv_images | length > 0 and ((resenv_images | last).properties.md5_hash | trim | default('undefined')) != (md5_hash.stdout | trim))
+          or (resenv_images | length > 0 and (((lookup('pipe', 'date +%s') | int) - ((resenv_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')).timestamp()) | int // 86400) > 7)
 
     - name: Build new {{ resenv }} image - {{ os_distro }} {{ os_version }}
       ansible.builtin.command: >
