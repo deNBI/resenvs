@@ -91,7 +91,7 @@
       register: images
 
     - name: Get Latest Master Branch Commit
-      ansible.builtin.command: git rev-parse --short --verify origin/master
+      ansible.builtin.command: git rev-parse --short --verify HEAD
       register: github_hash
       changed_when: false
 
