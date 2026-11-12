@@ -18,6 +18,8 @@
 
     - name: Setting up virtual machine with {{ resenv }}
       ansible.builtin.import_tasks: ../{{ resenv }}/{{ resenv }}.yml
+      vars:
+        pulsar_file_dir: "../{{ resenv }}"
 
   post_tasks:
     - name: Generic POST Tasks

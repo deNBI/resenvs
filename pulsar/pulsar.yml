@@ -15,6 +15,15 @@
 # provisioning time the real `state.json` must be written (mode 0640) before
 # the service is shown as OPERATIONAL.
 
+# Base directory for the sibling data files (state.json.placeholder,
+# pulsar-resenv.service.j2). Defaults to the SimpleVM-client layout, where the
+# whole resenvs tree is copied flat next to the playbook (so pulsar/ is a
+# sibling). Packer runs this from the packer/ dir, so packer_resenvs.yml
+# overrides it to ../pulsar.
+- name: Resolve the directory holding the pulsar data files
+  ansible.builtin.set_fact:
+    pulsar_file_dir: "{{ pulsar_file_dir | default(playbook_dir + '/pulsar') }}"
+
 - name: Ensure /usr/bin/python is a symlink to /usr/bin/python3
   become: true
   ansible.builtin.file:
@@ -73,15 +82,10 @@
     virtualenv: "{{ pulsar_vars.app_dir }}/.venv"
     extra_args: --no-cache-dir
 
-# NOTE: this playbook is imported as a task file by the SimpleVM client and run
-# from a flat temp directory. The client copies the whole resenvs tree (including
-# this pulsar/ folder) into that same directory, so external files are addressed
-# with an absolute {{ playbook_dir }} path rather than a relative src.
-
 - name: Ship a placeholder state.json (for testing; real creds are per-user)
   become: true
   ansible.builtin.copy:
-    src: "{{ playbook_dir }}/pulsar/state.json.placeholder"
+    src: "{{ pulsar_file_dir }}/state.json.placeholder"
     dest: "{{ pulsar_vars.app_dir }}/app/state.json"
     owner: root
     group: "{{ pulsar_vars.service_user }}"
@@ -90,7 +94,7 @@
 - name: Install the systemd unit
   become: true
   ansible.builtin.template:
-    src: "{{ playbook_dir }}/pulsar/pulsar-resenv.service.j2"
+    src: "{{ pulsar_file_dir }}/pulsar-resenv.service.j2"
     dest: /etc/systemd/system/pulsar-resenv.service
     owner: root
     group: root
