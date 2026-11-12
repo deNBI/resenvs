@@ -140,15 +140,12 @@
         update: true
       when:
         - base_image_build | length > 0
-        - base_images | length == 0
+        - >-
+          base_images | length == 0
           or ((base_image_build | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')) > ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ'))
           or (github_hash_from_image == 'undefined' or md5_checksum_from_image == 'undefined')
-          or (github_hash_from_image != github_hash.stdout | trim or md5_checksum_from_image != md5_hash.stdout |trim )
-          # Rebuild if image is older than 7 days
-          or (
-          base_images | length > 0 and
-          (now() - (base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')).days > 7
-          )
+          or (github_hash_from_image != github_hash.stdout | trim or md5_checksum_from_image != md5_hash.stdout |trim)
+          or (base_images | length > 0 and (((lookup('pipe', 'date +%s') | int) - ((base_images | last).created_at | to_datetime('%Y-%m-%dT%H:%M:%SZ')).timestamp()) | int // 86400) > 7)
 
     - name: Build new Base image -{{ os_distro }} {{ os_version }}
       ansible.builtin.command: >
