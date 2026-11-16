@@ -1,14 +1,28 @@
 ---
+# The playbook runs twice: when Packer builds the image and again when
+# SimpleVM starts the VM. blockinfile finds its own block by the marker and
+# keeps exactly one copy, so pip.conf stays a valid INI file.
 - name: Ensure pip configuration allows breaking system packages (system-wide)
   become: true
-  lineinfile:
+  ansible.builtin.blockinfile:
     path: /etc/pip.conf
     create: true
-    state: present
-    line: |
+    mode: "0644"
+    marker: "# {mark} resenvs vscode: pip settings"
+    block: |
       [global]
       break-system-packages = true
-    insertafter: EOF
+
+# Earlier versions appended this block with lineinfile on every run, so images
+# built with them contain it twice and pip refuses to read the file
+# ("section 'global' already exists"). Those copies end with an empty line;
+# the managed block above does not (its END marker follows directly).
+- name: Remove pip settings appended by earlier versions of this playbook
+  become: true
+  ansible.builtin.replace:
+    path: /etc/pip.conf
+    regexp: '^\[global\]\nbreak-system-packages = true\n\n'
+    replace: ""
 
 - name: Download Code Server Install Script
   ansible.builtin.get_url:
