@@ -22,6 +22,7 @@
     repo: "{{emgb_vars.emgb_repo}}"
     dest: "{{emgb_vars.repo_path}}"
     version: "{{emgb_vars.emgb_version}}"
+  timeout: 600
 
 - name: Create required directories
   ansible.builtin.file:
@@ -37,6 +38,7 @@
 - name: Run prepare-import.sh script
   ansible.builtin.command:
     cmd: ./prepare-import.sh
+    timeout: 900
   args:
     chdir: "{{ emgb_vars.repo_path }}"
 
@@ -48,11 +50,13 @@
 - name: Run yq command to delete nginx ports
   ansible.builtin.command:
     cmd: yq -e -i 'del(.services.nginx.ports)' docker-compose.yml
+    timeout: 120
   args:
     chdir: "{{ emgb_vars.repo_path }}"
 
 - name: Run docker-compose EMGB
   ansible.builtin.command:
     cmd: docker compose up -d
+    timeout: 900
   args:
     chdir: "{{ emgb_vars.repo_path }}"
