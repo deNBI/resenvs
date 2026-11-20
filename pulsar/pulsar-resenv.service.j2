@@ -1,0 +1,31 @@
+[Unit]
+Description=PULSAR BYOC resenv information service (FastAPI/uvicorn)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User={{ pulsar_vars.service_user }}
+Group={{ pulsar_vars.service_user }}
+
+WorkingDirectory={{ pulsar_vars.app_dir }}
+Environment=PYTHONUNBUFFERED=1
+Environment=PATH={{ pulsar_vars.app_dir }}/.venv/bin:/usr/local/bin:/usr/bin:/bin
+Environment=PULSAR_RESENV_HOST={{ pulsar_vars.service_host }}
+Environment=PULSAR_RESENV_PORT={{ pulsar_vars.service_port }}
+
+ExecStart={{ pulsar_vars.app_dir }}/.venv/bin/python -m app.main
+Restart=always
+RestartSec=5
+TimeoutStopSec=15
+KillSignal=SIGTERM
+
+# --- Hardening ---
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths={{ pulsar_vars.app_dir }}
+
+[Install]
+WantedBy=multi-user.target
