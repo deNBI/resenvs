@@ -120,9 +120,7 @@
     state: latest
   environment:
     DEBIAN_FRONTEND: noninteractive
-  when:
-    - location is defined
-    - location == "bielefeld"
+
 
 - name: Setup Docker
   ansible.builtin.import_tasks: ../generic/setup_docker.yml
